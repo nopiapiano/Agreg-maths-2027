@@ -1,0 +1,65 @@
+\twocolumn  % Reprise du format deux colonnes après le chapitre
+
+
+\section{101 : Groupe opérant sur un ensemble. Exemples et applications.}
+
+
+\begin{developpements}
+	\item Théorème de la base de Burnside. Un max de maths p13.
+\end{developpements}
+ 
+
+\Prop[]{
+Une action est fidèle si et seulement si $\phi$, le morphisme associé est injectif ssi l'intersection de tous les stabilisateurs vaut $e_G$.
+}
+
+
+\begin{proof}
+Si $\phi$ est injectif, soit $g\in  \bigcap_x \textup{Stab(x)}$. Alors $\forall x \in X$, $g\cdot x = x$, et donc par injectivité $g = e_G$. Si $ \bigcap_x \textup{Stab(x)} = \{e_G\}$, alors il est clair que $\phi$ est injectif.
+\end{proof}
+
+\Thm[(Formule des classes)]
+{
+ $X$ est fini :
+\[\vert X \vert = \sum_{x \in \bigslant{X}{ \sim}} \vert \textup{Orb}(x)\vert \]
+Et on a : $\textup{Orb}(x)$ et $\bigslant{G}{\textup{Stab}(x)}$ sont en bijection.
+}
+
+\begin{proof}
+Si $G$ agit sur $X$, les orbites sont des classes d'équivalence. Elles sont disjointes, et forment une partition de $X$, reste à évaluer le cardinal d'une classe, or on a une bijection, pour $x \in X$ :
+\[f : \begin{array}{cccc} \bigslant{G}{\textup{Stab}(x)} & \to & G x\\ g \textup{Stab}(x) & \mapsto & g\cdot x\end{array}\]
+par passage au quotient de $G \to Gx,g \mapsto g \cdot x$.
+\end{proof}
+
+
+\Prop[(Formule de Burnside :)]
+{
+ Si $G$ et $X$ sont finis, alors
+\[ \left| \bigslant{X}{\sim} \right| = \frac{1}{\vert G \vert} \sum_{g\in G} \vert \textup{Fix}(g) \vert\]
+}
+
+\begin{proof}
+Soit $E$ l'ensemble des couples $(g,x)$ où $g\cdot x = x$, alors
+\[\vert E \vert = \sum_{g \in G}\vert \textup{Fix}(g)\vert = \sum_{x\in X} \vert \textup{Stab}(x) \vert\]
+Si $\Omega$ est une transversale de $X$ (donc de cardinal le nombre des orbites), on a :
+\[ \vert E \vert = \sum_{x \in X} \frac{\vert G\vert}{\vert Gx\vert } = \vert G \vert \sum_{ \omega \in \Omega}  \sum_{ x \in \omega} \frac{1}{\vert Gx\vert} = \vert G \vert \sum_{ \omega \in \Omega}  \sum_{ x \in \omega} \frac{1}{\vert \omega\vert}  = \vert G  \vert \vert \Omega \vert \]
+\end{proof}
+
+\Prop[]
+{
+Soit $G$ un groupe de cardinal $p^\alpha$, alors le centre de $G$ n'est pas réduit à l'élément neutre.
+}
+
+\begin{proof} On considère l'action de $G$ sur lui même par automorphisme intérieur. par la formule des classe on a :
+\[\vert G \vert = \vert \calZ(G) \vert + \sum_{x\in A} \frac{\vert G \vert}{\vert \textup{Stab}(x) \vert }\]
+Avec $A$ une transversale pour l'ensemble des orbites non réduites à un point. On en déduit que puisque le centre est non vide, qu'il est un multiple de $p$.
+\end{proof}
+
+
+\Ap[]
+{
+ Il n'existe que 2 groupes d'ordre $p^2$ à isomorphisme près. 
+}
+
+\begin{proof} D'après la proposition précédente un tel groupe $G$ a son centre de cardinal $p$ ou $p^2$. Si il est de cardinal $p$ un élément de $G$ est dans $\calZ(G)$ si et seulement si son centralisateur $Z_G(g)$ est $G$. Comme le centralisateur d'un élément $g \in G\setminus \calZ(G)$ contient $g$ et contient $\calZ(G)$, il est donc d'ordre $>p$. Donc $\calZ(G)= G$, ce qui donne une contradiction. Donc $G$ est abélien. Soit $G$ est monogène et à se moment là il est isomorphe à $\bigslant{\Z}{p^2\Z}$, sinon soit $g \in G$, qui n'est pas l'élément unité, le sous-groupe $H$ engendré par $g$ est d'ordre $p$. Donc $\bigslant{G}{H}$ est d'ordre $p$ donc isomorphe à $\bigslant{\Z}{p\Z}$. Donc $G$ est isomorphe à $\bigslant{\Z}{p\Z} \times \bigslant{\Z}{p\Z}$.
+\end{proof}

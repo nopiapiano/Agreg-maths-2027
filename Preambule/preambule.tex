@@ -1,0 +1,422 @@
+
+%%% Le chargement des packages %%%
+
+
+\usepackage{amssymb}
+\setlength{\columnsep}{1cm}
+\usepackage{multicol}
+
+
+
+\usepackage{eurosym}
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{amsthm}  % DOIT être chargé AVANT de définir les théorèmes
+% For Landau's notation
+\usepackage{mismath}
+
+\usepackage{stmaryrd} % Where \llbracket and \rrbracket are defined
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}  
+% \usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}  
+\usepackage{pstricks-add}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{babel,varioref,float} % polices
+\usepackage{pgf,tikz} % permet de créer comme pstricks des figures en code LateX
+\let\clipbox\relax
+
+\usetikzlibrary{calc,decorations.pathmorphing,arrows}
+
+
+\usepackage{pgflibraryarrows} % librairie liée à tikz
+\usepackage{pgflibrarysnakes}
+\usepackage{xcolor} % module de couleur pour tikz
+\usepackage{pst-eucl}
+\usepackage{titlesec} % Personnaliser les titres
+\usepackage{graphicx}
+
+
+%\theoremstyle{plain}
+\newtheorem*{thm}{Théorème}
+\newtheorem*{de}{Définition}
+\newtheorem*{lem}{Lemme}
+
+
+\usepackage{amsmath,amsfonts,graphicx,geometry}
+\geometry{top=1.9cm,left=1.2cm,right=1.2cm,bottom=1.6cm}
+\usepackage{multicol}
+
+
+
+\usepackage{enumitem}
+
+\usepackage{calc,color}
+\usepackage{fancybox}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+
+\usepackage{marginnote}
+\usepackage{fontawesome}
+
+\usepackage[weather]{ifsym}
+\usepackage{pifont}
+
+
+%\usepackage[utf8]{inputenc}    % Pour utiliser les lettres accentuées
+%\usepackage[francais]{babel}    % Pour la langue française
+\usepackage{enumitem} % Itemize, enumerate etc.
+%\usepackage{enumerate} % Idem, mais a ne pas activer ensemble
+\usepackage{amscd,amsmath} % Les packages de Maths
+\usepackage{color} % les images
+\usepackage{index} % Pour pouvoir créer un index
+%\usepackage{titlesec} % Personnaliser les titres
+\usepackage{mathdots} % Faire des petits points verticaux, en oblique etc
+\usepackage{import} % Pouvoir importer des fichers dans un autre dossier
+\usepackage[all]{xy} % Faire des zoulis diagrammes
+ \usepackage[cyr]{aeguill} % Guillemets en francais et autres
+\usepackage{latexsym,stmaryrd,xypic,mathrsfs} % Différents package pour faire des maths
+%%% ------------------------------------------ %%%
+\usepackage{pgf,tikz} % permet de créer comme pstricks des figures en code LateX
+
+
+
+\usepackage[most]{tcolorbox}
+\usepackage{adjustbox}
+
+%\usepackage{lmodern} % Police moderne
+\usepackage{xcolor}
+
+
+% Style du bloc (SANS ombre)
+\tcbset{
+  developpementsbox/.style={
+    enhanced,
+    sharp corners=south,  % coins carrés en bas
+    colback=white,
+    colframe=gold,
+   % boxrule=1.2pt,
+    borderline west={3mm}{0pt}{gold}, % barre épaisse à gauche
+    left=10pt,
+    right=8pt,
+    top=6pt,
+    bottom=6pt,
+    before skip=12pt,
+    after skip=12pt,
+  }
+}
+
+% Style des items : numérotation classique
+\newlist{devlist}{enumerate}{1}
+\setlist[devlist,1]{%
+  label=\textbf{\arabic*.},
+  left=0pt, labelsep=1em, itemsep=0.7em,
+  font=\normalsize
+}
+
+% Environnement avec le titre toujours affiché
+\newenvironment{developpements}{%
+  \begin{tcolorbox}[developpementsbox]
+  \textbf{\large Liste des développements :}
+  \vspace{4pt}
+  \begin{devlist}
+}{%
+  \end{devlist}
+  \end{tcolorbox}
+}
+
+
+
+
+
+
+\newcommand{\poubelle}[1]{} % Commande Poubelle : "\poubelle{ blabla}" et le blabla sera ignoré, même si il tient en 200 lignes
+
+
+
+
+
+\definecolor{albertBlue1}{RGB}{34, 20, 81}
+\definecolor{albertBlue2}{RGB}{54, 37, 157}
+\definecolor{albertBlue3}{RGB}{173, 218, 247}
+
+\definecolor{inter}{RGB}{156, 66, 167}
+
+%%% Les couleurs %%%
+\definecolor{fondtitre}{rgb}{0.20,0.43,0.09}  % vert fonce
+\definecolor{gold}{RGB}{223,179,85}  % Gold
+%\definecolor{gold2}{RGB}{255,214,100}  % Gold
+\definecolor{gold2}{RGB}{53,93,173}   % Gold2 %bleu
+\definecolor{gold3}{RGB}{255,214,100} 
+\definecolor{goldinv}{RGB}{32,76,170}
+\definecolor{bleu}{RGB}{53,93,173}  
+\definecolor{vert}{RGB}{155,205,50}  
+\definecolor{vertfoncé}{RGB}{0,128,32}  
+\definecolor{bleufoncé}{RGB}{0,32,128}  
+\definecolor{grenat}{RGB}{110,11,20}  
+\definecolor{amande}{RGB}{130,196,108} 
+\definecolor{magentapink}{RGB}{204,51,139}   
+\definecolor{glauque}{RGB}{100,155,136}   
+\definecolor{oeuf}{RGB}{239,213,178}   
+\definecolor{bisque}{RGB}{255,228,196}   
+\definecolor{inter}{RGB}{156, 66, 167}
+%\definecolor{backg}{RGB}{185,220,200}   
+%\definecolor{backg}{RGB}{215,224,240}
+\definecolor{crème}{RGB}{253,247,196}  
+\definecolor{noirleger}{RGB}{79,77,81}  
+\definecolor{marron}{RGB}{88,41,0} 
+\definecolor{gris}{RGB}{150,150,150} 
+\definecolor{rougem}{RGB}{200,0,0} 
+\definecolor{vertm}{RGB}{0,200,0} 
+\definecolor{bleum}{RGB}{0,0,200} 
+\definecolor{backg}{RGB}{252, 233, 240}
+
+
+
+
+
+\setcounter{secnumdepth}{1} %  Profondeur des Chapitre/Sections/Sous-sections Etc
+
+\setcounter{tocdepth}{2}  % Profondeur de la table principale
+
+
+
+\titleformat{\chapter}[display]
+{\clearpage\normalfont\centering\color{gold3}}
+{\vspace*{\fill}\vspace{-5em}\fontsize{50}{48}\selectfont\bfseries\chaptertitlename\space\thechapter}
+{20pt}
+{\fontsize{40}{48}\selectfont\bfseries\thispagestyle{empty}}
+[\vspace*{\fill}]
+\titlespacing*{\chapter}
+{0pt}     
+{0pt}      
+{0pt}
+
+
+
+
+%\titleformat{\section}
+%{\normalfont\Large\bfseries\color{gold2}}  % Format du titre
+%{\thesection}   % Le numéro de section
+%{1em}          % Espace entre le numéro et le titre
+%{}     
+
+
+%\makeatletter 
+%\renewcommand\thesection{\@arabic\c@section} 
+%\makeatothe
+
+%\usepackage[export]{adjustbox}
+
+
+%\renewcommand{\thechapter}{\Roman{chapter}}
+
+
+
+
+
+% Properties
+\definecolor{propColor}{RGB}{0, 255, 0}
+\newcommand{\Props}[2][]{
+	\begin{tcolorbox}[colback=propColor!5!white,colframe=propColor!75!black,title=Propositions #1]
+		#2
+\end{tcolorbox}}
+\newcommand{\Prop}[2][]{
+	\begin{tcolorbox}[colback=vertfoncé!5!white,colframe=vertfoncé!75!black,title=Proposition #1]
+		#2
+\end{tcolorbox}}
+
+% Definitions
+\definecolor{defColor}{RGB}{255, 255, 255}
+\newcommand{\Defs}[2][]{
+	\begin{tcolorbox}[colback=defColor!5!white,colframe=defColor!75!black,title=Definitions #1]
+		#2
+\end{tcolorbox}}
+\newcommand{\Def}[2][]{
+	\begin{tcolorbox}[colback=defColor!5!white,colframe=defColor!75!black,title=Definition #1]
+		#2
+\end{tcolorbox}}
+
+% Theorems
+\definecolor{theoremColor}{RGB}{255, 0, 0}
+\newcommand{\Thm}[2][]{
+	\begin{tcolorbox}[colback=bleufoncé!5!white,colframe=bleufoncé!75!black,title=Théorème #1]
+		#2
+\end{tcolorbox}}
+
+% Applications
+\newcommand{\Ap}[2][]{
+	\begin{tcolorbox}[colback=grenat!5!white,colframe=grenat!75!black,title=Application #1]
+		#2
+\end{tcolorbox}}
+
+% Examples
+\newcommand{\example}[0]{
+	\vspace{1em}
+	{\bf Example :}
+}
+
+% Diverse things to highlight
+\newcommand{\highlight}[1]{
+	\vspace{1em}
+	{\bf #1}
+	\vspace{0.25em}
+	
+}
+
+
+
+%\newtheorem{prop}{Proposition}
+%\newtheorem{lem}{Lemme}
+%\newtheorem{cor}{Corollaire}
+
+\poubelle{
+\newtheorem{thm}{Théorème}[]
+\newtheorem{de}{Définition}[]
+\newtheorem{prop}{Proposition}[]
+\newtheorem{ap}{Application}[]
+\newtheorem{rem}{Remarque}[]
+\newtheorem{cex}{Contre-Exemple}[]
+\newtheorem{cor}{Corollaire}[]
+\newtheorem{cocor}{Cocorollaire}[]
+\newtheorem{ex}{Exemple}[]
+\newtheorem{lem}{Lemme}[]
+\newtheorem{de-prop}{Définition-Proposition}[]
+%\theoremstyle{definition} % à partir de là, les newtheorem seront en lettre droite contrairement à italique.
+\newtheorem{etape}{Etape}[]
+\newtheorem{e}{Exercice}[]
+\newtheorem{p}{Problème}[]
+}
+%\newtheorem*{e*}{Exercice}
+%%% ------------------------------------------------ %%%
+%%% Les nouvelles commandes %%%
+%\renewcommand{\thede}{\arabic{de}} % Les theorèmes  sont numérotés en chiffres arabes
+\def\legendre#1#2{\genfrac(){0.2pt}0{#1}{#2}} % Symbole de legendre
+%
+
+
+
+
+\def\restriction#1#2{\mathchoice %Notation restriction
+              {\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\textstyle #1}_{\scriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\scriptstyle #1}_{\scriptscriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\scriptscriptstyle #1}_{\scriptscriptstyle #2}$}
+              \restrictionaux{#1}{#2}}}
+\def\restrictionaux#1#2{{#1\,\smash{\vrule height .8\ht1 depth .85\dp1}}_{\,#2}} 
+\newcommand{\bigslant}[2]{{\raisebox{.1em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}} % Symbole quotient oblique exemple \bigslant{\Z}{n\Z}
+\newcommand{\calG}{\mathcal{G}} % Les symboles de maths 
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calZ}{\mathcal{Z}}
+\newcommand{\Ee}{\mathbb{E}}
+\newcommand{\bR}{\mathbb{R}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\jP}{\mathbb{P}}
+\newcommand{\Kk}{\mathbb{K}}
+\newcommand{\Cc}{\mathbb{C}}
+\newcommand{\bZ}{\mathbb{Z}}
+\newcommand{\bN}{\mathbb{N}}
+\newcommand{\UU}{\mathbb{U}}
+\newcommand{\bQ}{\mathbb{Q}}
+\newcommand{\bF}{\mathbb{F}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\OFP}{(\Omega,\calF,\bbP)}
+\newcommand{\Pa}{\mathscr{P}}
+\newcommand{\Oa}{\mathscr{O}}
+\newcommand{\Ta}{\mathscr{T}}
+\newcommand{\Sa}{\mathscr{S}}
+\newcommand{\car}{\mathds{1}} %Les symboles de maths 
+%%% --------------------------------------- %%%
+
+
+\usetikzlibrary{matrix,positioning}
+
+
+\newcommand{\titre}[1]{%
+	\vspace*{\fill}  % Espace flexible avant
+	\begin{center}
+		\begin{tikzpicture}
+			\matrix [matrix of nodes]{
+				|[draw=gold2,
+				very thick,
+				font=\fontsize{40}{48}\selectfont,
+				rounded corners=10pt,
+				inner sep=0.4cm,
+				fill=backg!80,
+				text=gold]|
+				{\textsc{\ #1\ }}  \\
+			} ;
+		\end{tikzpicture}
+		
+		\vspace{2cm}  % Espace entre le titre et votre nom
+		
+		{\Huge\color{gold2}\textsc{Louis-Thibault Gauthier}}  % Votre nom en plus petit et assorti
+		
+		\vspace{1cm}  % Espace entre votre nom et la date
+		
+		{\large\color{gold2}\textsc{\today}}  % Date de production du document
+	\end{center}
+	\vspace*{\fill}  % Espace flexible après
+}
+
+
+
+\fancypagestyle{plain}{
+	\fancyhf{} %Clear Everything.
+	\renewcommand\headrulewidth{1pt}
+	%\fancyfoot[C]{\thepage} %Page Number
+	\renewcommand{\headrule}{\color{gold2}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth} %0pt for no rule, 2pt thicker etc...
+	\renewcommand{\footrule}{\color{gold2}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth} %0pt for no rule, 2pt thicker etc...
+	\fancyfoot[R]{Session 2027}
+	\fancyfoot[L]{Louis-Thibault Gauthier}
+	%\fancyfoot[C]{Page \thepage/\pageref{LastPage}}
+	\fancyfoot[C]{Page \number\numexpr\thepage+1\relax/\number\numexpr\getpagerefnumber{LastPage}+1\relax}
+	%	\fancyhead[L]{TOP LEFT, EVEN PAGES}
+	%	\fancyhead[R]{\small \textcolor{gold}{Louis-Thibault GAUTHIER}}
+	%	\fancyhead[L]{{\small \textcolor{gold}{OZANAM}}	
+	\fancyhead[L]{\textcolor{gold2}{Préparation aux oraux de l'agrégation externe}}
+	\fancyhead[C]{\textcolor{gold2}{Mathématiques}}
+	\fancyhead[R]{\textcolor{gold2}{Concours standard}}
+}
+	
+	
+	\pagestyle{plain}
+
+
+% Ajouter à la toute fin du préambule :
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=gold2,
+	urlcolor=bleufoncé,
+	citecolor=bleufoncé,
+	filecolor=bleufoncé,
+	linktoc=all
+}
+
+% Style de la table des matières
+\renewcommand{\contentsname}{\color{gold2}Table des matières}
+

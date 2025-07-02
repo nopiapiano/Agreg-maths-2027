@@ -1,0 +1,63 @@
+
+\section{Théorème de la base de Burnside}
+	 
+
+Soit $G$ un $p$-groupe (groupe fini d'ordre une puissance de $p$ premier).
+
+
+
+\begin{de}
+	\begin{itemize}
+		\item Un sous-groupe maximal de $G$ est un sous-groupe strict de $G$ et maximal pour l'inclusion. On note $\calM$ leur ensemble. 
+		\item Le normalisateur de $H$ dans $G$, $N_G(H)$ est le sous-groupe de $G$ qui laisse stable $H$ par l'action de conjugaison.
+	\end{itemize}
+\end{de}
+
+
+\begin{lem}
+	Soit $H \in \calM$, alors $H \triangleleft G$, et $\bigslant{G}{H} = \bigslant{\bZ}{p\bZ}$.
+\end{lem}
+\begin{proof}
+	On fait agir $H$ sur $\bigslant{G}{H}$ par multiplication des classes à gauche, on a, par la formule des classes 
+	\begin{equation}\label{100117}
+		0 \equiv \vert \bigslant{G}{H} \vert \equiv  \left\vert \left( \bigslant{G}{H} \right)^H \right\vert [p]
+	\end{equation}
+	\noindent Donc  $p$ divise le cardinal de $\left( \bigslant{G}{H} \right)^H $. Or :
+	\[
+		\begin{array}{lll}
+			gH \in \left( \bigslant{G}{H} \right)^H  &\Longleftrightarrow& \forall h \in H;  hg H = gH\\
+			 & \Longleftrightarrow&  Hg H = gH \\
+			 &\Longleftrightarrow&  Hg = gH\\
+			  &\Longleftrightarrow& g \in N_G(H)
+		\end{array}
+	\]
+	\noindent On peut alors considérer $\psi : \left( \begin{array}{cccc} N_G(H) & \to &\left( \bigslant{G}{H} \right)^H \\ g & \mapsto &gH \end{array} \right)$ application qui est donc surjective, dont le nombre d'antécédents d'un élément est $\vert H \vert$, donc on a l'égalité $\vert N_G(H) \vert = \vert H \vert \times  \underbrace{\left\vert \left(\bigslant{G}{H} \right)^H  \right\vert}_{\underset{ \mbox{\tiny{par} } (\ref{100117}) }{ \geq p}}$, et donc on a  $\vert N_G(H) \vert > \vert H \vert$, et donc $H \subsetneq N_G(H) \subseteq G$, ainsi par maximalité :
+	\begin{equation*} N_G(H) = G \end{equation*} \noindent C'est à dire $H \triangleleft G$.
+	\\
+	
+	De plus, comme $H$ est maximal dans $G$, $\bigslant{G}{H}$ n'a pas de sous-groupe propre (correspondance des sous-groupes de $\bigslant{G}{H}$) donc $\bigslant{G}{H}$ est cyclique ( et de cardinal une puissance de $p$) ce qui entraine :  \begin{equation*} \bigslant{G}{H} = \bigslant{\bZ}{p\bZ} \end{equation*}
+\end{proof}
+
+\begin{thm}
+	Les parties génératrices minimales de $G$ ont le même cardinal.
+\end{thm}
+\begin{proof}
+	Considérons le sous groupe $\Phi(G) := \bigcap_{H\in \calM} H \triangleleft G$, notons $\pi : G \to \bigslant{G}{\Phi(G)}$. \\
+	Soit $ H\in \calM$, d'après le lemme précédent, $\bigslant{G}{H}$ est abélien, donc $D(G) \subseteq H$, donc $D(G) \subset \Phi(G)$, donc $\bigslant{G}{\Phi(G)}$ est abélien, en particulier c'est un $\Z$-module. \\
+	Soit $x\in G$, soit $H\in \calM$, on note $\sigma : G \to \bigslant{G}{H} = \bigslant{\bZ}{p\bZ}$, alors $\sigma(x^p) = p \sigma(x) = 0$, ainsi $x^p \in \textup{Ker}(\sigma) = H$, donc 
+	\begin{equation*} \forall x \in G; x^p \in \Phi(G) \end{equation*} 
+	\noindent Ainsi, pour tout $x \in G$ $\pi(x)^p = 1$, ainsi, de la structure de $\bZ$-module sur $\bigslant{G}{\Phi(G)}$ on en déduit une structure de $\bF_p$-espace vectoriel de dimension finie, dont toutes les familles génératrices minimales sont des bases, et en particulier ont le même cardinal.
+\end{proof}
+
+On a démontré que les parties génératrices minimal générant le groupe entier ont même cardinal, seulement pour $\bigslant{G}{\Phi(G)}$, le lemme suivant conclut la preuve :
+
+\begin{lem}
+	$(g_i)_{i\in I}$ est génératrice de $G$ si et seulement si $(\pi(g_i))_{i \in I}$ est génératrice de $\bigslant{G}{\Phi(G)}$.
+\end{lem}
+\begin{proof}
+	L'implication directe est immédiate par surjectivité de $\pi$. Pour la réciproque, raisonnons par contraposée. Si $(g_i)$ n'engendre pas $G$, considérons un sous-groupe maximal $H$ de $G$ contenant le sous-groupe engendré par la famille $(g_i)$. Alors $\Phi(G) \subseteq H \subsetneq G$, donc $\pi(H) \subsetneq \bigslant{G}{\Phi(G)}$, et la famille $(\pi(g_i))$ n'engendre pas $\bigslant{G}{\Phi(G)}$.
+\end{proof}
+
+
+
+
