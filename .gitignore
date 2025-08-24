@@ -23,3 +23,4 @@
 # Fichiers compilés
 #*.pdf  # Enlève cette ligne si tu veux versionner le PDF
 Céleste ECGS2 Maristes/DNSTL_facultatif_2_F_2024-25.pdf
+.DS_Store
