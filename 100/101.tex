@@ -7,6 +7,62 @@
 	\item Théorème de la base de Burnside. Un max de maths p13.
 \end{developpements}
  
+ 
+\subsection{Définitions de différents types d'actions}
+
+On pose $G$ un groupe et $X$ un essemble non vide.
+
+\Def
+{
+On définit une action de groupe comme la donnée d'un morphisme de groupes $\varphi$ : 
+\[
+	\begin{array}{l|ccc}	
+		\varphi & G & \rightarrow & \operatorname{Bij}(X) \\
+		& g & \mapsto & {[x \mapsto \rho(g ; x)]}	
+	\end{array}
+\]
+}
+
+\exemple
+{
+	\begin{itemize}
+	    \item $G$ agit sur lui-même par translation ou encore par conjugaison ;
+	    \item $G$ agit sur $G/H$ ($H$ sous-groupe de $G$) par translation : $g \cdot xH = gxH$ ;
+	    \item $S_n$ agit sur $\{1, \ldots, n\}$ de façon naturelle ;
+	\end{itemize}
+}
+
+
+
+\Def
+{
+	Soit $x \in X$.
+	\begin{itemize}
+	    \item On appelle orbite de $x$, et l'on note $\operatorname{Orb}(x)$, l'ensemble $$\{\rho(g, x) \mid g \in G\}$$
+	    \item On appelle stabilisateur de $x$, et l'on note $\operatorname{Stab}(x)$, l'ensemble $$\{g \in G \mid \rho(g, x) = x\}$$
+	    \item On appelle fixateur de $g$, et l'on note $\operatorname{Fix}(g)$, l'ensemble $$\{x \in X \mid \rho(g, x) = x\}$$
+	\end{itemize}
+}
+
+\Def
+{
+On dit que $\rho$ est :
+\begin{itemize}
+    \item (simplement) transitive si pour tout $(x, y) \in X^2$, il existe (un unique) $g \in G$ tel que $\rho(g, x) = y$ ;
+    \item libre si pour tout $x \in X$, $\operatorname{Stab}(x) = \{e_G\}$ ;
+    \item fidèle si $\phi$ (le morphisme associé) est injective (ou si l'intersection de tous les stabilisateurs vaut $e_G$).
+\end{itemize}
+}
+
+\exemple
+{
+\begin{itemize}
+    \item L'action de $G$ sur $\operatorname{Orb}(x)$ est transitive ;
+    \item L'action de $G$ sur $G$ par translation à gauche est libre (et donc fidèle) ;
+    \item L'action de $G / \operatorname{Ker} \phi$ sur $X$ est fidèle ;
+    \item L'action de $\mathcal{A}_n$ sur $\{1, \ldots, n\}$ est $(n-2)$-transitive.
+\end{itemize}
+}
 
 \Prop
 {
@@ -18,6 +74,15 @@
 	Si $\phi$ est injectif, soit $g\in  \bigcap_x \textup{Stab(x)}$. Alors $\forall x \in X$, $g\cdot x = x$, et donc par injectivité $g = e_G$. Si $\bigcap_x \textup{Stab(x)} = \{e_G\}$, alors il est clair que $\phi$ est injectif.
 \end{proof}
 
+\DefProp
+{
+	On définit la relation d'équivalence : $x \sim y$ si $y \in \operatorname{Orb}(x)$.
+}
+
+\Not
+{
+	Désormais, dans cette sous-section : $G$ est un groupe fini, $X$ est un ensemble fini et $\rho$ est une action de $G$ sur $X$.
+}
 
 \Thm[(Formule des classes)]
 {

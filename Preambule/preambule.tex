@@ -178,9 +178,9 @@
 
 
 
-\setcounter{secnumdepth}{1} %  Profondeur des Chapitre/Sections/Sous-sections Etc
+\setcounter{secnumdepth}{2} %  Profondeur des Chapitre/Sections/Sous-sections Etc
 
-\setcounter{tocdepth}{2}  % Profondeur de la table principale
+\setcounter{tocdepth}{1}  % Profondeur de la table principale
 
 
 
@@ -216,6 +216,13 @@
 
 
 
+\definecolor{defpropColor}{RGB}{155,205,50}  
+\newcommand{\DefProp}[2][]{% 
+        \begin{tcolorbox}[colback=defpropColor!5!white,colframe=defpropColor!75!black,title=Définition-Proposition #1]
+            #2
+        \end{tcolorbox}%
+}
+
 
 
 % Properties
@@ -229,23 +236,19 @@
 		#2
 \end{tcolorbox}}
 
-% Definitions
-\definecolor{defColor}{RGB}{255, 255, 255}
-\newcommand{\Defs}[2][]{
-	\begin{tcolorbox}[colback=defColor!5!white,colframe=defColor!75!black,title=Definitions #1]
-		#2
-\end{tcolorbox}}
-\newcommand{\Def}[2][]{
-	\begin{tcolorbox}[colback=defColor!5!white,colframe=defColor!75!black,title=Definition #1]
-		#2
-\end{tcolorbox}}
 
-% Theorems
-\definecolor{theoremColor}{RGB}{255, 0, 0}
-\newcommand{\Thm}[2][]{
-	\begin{tcolorbox}[colback=bleufoncé!5!white,colframe=bleufoncé!75!black,title=Théorème #1]
-		#2
-\end{tcolorbox}}
+
+
+
+\definecolor{defColor}{RGB}{54, 37, 157}
+\newcommand{\Def}[2][]{% 
+        \begin{tcolorbox}[colback=defColor!5!white,colframe=defColor!75!black,title=Définition #1]
+            #2
+        \end{tcolorbox}%
+    }
+
+
+
 
 % Applications
 \newcommand{\Ap}[2][]{
@@ -253,10 +256,35 @@
 		#2
 \end{tcolorbox}}
 
+
+
+\definecolor{defRapColor}{RGB}{200,110,0} 
+\newcommand{\Rap}[2][]{% 
+        \begin{tcolorbox}[colback=defRapColor!5!white,colframe=defRapColor!75!black,title=Rappel \theenvcounterRap\ #1]
+            #2
+        \end{tcolorbox}%
+}
+
+\definecolor{notColor}{RGB}{223,179,85} 
+\newcommand{\Not}[2][]{% 
+        \begin{tcolorbox}[colback=notColor!5!white,colframe=notColor!75!black,title=Notation #1]
+            #2
+        \end{tcolorbox}%
+}
+
+
+\definecolor{theoremColor}{RGB}{200,0,0} 
+\newcommand{\Thm}[2][]{% 
+        \begin{tcolorbox}[colback=theoremColor!5!white,colframe=theoremColor!75!black,title=Théorème  #1]
+            #2
+        \end{tcolorbox}%
+}
+
+
 % Examples
-\newcommand{\example}[0]{
+\newcommand{\exemple}[0]{
 	\vspace{1em}
-	{\bf Example :}
+	{\bf Exemple :}
 }
 
 % Diverse things to highlight
@@ -390,7 +418,7 @@
 	%\fancyfoot[C]{\thepage} %Page Number
 	\renewcommand{\headrule}{\color{gold2}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth} %0pt for no rule, 2pt thicker etc...
 	\renewcommand{\footrule}{\color{gold2}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth} %0pt for no rule, 2pt thicker etc...
-	\fancyfoot[R]{Session 2027}
+	\fancyfoot[R]{Session 2026}
 	\fancyfoot[L]{Louis-Thibault Gauthier}
 	%\fancyfoot[C]{Page \thepage/\pageref{LastPage}}
 	\fancyfoot[C]{Page \number\numexpr\thepage+1\relax/\number\numexpr\getpagerefnumber{LastPage}+1\relax}
