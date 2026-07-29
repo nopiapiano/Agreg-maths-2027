@@ -1,0 +1,1387 @@
+% !TEX program = pdflatex
+% =====================================================================
+%  Agrégation interne de mathématiques -- Session 2026
+%  Première épreuve écrite (EAI MAT 1)
+%  Corrigé rédigé : Vrai/Faux, Partie I, Partie II
+%  + encadrés "Erreurs fréquentes à éviter"
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{stmaryrd}                 % \llbracket, \rrbracket
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+
+% ------------------------- Palette -----------------------------------
+\definecolor{bleuP}{RGB}{25,54,102}       % bleu profond (titres, énoncés)
+\definecolor{bleuClair}{RGB}{240,244,250} % fond des énoncés
+\definecolor{vertP}{RGB}{22,101,52}       % vert (corrigés)
+\definecolor{vertClair}{RGB}{243,250,245}
+\definecolor{orangeP}{RGB}{178,74,10}     % orange (pièges)
+\definecolor{orangeClair}{RGB}{255,247,237}
+\definecolor{grisP}{RGB}{90,90,90}
+
+\hypersetup{colorlinks=true, linkcolor=bleuP, urlcolor=bleuP}
+
+% ------------------------- Titres ------------------------------------
+\titleformat{\section}
+  {\Large\bfseries\color{bleuP}}{\thesection.}{0.6em}{}
+  [\vspace{2pt}{\color{bleuP}\titlerule[1.2pt]}]
+\titleformat{\subsection}
+  {\large\bfseries\color{bleuP}}{\thesubsection.}{0.6em}{}
+
+% ------------------------- Boîtes ------------------------------------
+\newtcolorbox{enonce}[1]{%
+  enhanced, breakable,
+  colback=bleuClair, colframe=bleuP,
+  boxrule=0.8pt, arc=2mm,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  title={\bfseries #1},
+  fonttitle=\color{white},
+  colbacktitle=bleuP,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={arc=1.5mm, boxrule=0pt}}
+
+\newtcolorbox{pieges}{%
+  enhanced, breakable,
+  colback=orangeClair, colframe=orangeP,
+  boxrule=0.8pt, arc=2mm,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  title={\bfseries Erreurs fréquentes à éviter},
+  fonttitle=\color{white},
+  colbacktitle=orangeP,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={arc=1.5mm, boxrule=0pt}}
+
+\newtcolorbox{conseil}{%
+  enhanced, breakable,
+  colback=vertClair, colframe=vertP,
+  boxrule=0.8pt, arc=2mm,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  title={\bfseries Conseils de rédaction pour l'épreuve},
+  fonttitle=\color{white},
+  colbacktitle=vertP,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={arc=1.5mm, boxrule=0pt}}
+
+% Corrigé : filet vertical vert à gauche
+\newenvironment{corrige}
+  {\par\medskip\noindent
+   \begin{tcolorbox}[blanker, breakable,
+     borderline west={2.5pt}{0pt}{vertP},
+     left=10pt, top=2pt, bottom=2pt]
+   {\color{vertP}\bfseries Corrigé.}\hspace{0.5em}\ignorespaces}
+  {\hfill$\blacksquare$\end{tcolorbox}\medskip}
+
+% ------------------------- Macros ------------------------------------
+\newcommand{\og}{``}
+\newcommand{\fg}{''}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\Mn}[1][n]{\mathcal{M}_{#1}}
+\newcommand{\GLn}[1][n]{\mathrm{GL}_{#1}}
+\newcommand{\On}[1][n]{\mathrm{O}_{#1}}
+\newcommand{\Sym}[1][n]{S_{#1}}          % matrices symétriques S_n(Z)
+\newcommand{\Perm}[1][n]{\mathcal{S}_{#1}} % permutations
+\newcommand{\ii}[2]{\llbracket #1,#2\rrbracket}
+\newcommand{\dg}[1]{\mathrm{d}^{\circ}\!\left(#1\right)}
+\newcommand{\T}{\mathsf{T}}               % transposée : M^\T
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Ima}{Im}
+\DeclareMathOperator{\rg}{rang}
+\DeclareMathOperator{\vect}{vect}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\Diag}{Diag}
+\newcommand{\red}[1]{\overline{#1}}       % réduction mod p
+
+\setlist[enumerate,1]{label=(\alph*), leftmargin=2em}
+
+\title{\vspace{-1.2cm}{\color{bleuP}\bfseries\LARGE
+Agrégation interne de mathématiques --- Session 2026\\[4pt]
+\Large Première épreuve écrite (EAI MAT 1)}\\[8pt]
+{\large Corrigé rédigé : Vrai/Faux, Partie I et Partie II,\\
+avec les erreurs fréquentes à éviter}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.4cm}
+
+\begin{center}
+\begin{minipage}{0.92\textwidth}\small\itshape\color{grisP}
+Le problème porte sur l'action de conjugaison de $\On(\Q)$ sur
+$\Sym(\R)\cap\Mn(\Z)$. Le Vrai/Faux et les parties I et II, corrigés
+ci-dessous, mettent en place les outils : réduction modulo $p$,
+groupe $\GLn(\Z)$, matrices de permutation et de transvection,
+puis le résultant $\Delta(R)=\det(\psi_R)$ et l'étude fine de
+$\Ker(\varphi_{R,S})$. Chaque question est suivie, lorsque c'est
+pertinent, d'un encadré signalant les pièges classiques relevés
+dans les rapports de jury.
+\end{minipage}
+\end{center}
+
+\begin{conseil}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item \textbf{Le Vrai/Faux se justifie.} L'énoncé le dit explicitement :
+une réponse non argumentée (ou un contre-exemple non vérifié) ne
+rapporte rien. Pour un \emph{faux}, un contre-exemple explicite et
+\emph{vérifié} ; pour un \emph{vrai}, une démonstration complète.
+\item \textbf{Citer les questions utilisées.} Le sujet est très
+structuré ; écrire \og d'après la question 6(b)\fg{} est attendu et
+valorisé. \emph{Remarque :} on écrira ici simplement
+\emph{d'après 6(b)}.
+\item \textbf{Attention à la caractéristique.} Le corps $\K$ est
+quelconque : plusieurs questions (VF4, 17, 18) sont précisément
+conçues pour piéger les réflexes de la caractéristique nulle
+($\dg{R'}=\dg{R}-1$, \og $k\neq 0$ \fg, etc.).
+\item \textbf{\og Soigneusement \fg{} signifie coefficient par
+coefficient.} Aux questions 9 et 10, un dessin ou un exemple
+$3\times 3$ ne suffit pas : on calcule le coefficient générique du
+produit avec le symbole de Kronecker.
+\item \textbf{Vérifier les appartenances.} Quand on exhibe un élément
+d'un noyau ou d'un espace $\K_{d-1}[X]$, il faut contrôler les
+\emph{degrés} : c'est le point le plus souvent omis en question 15.
+\end{itemize}
+\end{conseil}
+
+% =====================================================================
+\section{Vrai ou faux ?}
+% =====================================================================
+
+% ------------------------------------------------ VF 1
+\begin{enonce}{Question 1}
+Soient $p$ un nombre premier et $A\in\Mn(\Z)$.
+Affirmation : \emph{dans $\Fp$, on a
+$\red{\det(A)}=\det\big(\red{A}\big)$.}
+\end{enonce}
+
+\begin{corrige}
+\textbf{L'affirmation est vraie.}
+Notons $\pi:\Z\to\Fp$, $a\mapsto\red{a}$, la réduction modulo $p$ :
+c'est un \emph{morphisme d'anneaux} (surjectif). Écrivons la formule de
+Leibniz pour $A=[a_{i,j}]$ :
+\[
+\det(A)\;=\;\sum_{\sigma\in\Perm}\varepsilon(\sigma)
+\prod_{i=1}^{n}a_{\sigma(i),i}.
+\]
+Comme $\pi$ est additif et multiplicatif et vérifie $\pi(-x)=-\pi(x)$,
+il commute avec les sommes, les produits et les signes ; en appliquant
+$\pi$ membre à membre :
+\[
+\red{\det(A)}
+=\sum_{\sigma\in\Perm}\varepsilon(\sigma)
+\prod_{i=1}^{n}\red{a_{\sigma(i),i}}
+=\det\big([\,\red{a_{i,j}}\,]\big)
+=\det\big(\red{A}\big),
+\]
+où l'on a reconnu la formule de Leibniz du déterminant dans le corps
+$\Fp$ (le signe $\varepsilon(\sigma)=\pm 1$ est envoyé sur
+$\pm\red{1}$).
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Invoquer la \og linéarité \fg{} de la réduction modulo $p$ : le
+déterminant n'est pas linéaire en $A$. C'est le caractère de
+\emph{morphisme d'anneaux} (compatibilité aux sommes \emph{et} aux
+produits) qui fait fonctionner l'argument, via une formule explicite
+du déterminant.
+\item Raisonner avec $\det(A)=\prod\lambda_i$ (valeurs propres) : les
+valeurs propres n'ont aucune raison d'être entières ni de se réduire
+convenablement.
+\item Oublier de dire ce que devient $\varepsilon(\sigma)$ dans $\Fp$.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ VF 2
+\begin{enonce}{Question 2}
+Soient $E$ et $F$ deux espaces vectoriels de bases respectives
+$(e_i)_{1\le i\le m}$ et $(f_j)_{1\le j\le n}$.
+Affirmation : \emph{$(e_i,f_j)_{\substack{1\le i\le m\\ 1\le j\le n}}$
+est une base de $E\times F$.}
+\end{enonce}
+
+\begin{corrige}
+\textbf{L'affirmation est fausse.}
+La famille proposée est constituée des $mn$ couples
+$(e_i,f_j)\in E\times F$. Montrons qu'elle n'engendre jamais
+$E\times F$ : le vecteur $(e_1,0)$ n'appartient pas à son sous-espace
+engendré. En effet, si
+\[
+(e_1,0)\;=\;\sum_{i=1}^{m}\sum_{j=1}^{n}\lambda_{i,j}\,(e_i,f_j)
+\;=\;\Big(\sum_{i}\big(\textstyle\sum_{j}\lambda_{i,j}\big)e_i\,,\;
+\sum_{j}\big(\textstyle\sum_{i}\lambda_{i,j}\big)f_j\Big),
+\]
+alors, par liberté de $(e_i)$ et de $(f_j)$ :
+\[
+\sum_{j}\lambda_{1,j}=1,\qquad
+\sum_{j}\lambda_{i,j}=0\ (i\ge 2),\qquad
+\sum_{i}\lambda_{i,j}=0\ (1\le j\le n).
+\]
+En sommant toutes les égalités de gauche, la somme totale
+$\Sigma=\sum_{i,j}\lambda_{i,j}$ vaut $1$ ; en sommant celles de
+droite, $\Sigma=0$ : contradiction. La famille n'est donc pas
+génératrice, ce n'est pas une base.
+
+\emph{Complément.} La bonne base de $E\times F$ est la famille de
+cardinal $m+n$
+\[
+\big((e_1,0),\dots,(e_m,0),(0,f_1),\dots,(0,f_n)\big),
+\]
+et $\dim(E\times F)=m+n$. On notera d'ailleurs que pour $m,n\ge 2$
+la famille de l'énoncé n'est même pas libre :
+$(e_1,f_1)+(e_2,f_2)-(e_1,f_2)-(e_2,f_1)=(0,0)$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Se contenter de l'argument de cardinal $mn\neq m+n$ : il est en
+défaut pour $m=n=2$ (où $mn=m+n=4$) ! Il faut un argument valable
+pour \emph{tous} $m,n$, comme celui donné ci-dessus, ou traiter ce
+cas à part.
+\item Confondre avec le \emph{produit tensoriel} $E\otimes F$, dont
+$(e_i\otimes f_j)$ est effectivement une base : c'est l'origine du
+piège.
+\item Répondre \og faux \fg{} sans justification, ou avec un
+contre-exemple non vérifié.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ VF 3
+\begin{enonce}{Question 3}
+Soient $E$ de dimension finie, $f\in\mathcal{L}(E)$ diagonalisable et
+$F$ un sous-espace vectoriel de $E$.
+Affirmation : \emph{si $F$ est stable par $f$, alors $f$ induit un
+endomorphisme diagonalisable de $F$.}
+\end{enonce}
+
+\begin{corrige}
+\textbf{L'affirmation est vraie.}
+Notons $g:F\to F$, $x\mapsto f(x)$, l'endomorphisme induit (bien
+défini car $f(F)\subset F$).
+
+Puisque $f$ est diagonalisable, il existe un polynôme
+$P\in\K[X]$ \emph{scindé à racines simples} annulant $f$ (par exemple
+$P=\prod_{\lambda\in\mathrm{Sp}(f)}(X-\lambda)$).
+
+Montrons que $P(g)=0$. Une récurrence immédiate donne, pour tout
+$k\in\N$ et tout $x\in F$, $g^{k}(x)=f^{k}(x)$ : c'est vrai pour
+$k=0$, et si $g^k(x)=f^k(x)$ alors, comme $f^k(x)\in F$ (stabilité),
+$g^{k+1}(x)=g\big(f^k(x)\big)=f^{k+1}(x)$. Par linéarité, pour tout
+$x\in F$ :
+\[
+P(g)(x)=P(f)(x)=0 .
+\]
+Ainsi $g$ est annulé par un polynôme scindé à racines simples : par le
+critère de diagonalisabilité (via le lemme des noyaux), $g$ est
+diagonalisable.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Écrire directement $P(g)=P(f)_{|F}$ sans justification : la
+petite récurrence $g^k(x)=f^k(x)$ (qui utilise la stabilité à chaque
+étape) est attendue.
+\item Tenter la voie \og $F=\bigoplus (F\cap E_\lambda)$ \fg{} : le
+résultat est vrai mais c'est précisément ce qu'il faut démontrer ;
+beaucoup de copies l'affirment sans preuve. La voie du polynôme
+annulateur est la plus économique.
+\item Énoncer le critère de diagonalisabilité de façon incomplète
+(oublier \og à racines simples \fg{} ou \og scindé \fg).
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ VF 4
+\begin{enonce}{Question 4}
+Soient $\K$ un corps, $R\in\K[X]$ et $R'$ son polynôme dérivé.
+Affirmation : \emph{si $R'=0$, alors $R$ est constant.}
+\end{enonce}
+
+\begin{corrige}
+\textbf{L'affirmation est fausse} (pour un corps $\K$ quelconque).
+Prenons $\K=\Fp$ avec $p$ premier et $R=X^{p}$. Alors
+\[
+R'=\red{p}\,X^{p-1}=\red{0}\cdot X^{p-1}=0,
+\]
+puisque $p\equiv 0\ [p]$, alors que $R$ n'est pas constant
+($\dg{R}=p\ge 2$).
+
+\emph{Complément.} L'affirmation est vraie si $\K$ est de
+caractéristique nulle : si $R=\sum_{k=0}^{n}r_kX^k$ avec $R'=0$,
+alors $k\,r_k=0$ pour tout $k\ge 1$, et comme $k\neq 0$ dans $\K$
+on obtient $r_k=0$ pour $k\ge 1$. En caractéristique $p$, la
+conclusion correcte est seulement : $R'=0$ si et seulement si $R$ est
+un polynôme en $X^{p}$ (c'est l'objet de la question 34 du sujet).
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Réflexe \og $\dg{R'}=\dg{R}-1$ \fg{} : cette formule est fausse
+en caractéristique $p$ (le coefficient dominant $n\,r_n$ peut
+s'annuler).
+\item Oublier que $\K$ est un corps \emph{quelconque} : l'énoncé ne dit
+pas $\K=\R$ ou $\mathbb{C}$. Ce Vrai/Faux annonce la partie IV.
+\item Donner le contre-exemple $X^p$ sans vérifier explicitement
+$R'=0$ dans $\Fp[X]$.
+\end{itemize}
+\end{pieges}
+
+% =====================================================================
+\section{Partie I. Quelques résultats sur les matrices à coefficients
+dans $\Z$}
+% =====================================================================
+Dans toute cette partie, $n\in\N^{*}$.
+
+% ------------------------------------------------ Q5
+\begin{enonce}{Question 5}
+Soient $Q\in\On(\Q)$ et $A\in\Mn(\Z)$ telles que $Q^{\T}AQ\in\Mn(\Z)$.
+On note $\widehat{Q}=\ell(Q)\,Q$ et on suppose que $p$ est un nombre
+premier divisant $\ell(Q)$. Démontrer que
+$\widehat{Q}^{\T}\widehat{Q}\equiv 0\,[p^{k}]$ et
+$\widehat{Q}^{\T}A\widehat{Q}\equiv 0\,[p^{k}]$ pour $k\in\{1,2\}$.
+\end{enonce}
+
+\begin{corrige}
+Posons $\ell=\ell(Q)$ ; par définition
+$\widehat{Q}=\ell Q\in\Mn(\Z)$. Comme $Q\in\On(\Q)$, on a
+$Q^{\T}Q=I_n$, d'où :
+\[
+\widehat{Q}^{\T}\widehat{Q}
+=(\ell Q)^{\T}(\ell Q)
+=\ell^{2}\,Q^{\T}Q
+=\ell^{2}I_n .
+\]
+De même, par bilinéarité du produit matriciel :
+\[
+\widehat{Q}^{\T}A\widehat{Q}=\ell^{2}\,\big(Q^{\T}AQ\big),
+\qquad\text{avec }Q^{\T}AQ\in\Mn(\Z)\text{ par hypothèse.}
+\]
+Ainsi, tout coefficient de $\widehat{Q}^{\T}\widehat{Q}$
+(respectivement de $\widehat{Q}^{\T}A\widehat{Q}$) est de la forme
+$\ell^{2}m$ avec $m\in\Z$. Or $p\mid\ell$, donc $p^{2}\mid\ell^{2}$,
+et par conséquent $p^{2}\mid\ell^{2}m$ : chaque coefficient est
+divisible par $p^{2}$, c'est-à-dire
+\[
+\widehat{Q}^{\T}\widehat{Q}\equiv 0\,[p^{2}]
+\quad\text{et}\quad
+\widehat{Q}^{\T}A\widehat{Q}\equiv 0\,[p^{2}].
+\]
+Enfin, la divisibilité par $p^{2}$ entraîne la divisibilité par $p$ :
+les deux congruences valent aussi modulo $p$, d'où le résultat pour
+$k\in\{1,2\}$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Ne pas voir que $Q^{\T}Q=I_n$ règle instantanément le premier
+point : certains candidats se lancent dans des calculs de
+coefficients inutiles.
+\item Oublier d'invoquer l'hypothèse $Q^{\T}AQ\in\Mn(\Z)$ : sans elle,
+$\ell^{2}Q^{\T}AQ$ n'a aucune raison d'avoir des coefficients dans
+$p^{2}\Z$ (les coefficients de $Q^{\T}AQ$ pourraient avoir des
+dénominateurs).
+\item Traiter laborieusement $k=1$ puis $k=2$ : le cas $k=2$ implique
+le cas $k=1$, il suffit de le dire.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q6
+\begin{enonce}{Question 6}
+Soit $U\in\Mn(\Z)$.
+\begin{enumerate}
+\item Si $U\in\GLn(\Z)$, démontrer que $\det(U)=\pm 1$.
+\item Si $\det(U)=\pm 1$, démontrer que $U\in\GLn(\Z)$.
+\item Montrer que $(\GLn(\Z),\times)$ est un groupe.
+\end{enumerate}
+\end{enonce}
+
+\begin{corrige}
+\textbf{(a)} Par définition, $U$ est inversible dans $\Mn(\R)$ et
+$U^{-1}\in\Mn(\Z)$. Le déterminant d'une matrice à coefficients
+entiers est un entier (formule de Leibniz) : $\det(U)\in\Z$ et
+$\det(U^{-1})\in\Z$. Or
+\[
+\det(U)\,\det(U^{-1})=\det(UU^{-1})=\det(I_n)=1 .
+\]
+Ainsi $\det(U)$ est un élément inversible de l'anneau $\Z$, donc
+$\det(U)\in\{-1,1\}$.
+
+\textbf{(b)} Supposons $\det(U)=\varepsilon\in\{-1,1\}$. En
+particulier $\det(U)\neq 0$, donc $U$ est inversible dans $\Mn(\R)$
+et la formule de la comatrice donne
+\[
+U^{-1}=\frac{1}{\det(U)}\,{}\mathrm{com}(U)^{\T}
+=\varepsilon\,\mathrm{com}(U)^{\T}.
+\]
+Chaque cofacteur de $U$ est, au signe près, le déterminant d'une
+matrice extraite de $U$, donc à coefficients entiers : c'est un
+entier. Ainsi $\mathrm{com}(U)^{\T}\in\Mn(\Z)$, puis
+$U^{-1}=\varepsilon\,\mathrm{com}(U)^{\T}\in\Mn(\Z)$, et
+$U\in\GLn(\Z)$.
+
+\textbf{(c)} Montrons que $\GLn(\Z)$ est un \emph{sous-groupe} de
+$(\GLn(\R),\times)$, ce qui suffira (l'associativité, l'élément
+neutre et les inverses sont alors hérités).
+\begin{itemize}[leftmargin=1.6em, itemsep=1pt]
+\item $\GLn(\Z)\subset\GLn(\R)$ et $I_n\in\GLn(\Z)$ car
+$I_n\in\Mn(\Z)$, $I_n^{-1}=I_n\in\Mn(\Z)$ : la partie est non vide.
+\item \emph{Stabilité par produit :} si $U,V\in\GLn(\Z)$, alors
+$UV\in\Mn(\Z)$ (les coefficients d'un produit de matrices entières
+sont des sommes de produits d'entiers) et
+$(UV)^{-1}=V^{-1}U^{-1}\in\Mn(\Z)$ pour la même raison. Donc
+$UV\in\GLn(\Z)$.
+\item \emph{Stabilité par inverse :} si $U\in\GLn(\Z)$, alors
+$U^{-1}\in\Mn(\Z)$ par définition, et $(U^{-1})^{-1}=U\in\Mn(\Z)$ ;
+donc $U^{-1}\in\GLn(\Z)$.
+\end{itemize}
+Ainsi $(\GLn(\Z),\times)$ est un groupe.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item En (a), écrire \og $\det(U^{-1})=1/\det(U)$ donc c'est fini \fg{}
+sans utiliser que $\det(U^{-1})$ est \emph{entier} : le point clé est
+que $\det(U)$ divise $1$ \emph{dans $\Z$}.
+\item En (b), oublier de justifier que la comatrice est à coefficients
+entiers, ou oublier de dire que $\det(U)\neq 0$ assure d'abord
+l'inversibilité dans $\Mn(\R)$.
+\item En (c), redémontrer l'associativité à la main au lieu de
+travailler par sous-groupe ; ou, à l'inverse, oublier de vérifier que
+le \emph{produit} reste à coefficients entiers (la structure demande
+une loi \emph{interne}).
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q7
+\begin{enonce}{Question 7}
+\begin{enumerate}
+\item Soit $M\in\On(\Z)$. Démontrer que sur chaque ligne et chaque
+colonne de $M$ il y a exactement un coefficient non nul, qui vaut
+$\pm 1$.
+\item En déduire le cardinal de $\On(\Z)$.
+\end{enumerate}
+\end{enonce}
+
+\begin{corrige}
+\textbf{(a)} Notons $M=[m_{i,j}]$. La relation $M^{\T}M=I_n$ signifie
+que pour tous $j,j'$ :
+\[
+\sum_{i=1}^{n}m_{i,j}\,m_{i,j'}=\delta_{j,j'} .
+\]
+\emph{Colonnes.} Pour $j'=j$ : $\sum_{i}m_{i,j}^{2}=1$. C'est une
+somme d'entiers positifs ou nuls valant $1$ : exactement un des
+$m_{i,j}^{2}$ vaut $1$ (les autres étant nuls). Il existe donc un
+unique indice, noté $\tau(j)$, tel que $m_{\tau(j),j}=\pm 1$, et
+$m_{i,j}=0$ pour $i\neq\tau(j)$.
+
+\emph{Lignes.} Pour $j\neq j'$, l'orthogonalité donne
+$\sum_i m_{i,j}m_{i,j'}=0$. Si l'on avait $\tau(j)=\tau(j')$, cette
+somme vaudrait $m_{\tau(j),j}\,m_{\tau(j),j'}=\pm 1\neq 0$ :
+contradiction. Donc $\tau:\ii{1}{n}\to\ii{1}{n}$ est injective, et,
+entre ensembles finis de même cardinal, bijective : c'est une
+permutation. Chaque ligne $i$ contient alors exactement un coefficient
+non nul, celui de la colonne $\tau^{-1}(i)$, qui vaut $\pm 1$.
+
+\textbf{(b)} D'après (a), toute matrice $M\in\On(\Z)$ s'écrit de
+manière unique
+\[
+M=[\,\varepsilon_j\,\delta_{i,\tau(j)}\,]_{1\le i,j\le n},
+\qquad \tau\in\Perm,\quad
+(\varepsilon_1,\dots,\varepsilon_n)\in\{-1,1\}^{n},
+\]
+où $\tau$ est la permutation ci-dessus et $\varepsilon_j=m_{\tau(j),j}$.
+Réciproquement, toute matrice de cette forme est dans $\On(\Z)$ : ses
+coefficients sont entiers, et ses colonnes sont, au signe près, des
+vecteurs distincts de la base canonique, donc forment une famille
+orthonormale : $M^{\T}M=I_n$. L'application
+\[
+\Perm\times\{-1,1\}^{n}\longrightarrow\On(\Z),\qquad
+(\tau,\varepsilon)\longmapsto[\,\varepsilon_j\,\delta_{i,\tau(j)}\,]
+\]
+est donc une bijection, et
+\[
+\boxed{\ \#\On(\Z)=2^{\,n}\,n!\ }
+\]
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Ne traiter que les colonnes et \og par symétrie les lignes \fg{}
+en utilisant $MM^{\T}=I_n$ sans le justifier : $M^{\T}M=I_n$ donne
+$M$ inversible d'inverse $M^{\T}$, \emph{puis} $MM^{\T}=I_n$ ; il
+faut l'écrire (ou utiliser l'argument d'injectivité de $\tau$
+ci-dessus, qui l'évite).
+\item L'argument arithmétique clé est \og une somme de carrés
+d'entiers vaut $1$ \fg{} : il doit apparaître explicitement. Sur
+$\R$, la conclusion serait évidemment fausse !
+\item En (b), donner $2^{n}n!$ sans vérifier la \emph{réciproque}
+(toutes ces matrices sont orthogonales) ni l'\emph{injectivité} du
+paramétrage.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q8
+\begin{enonce}{Question 8}
+Soit $\sigma\in\Perm$. On pose
+$Q_\sigma=[\delta_{i,\sigma(j)}]_{1\le i,j\le n}$. Démontrer que
+$Q_\sigma^{\T}=Q_{\sigma^{-1}}$, puis que $Q_\sigma\in\On(\Z)$.
+\end{enonce}
+
+\begin{corrige}
+\emph{Transposée.} Pour tous $i,j\in\ii{1}{n}$ :
+\[
+\big(Q_\sigma^{\T}\big)_{i,j}
+=\big(Q_\sigma\big)_{j,i}
+=\delta_{j,\sigma(i)} .
+\]
+Or $j=\sigma(i)\iff i=\sigma^{-1}(j)$, de sorte que
+$\delta_{j,\sigma(i)}=\delta_{i,\sigma^{-1}(j)}
+=\big(Q_{\sigma^{-1}}\big)_{i,j}$. D'où
+$Q_\sigma^{\T}=Q_{\sigma^{-1}}$.
+
+\emph{Morphisme.} Montrons que pour $\sigma,\tau\in\Perm$ on a
+$Q_\sigma Q_\tau=Q_{\sigma\circ\tau}$. En effet :
+\[
+\big(Q_\sigma Q_\tau\big)_{i,j}
+=\sum_{k=1}^{n}\delta_{i,\sigma(k)}\,\delta_{k,\tau(j)}
+=\delta_{i,\sigma(\tau(j))}
+=\big(Q_{\sigma\circ\tau}\big)_{i,j},
+\]
+le seul terme éventuellement non nul de la somme étant celui d'indice
+$k=\tau(j)$.
+
+\emph{Conclusion.} $Q_\sigma$ est à coefficients dans $\{0,1\}
+\subset\Z$, et
+\[
+Q_\sigma^{\T}\,Q_\sigma
+=Q_{\sigma^{-1}}\,Q_\sigma
+=Q_{\sigma^{-1}\circ\,\sigma}
+=Q_{\mathrm{id}}
+=I_n ,
+\]
+car $Q_{\mathrm{id}}=[\delta_{i,j}]=I_n$. Donc
+$Q_\sigma\in\On(\Z)$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Erreurs d'indices : avec la convention de l'énoncé, la colonne
+$j$ de $Q_\sigma$ porte son $1$ en \emph{ligne} $\sigma(j)$ ; toute
+confusion ligne/colonne inverse $\sigma$ et $\sigma^{-1}$.
+\item Dans le calcul du produit, ne pas identifier l'unique indice $k$
+qui contribue ($k=\tau(j)$) : les manipulations de Kronecker doivent
+être justifiées.
+\item Conclure \og orthogonale donc dans $\On(\Z)$ \fg{} en oubliant de
+mentionner que les coefficients sont entiers.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q9
+\begin{enonce}{Question 9}
+Pour $i\neq j$ dans $\ii{1}{n}$, $P_{i,j}$ désigne la matrice égale à
+$I_n$ sauf : $1$ en positions $(i,j)$ et $(j,i)$, $0$ en positions
+$(i,i)$ et $(j,j)$. Soit $A=[a_{k,l}]\in\Mn(\R)$.
+\begin{enumerate}
+\item Démontrer qu'il existe $\sigma\in\Perm$ telle que
+$P_{i,j}=Q_\sigma$.
+\item Démontrer soigneusement que la matrice obtenue à partir de $A$
+en échangeant les lignes $i$ et $j$ est $P_{i,j}A$.
+\end{enumerate}
+\end{enonce}
+
+\begin{corrige}
+\textbf{(a)} Soit $\tau=(i\ j)\in\Perm$ la transposition échangeant
+$i$ et $j$. Vérifions coefficient par coefficient que
+$P_{i,j}=Q_\tau$, c'est-à-dire $(P_{i,j})_{k,l}=\delta_{k,\tau(l)}$
+pour tous $k,l$ :
+\begin{itemize}[leftmargin=1.6em, itemsep=1pt]
+\item si $l\notin\{i,j\}$ : $\tau(l)=l$ et
+$\delta_{k,\tau(l)}=\delta_{k,l}$, soit un $1$ en position $(l,l)$ et
+des $0$ ailleurs, conformément à la définition de $P_{i,j}$ ;
+\item si $l=i$ : $\tau(i)=j$ et $\delta_{k,\tau(i)}=\delta_{k,j}$ :
+la colonne $i$ porte un unique $1$ en ligne $j$, conformément au
+$1$ en position $(j,i)$ et aux $0$ en $(i,i)$ et ailleurs ;
+\item si $l=j$ : symétriquement, unique $1$ en position $(i,j)$.
+\end{itemize}
+Donc $P_{i,j}=Q_\tau$ avec $\sigma=\tau=(i\ j)$.
+
+\textbf{(b)} Calculons le coefficient générique de $P_{i,j}A=Q_\tau A$.
+Pour tous $k,l\in\ii{1}{n}$ :
+\[
+\big(P_{i,j}A\big)_{k,l}
+=\sum_{m=1}^{n}\delta_{k,\tau(m)}\,a_{m,l} .
+\]
+L'unique valeur de $m$ pour laquelle $\tau(m)=k$ est
+$m=\tau^{-1}(k)=\tau(k)$ (une transposition est involutive), donc
+\[
+\big(P_{i,j}A\big)_{k,l}=a_{\tau(k),\,l}\qquad
+\text{pour tous }k,l .
+\]
+Autrement dit : la ligne $k$ de $P_{i,j}A$ est la ligne $\tau(k)$ de
+$A$. Comme $\tau(i)=j$, $\tau(j)=i$ et $\tau(k)=k$ pour
+$k\notin\{i,j\}$, la matrice $P_{i,j}A$ est exactement la matrice
+obtenue à partir de $A$ en échangeant les lignes $i$ et $j$, les
+autres lignes étant inchangées.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item L'adverbe \og soigneusement \fg{} est un signal du jury : un
+schéma, un exemple $3\times 3$ ou un \og on voit que \fg{} ne
+rapportent rien. Le calcul du coefficient générique avec le symbole
+de Kronecker est attendu.
+\item Oublier l'involutivité ($\tau^{-1}=\tau$) et écrire
+$a_{\tau^{-1}(k),l}$ sans conclure.
+\item Confondre le sens : \emph{multiplier à gauche agit sur les
+lignes}, à droite sur les colonnes (l'énoncé admet d'ailleurs le cas
+des colonnes).
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q10
+\begin{enonce}{Question 10}
+Soient $q\in\Z$ et $i\neq j$ dans $\ii{1}{n}$. On pose
+$T_{i,j}(q)=I_n-q\,E_{i,j}$.
+\begin{enumerate}
+\item Démontrer que $T_{i,j}(q)\in\GLn(\Z)$.
+\item Démontrer soigneusement que la matrice obtenue à partir de $A$
+par l'opération $C_j\leftarrow C_j-qC_i$ est $A\,T_{i,j}(q)$.
+\item Donner, sans démonstration, $S_{i,j}(q)\in\GLn(\Z)$ telle que
+$S_{i,j}(q)A$ réalise $L_j\leftarrow L_j-qL_i$.
+\end{enumerate}
+\end{enonce}
+
+\begin{corrige}
+\textbf{(a)} Rappelons la règle de multiplication des matrices
+élémentaires : $E_{i,j}E_{k,l}=\delta_{j,k}\,E_{i,l}$. Comme
+$i\neq j$, on a $E_{i,j}^{2}=\delta_{j,i}E_{i,j}=0$, d'où
+\[
+\big(I_n-qE_{i,j}\big)\big(I_n+qE_{i,j}\big)
+=I_n-q^{2}E_{i,j}^{2}=I_n ,
+\]
+et de même dans l'autre sens. Ainsi $T_{i,j}(q)$ est inversible,
+d'inverse $T_{i,j}(-q)=I_n+qE_{i,j}\in\Mn(\Z)$. Les deux matrices
+étant à coefficients entiers, $T_{i,j}(q)\in\GLn(\Z)$.
+
+\emph{Variante :} $T_{i,j}(q)$ est triangulaire à diagonale de $1$
+(quitte à regarder le cas $i<j$ ou $i>j$), donc $\det=1$, et l'on
+conclut par la question 6(b).
+
+\textbf{(b)} On a $A\,T_{i,j}(q)=A-q\,A\,E_{i,j}$. Calculons le
+coefficient générique de $AE_{i,j}$ : pour tous $k,l$,
+\[
+\big(AE_{i,j}\big)_{k,l}
+=\sum_{m=1}^{n}a_{k,m}\,\big(E_{i,j}\big)_{m,l}
+=\sum_{m=1}^{n}a_{k,m}\,\delta_{m,i}\,\delta_{l,j}
+=a_{k,i}\,\delta_{l,j} .
+\]
+Ainsi $AE_{i,j}$ a toutes ses colonnes nulles sauf la $j$-ième, qui
+est la colonne $C_i$ de $A$. Par conséquent, pour tous $k,l$ :
+\[
+\big(A\,T_{i,j}(q)\big)_{k,l}
+=a_{k,l}-q\,a_{k,i}\,\delta_{l,j}
+=\begin{cases}
+a_{k,l} & \text{si } l\neq j,\\[2pt]
+a_{k,j}-q\,a_{k,i} & \text{si } l=j .
+\end{cases}
+\]
+Les colonnes de $A\,T_{i,j}(q)$ sont donc celles de $A$, à
+l'exception de la colonne $j$ qui est remplacée par $C_j-qC_i$ :
+c'est exactement l'opération $C_j\leftarrow C_j-qC_i$.
+
+\textbf{(c)} On peut prendre
+\[
+S_{i,j}(q)=I_n-q\,E_{j,i}\;=\;T_{j,i}(q)\in\GLn(\Z).
+\]
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Affirmer \og triangulaire \fg{} sans préciser
+supérieure/inférieure selon la position relative de $i$ et $j$ ; la
+preuve par l'inverse explicite $T_{i,j}(-q)$ évite toute discussion.
+\item Utiliser $E_{i,j}^{2}=0$ sans mentionner l'hypothèse $i\neq j$
+(pour $i=j$, $E_{i,i}^2=E_{i,i}\neq 0$).
+\item En (c), se tromper d'indices : l'opération sur la \emph{ligne}
+$j$ demande $E_{j,i}$ (le $-q$ se trouve en position $(j,i)$), pas
+$E_{i,j}$. Une vérification rapide sur le coefficient générique,
+même non demandée, sécurise la réponse.
+\end{itemize}
+\end{pieges}
+
+% =====================================================================
+\section{Partie II. Résultant et applications}
+% =====================================================================
+
+\noindent\emph{Rappel du cadre.} Soient $m,n\in\N^{*}$ avec
+$m\ge 2$, et $R=\sum_{k=0}^{m}r_kX^{k}$, $S=\sum_{k=0}^{n}s_kX^{k}$
+dans $\K[X]$, avec $\dg{R}=m$ \emph{exactement} et $\dg{S}\le n$. On
+pose
+\[
+\varphi_{R,S}:\left\{
+\begin{array}{ccl}
+\K_{n-1}[X]\times\K_{m-1}[X] & \longrightarrow & \K_{n+m-1}[X]\\
+(G,H) & \longmapsto & GR+HS
+\end{array}\right.
+\]
+puis $D=R\wedge S$, $d=\dg{D}$, et
+$\psi_R=\varphi_{R,R'}:\K_{m-2}[X]\times\K_{m-1}[X]\to\K_{2m-2}[X]$,
+$\Delta(R)=\det(\psi_R)$.
+
+% ------------------------------------------------ Q11
+\begin{enonce}{Question 11}
+Démontrer le lemme de Gauss : si $G,H,L\in\K[X]$ vérifient
+$G\wedge H=1$ et $G\mid HL$, alors $G\mid L$.
+\end{enonce}
+
+\begin{corrige}
+L'anneau $\K[X]$ est euclidien (pour le degré), donc principal ; le
+théorème de Bézout s'y applique : puisque $G\wedge H=1$, il existe
+$U,V\in\K[X]$ tels que
+\[
+UG+VH=1 .
+\]
+Multiplions cette relation par $L$ :
+\[
+L=UGL+VHL .
+\]
+Le polynôme $G$ divise $UGL$ (évident) ; il divise $HL$ par
+hypothèse, donc aussi $VHL$. Par somme, $G$ divise
+$UGL+VHL=L$, ce qu'il fallait démontrer. Précisément, si $HL=GM$
+avec $M\in\K[X]$, alors $L=G\,(UL+VM)$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Invoquer Bézout sans dire pourquoi il est valable ($\K[X]$
+euclidien donc principal) : c'est précisément le contenu de la
+question, qui est un exercice de cours à rédiger sans trou.
+\item Raisonner par décomposition en facteurs irréductibles : c'est
+correct dans l'anneau factoriel $\K[X]$, mais la rédaction en est
+plus délicate (unicité de la décomposition à invoquer proprement) ;
+la voie Bézout est la voie attendue.
+\item Attention : ce lemme, vrai ici grâce à Bézout, sert ensuite en
+question 15 ; il faut le citer à ce moment-là.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q12
+\begin{enonce}{Question 12}
+Démontrer que $\varphi_{R,S}$ est une application linéaire de
+$\K_{n-1}[X]\times\K_{m-1}[X]$ dans $\K_{n+m-1}[X]$.
+\end{enonce}
+
+\begin{corrige}
+\emph{L'application est bien à valeurs dans $\K_{n+m-1}[X]$.} Soit
+$(G,H)\in\K_{n-1}[X]\times\K_{m-1}[X]$. Alors
+\[
+\dg{GR}\le\dg{G}+\dg{R}\le (n-1)+m=n+m-1,
+\qquad
+\dg{HS}\le (m-1)+n=n+m-1,
+\]
+avec les conventions usuelles sur le degré du polynôme nul. Donc
+$GR+HS\in\K_{n+m-1}[X]$.
+
+\emph{Linéarité.} Soient $(G,H),(G',H')$ dans l'espace de départ et
+$\lambda\in\K$. Alors, par distributivité dans $\K[X]$ :
+\begin{align*}
+\varphi_{R,S}\big(\lambda(G,H)+(G',H')\big)
+&=\varphi_{R,S}\big(\lambda G+G',\,\lambda H+H'\big)\\
+&=(\lambda G+G')R+(\lambda H+H')S\\
+&=\lambda\,(GR+HS)+(G'R+H'S)\\
+&=\lambda\,\varphi_{R,S}(G,H)+\varphi_{R,S}(G',H').
+\end{align*}
+Donc $\varphi_{R,S}$ est linéaire.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Oublier la vérification des degrés : montrer qu'une application
+est \og linéaire de $E$ dans $F$ \fg{} inclut le fait qu'elle est
+\emph{bien définie à valeurs dans $F$}.
+\item Confondre la linéarité en $(G,H)$ (demandée) avec une
+prétendue linéarité en $(R,S)$ (qui sont fixés).
+\item La structure d'espace vectoriel produit doit être utilisée
+correctement : $\lambda(G,H)=(\lambda G,\lambda H)$.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q13
+\begin{enonce}{Question 13}
+Soit
+$\mathcal{U}=\big((1,0),(X,0),\dots,(X^{n-1},0),(0,1),(0,X),\dots,
+(0,X^{m-1})\big)$. Démontrer que $\mathcal{U}$ est une base de
+$\K_{n-1}[X]\times\K_{m-1}[X]$.
+\end{enonce}
+
+\begin{corrige}
+L'espace produit de deux espaces de dimension finie est de dimension
+la somme des dimensions :
+\[
+\dim\big(\K_{n-1}[X]\times\K_{m-1}[X]\big)
+=\dim\K_{n-1}[X]+\dim\K_{m-1}[X]=n+m .
+\]
+La famille $\mathcal{U}$ compte exactement $n+m$ vecteurs ; il suffit
+donc de montrer qu'elle est \emph{libre}.
+
+Soient $a_0,\dots,a_{n-1},b_0,\dots,b_{m-1}\in\K$ tels que
+\[
+\sum_{k=0}^{n-1}a_k\,(X^{k},0)+\sum_{k=0}^{m-1}b_k\,(0,X^{k})=(0,0).
+\]
+Par définition des lois du produit, cette égalité s'écrit
+\[
+\Big(\sum_{k=0}^{n-1}a_kX^{k},\ \sum_{k=0}^{m-1}b_kX^{k}\Big)=(0,0),
+\]
+soit $\sum_k a_kX^k=0$ et $\sum_k b_kX^k=0$. Comme
+$(1,X,\dots,X^{n-1})$ et $(1,X,\dots,X^{m-1})$ sont les bases
+canoniques (donc des familles libres) de $\K_{n-1}[X]$ et
+$\K_{m-1}[X]$, tous les $a_k$ et tous les $b_k$ sont nuls.
+
+La famille $\mathcal{U}$ est libre de cardinal $n+m=\dim$, c'est une
+base.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Décréter \og c'est la base canonique du produit \fg{} : c'est
+justement ce qu'on demande de prouver (et le Vrai/Faux 2 vient de
+montrer qu'on peut se tromper sur les bases d'un produit !).
+\item Oublier de citer la formule
+$\dim(E\times F)=\dim E+\dim F$, ou compter $nm$ vecteurs.
+\item Montrer le caractère générateur \emph{et} la liberté alors que
+l'argument \og libre + bon cardinal \fg{} économise la moitié du
+travail.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q14
+\begin{enonce}{Question 14}
+Expliciter les coefficients de
+$\Mat_{\mathcal{U},\mathcal{V}}(\varphi_{R,S})$, où
+$\mathcal{V}=(1,X,\dots,X^{m+n-1})$ est la base canonique de
+$\K_{n+m-1}[X]$.
+\end{enonce}
+
+\begin{corrige}
+Adoptons les conventions $r_k=0$ pour $k\notin\ii{0}{m}$ et
+$s_k=0$ pour $k\notin\ii{0}{n}$.
+
+Les colonnes de la matrice sont les coordonnées dans $\mathcal{V}$
+des images des vecteurs de $\mathcal{U}$. Pour
+$j\in\ii{1}{n}$, le $j$-ième vecteur de $\mathcal{U}$ est
+$(X^{j-1},0)$ et
+\[
+\varphi_{R,S}(X^{j-1},0)=X^{j-1}R
+=\sum_{k=0}^{m}r_k\,X^{k+j-1}
+=\sum_{i=1}^{n+m}r_{\,i-j}\;X^{\,i-1},
+\]
+en posant $i=k+j$ (le coefficient de $X^{i-1}$ est $r_{i-j}$). De
+même, pour $j\in\ii{1}{m}$, le $(n+j)$-ième vecteur de $\mathcal{U}$
+est $(0,X^{j-1})$ et
+\[
+\varphi_{R,S}(0,X^{j-1})=X^{j-1}S
+=\sum_{i=1}^{n+m}s_{\,i-j}\;X^{\,i-1}.
+\]
+Notant $\Sigma=\Mat_{\mathcal{U},\mathcal{V}}(\varphi_{R,S})
+\in\mathcal{M}_{n+m}(\K)$, on a donc, pour tout
+$i\in\ii{1}{n+m}$ :
+\[
+\boxed{\;\Sigma_{i,j}=r_{\,i-j}\ \ (1\le j\le n),
+\qquad
+\Sigma_{i,\,n+j}=s_{\,i-j}\ \ (1\le j\le m).\;}
+\]
+Chaque colonne du premier bloc contient la liste
+$r_0,r_1,\dots,r_m$ décalée d'un cran vers le bas à chaque colonne ;
+idem pour $s_0,\dots,s_n$ dans le second bloc :
+\[
+\Sigma=
+\begin{pmatrix}
+r_0    &        &        &(0)     & s_0    &        &  &(0)  \\
+r_1    & r_0    &        &        & s_1    & s_0    &  &     \\
+\vdots & r_1    & \ddots &        & \vdots & s_1    & \ddots & \\
+r_m    & \vdots & \ddots & r_0    & s_n    & \vdots & \ddots & s_0\\
+       & r_m    &        & r_1    &        & s_n    &        & s_1\\
+       &        & \ddots & \vdots &        &        & \ddots & \vdots\\
+(0)    &        &        & r_m    & (0)    &        &        & s_n
+\end{pmatrix}
+\begin{matrix}
+\left.\vphantom{\begin{matrix}1\\1\\1\\1\\1\\1\\1\end{matrix}}
+\right\}\ n+m\ \text{lignes}
+\end{matrix}
+\]
+(le premier bloc a $n$ colonnes, le second $m$). C'est la
+\emph{matrice de Sylvester} de $(R,S)$ ; son déterminant, dans le cas
+$S=R'$, est $\Delta(R)$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item L'erreur classique : rendre la matrice \emph{transposée}. Ici les
+\emph{colonnes} sont les images des vecteurs de $\mathcal{U}$ ; la
+matrice de Sylvester est souvent présentée en lignes dans les
+ouvrages, d'où la confusion.
+\item Oublier les conventions $r_k=0$ hors de $\ii{0}{m}$ : sans
+elles, la formule $\Sigma_{i,j}=r_{i-j}$ n'a pas de sens pour tous
+les indices.
+\item Décalages d'indices entre \og coefficient de $X^{i-1}$ \fg{} et
+\og $i$-ième ligne \fg{} : poser explicitement le changement d'indice
+$i=k+j$ sécurise le calcul.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q15
+\begin{enonce}{Question 15}
+Soient $R_1,S_1\in\K[X]$ tels que $R=DR_1$ et $S=DS_1$. Démontrer que
+\[
+\Ker(\varphi_{R,S})=\big\{(S_1W,\,-R_1W),\ W\in\K_{d-1}[X]\big\},
+\]
+et en déduire $\dim\Ker(\varphi_{R,S})$.
+\end{enonce}
+
+\begin{corrige}
+Remarquons d'abord que $R\neq 0$ (car $\dg{R}=m$), donc
+$D=R\wedge S\neq 0$ et $R_1\neq 0$, avec
+\[
+\dg{R_1}=m-d\qquad\text{et}\qquad \dg{S_1}\le n-d .
+\]
+De plus $R_1\wedge S_1=1$ : si un polynôme irréductible $P$ divisait
+$R_1$ et $S_1$, alors $DP$ diviserait $R$ et $S$, donc $DP\mid D$,
+ce qui est impossible pour des raisons de degré. (Si $S=0$, alors
+$S_1=0$ et la convention $R_1\wedge 0=R_1$, avec $D=R$ unitaire
+associé à $R$, donne $R_1$ constant non nul : le raisonnement
+ci-dessous couvre ce cas.)
+
+\emph{Inclusion $\supseteq$.} Soit $W\in\K_{d-1}[X]$. Vérifions
+d'abord que le couple appartient bien à l'espace de départ :
+\[
+\dg{S_1W}\le (n-d)+(d-1)=n-1,
+\qquad
+\dg{R_1W}\le (m-d)+(d-1)=m-1 ,
+\]
+donc $(S_1W,-R_1W)\in\K_{n-1}[X]\times\K_{m-1}[X]$. Ensuite :
+\[
+\varphi_{R,S}(S_1W,-R_1W)
+=S_1W\,R-R_1W\,S
+=S_1W\,DR_1-R_1W\,DS_1
+=0 .
+\]
+
+\emph{Inclusion $\subseteq$.} Soit
+$(G,H)\in\Ker(\varphi_{R,S})$ : $GR+HS=0$, soit
+$G\,DR_1=-H\,DS_1$. L'anneau $\K[X]$ étant intègre et $D\neq 0$, on
+simplifie par $D$ :
+\[
+G\,R_1=-H\,S_1 . \tag{$*$}
+\]
+\begin{itemize}[leftmargin=1.6em, itemsep=1pt]
+\item \emph{Si $S_1=0$} (cas $S=0$) : $(*)$ donne $GR_1=0$ avec
+$R_1\neq 0$, donc $G=0$ ; ici $d=m$, $R_1=r_m$ (constante non
+nulle), et tout $H\in\K_{m-1}[X]$ convient : en posant
+$W=-H/r_m\in\K_{d-1}[X]$, on a bien $(G,H)=(S_1W,-R_1W)$.
+\item \emph{Si $S_1\neq 0$} : de $(*)$, $S_1$ divise $G R_1$ ; comme
+$S_1\wedge R_1=1$, le lemme de Gauss (question 11) donne
+$S_1\mid G$ : il existe $W\in\K[X]$ tel que $G=S_1W$. En reportant
+dans $(*)$ : $S_1WR_1=-HS_1$, et en simplifiant par $S_1\neq 0$
+(intégrité) : $H=-R_1W$.
+
+\emph{Contrôle du degré de $W$.} Comme $\dg{H}\le m-1$ et
+$\dg{R_1}=m-d$ \emph{exactement}, on a, si $W\neq 0$,
+\[
+\dg{W}=\dg{H}-\dg{R_1}\le (m-1)-(m-d)=d-1,
+\]
+donc $W\in\K_{d-1}[X]$.
+\end{itemize}
+Dans tous les cas $(G,H)=(S_1W,-R_1W)$ avec $W\in\K_{d-1}[X]$, ce
+qui achève la double inclusion.
+
+\emph{Dimension.} L'application
+\[
+\Theta:\K_{d-1}[X]\longrightarrow\Ker(\varphi_{R,S}),
+\qquad W\longmapsto(S_1W,-R_1W)
+\]
+est linéaire, surjective (ce qui précède) et injective : si
+$(S_1W,-R_1W)=(0,0)$, alors $R_1W=0$ avec $R_1\neq 0$, donc $W=0$.
+C'est un isomorphisme, d'où
+\[
+\boxed{\ \dim\Ker(\varphi_{R,S})=\dim\K_{d-1}[X]=d
+=\dg{R\wedge S}.\ }
+\]
+(Si $d=0$, $\K_{d-1}[X]=\{0\}$ et $\varphi_{R,S}$ est injective.)
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item \textbf{Oublier de justifier $R_1\wedge S_1=1$} avant d'invoquer
+Gauss : c'est le point central, et il se démontre en une ligne par
+maximalité de $D$.
+\item \textbf{Négliger les contraintes de degré} : dans l'inclusion
+$\supseteq$, vérifier que $(S_1W,-R_1W)$ est dans l'espace de
+\emph{départ} ; dans $\subseteq$, borner $\dg{W}$ en utilisant que
+$\dg{R_1}=m-d$ \emph{exactement} (côté $S_1$, le degré peut être
+strictement inférieur à $n-d$, la majoration par $H$ est la bonne).
+\item Simplifier par $D$ ou par $S_1$ sans mentionner l'intégrité de
+$\K[X]$, ou sans avoir écarté le cas $S_1=0$.
+\item Conclure $\dim=d-1$ : la dimension de $\K_{d-1}[X]$ est $d$
+(degré $\le d-1$, donc $d$ coefficients).
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q16
+\begin{enonce}{Question 16}
+Déterminer $\Ima(\varphi_{R,S})$.
+\end{enonce}
+
+\begin{corrige}
+Montrons que
+\[
+\boxed{\ \Ima(\varphi_{R,S})
+=D\cdot\K_{n+m-1-d}[X]
+=\big\{DP,\ P\in\K[X],\ \dg{P}\le n+m-1-d\big\},\ }
+\]
+c'est-à-dire l'ensemble des multiples de $D$ appartenant à
+$\K_{n+m-1}[X]$.
+
+\emph{Inclusion directe.} Pour $(G,H)$ dans l'espace de départ,
+\[
+GR+HS=D\,(GR_1+HS_1)
+\]
+est un multiple de $D$, de degré $\le n+m-1$ ; en écrivant
+$GR+HS=DP$, l'intégrité donne $\dg{P}=\dg{GR+HS}-d\le n+m-1-d$
+lorsque $GR+HS\neq 0$ (et $0=D\cdot 0$ convient). D'où
+$\Ima(\varphi_{R,S})\subseteq D\cdot\K_{n+m-1-d}[X]$.
+
+\emph{Égalité par les dimensions.} D'une part, le théorème du rang
+appliqué à $\varphi_{R,S}$ et la question 15 donnent
+\[
+\dim\Ima(\varphi_{R,S})
+=\dim\big(\K_{n-1}[X]\times\K_{m-1}[X]\big)-\dim\Ker(\varphi_{R,S})
+=(n+m)-d .
+\]
+D'autre part, l'application $P\mapsto DP$ est linéaire injective
+(intégrité, $D\neq 0$) de $\K_{n+m-1-d}[X]$ sur
+$D\cdot\K_{n+m-1-d}[X]$, donc
+\[
+\dim\big(D\cdot\K_{n+m-1-d}[X]\big)=n+m-d .
+\]
+Une inclusion entre sous-espaces de même dimension finie est une
+égalité : $\Ima(\varphi_{R,S})=D\cdot\K_{n+m-1-d}[X]$.
+
+\emph{Cas particulier utile.} Si $R\wedge S=1$ (soit $d=0$),
+$\varphi_{R,S}$ est un isomorphisme sur $\K_{n+m-1}[X]$ : c'est
+l'identité de Bézout \og avec contrôle des degrés \fg.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Tenter la double inclusion \og à la main \fg{} : l'inclusion
+réciproque directe (tout multiple de $D$ de bon degré est atteint)
+est faisable mais délicate ; le théorème du rang, combiné à la
+question 15, donne l'égalité en trois lignes. Savoir \emph{choisir}
+l'argument fait partie de l'épreuve.
+\item Erreur de dimension : $D\cdot\K_{n+m-1-d}[X]$ est de dimension
+$n+m-d$ (et non $n+m-d-1$) ; l'isomorphisme $P\mapsto DP$ doit être
+mentionné.
+\item Répondre \og $\Ima=\K_{n+m-1}[X]$ \fg{} : ce n'est vrai que si
+$d=0$.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q17
+\begin{enonce}{Question 17}
+Démontrer que si $R$ a un facteur multiple dans sa décomposition en
+facteurs irréductibles, alors $\Delta(R)=0$.
+\end{enonce}
+
+\begin{corrige}
+Par hypothèse, il existe $P\in\K[X]$ irréductible et $T\in\K[X]$
+tels que $R=P^{2}T$. Dérivons :
+\[
+R'=2PP'T+P^{2}T'=P\,\big(2P'T+PT'\big),
+\]
+de sorte que $P$ divise à la fois $R$ et $R'$. Ainsi $P$ divise
+$D_\psi:=R\wedge R'$, et donc
+\[
+\dg{R\wedge R'}\ \ge\ \dg{P}\ \ge\ 1 .
+\]
+Or $\psi_R=\varphi_{R,R'}$ entre dans le cadre de la question 15
+appliqué au couple $(R,S)=(R,R')$, avec ici $\dg{R'}\le m-1$ (le
+paramètre \og $n$ \fg{} vaut $m-1$) : d'après 15,
+\[
+\dim\Ker(\psi_R)=\dg{R\wedge R'}\ \ge\ 1 .
+\]
+L'application linéaire $\psi_R$ relie deux espaces de même dimension
+finie,
+\[
+\dim\big(\K_{m-2}[X]\times\K_{m-1}[X]\big)=(m-1)+m=2m-1
+=\dim\K_{2m-2}[X],
+\]
+et son noyau est non trivial : elle n'est pas injective, donc pas
+bijective, et sa matrice dans les bases $\mathcal{U},\mathcal{V}$
+est non inversible. Par conséquent
+\[
+\Delta(R)=\det(\psi_R)=0 .
+\]
+\emph{Remarque (caractéristique quelconque).} L'argument n'utilise
+jamais $2\neq 0$ ni $R'\neq 0$ : même si $R'=0$ (possible en
+caractéristique $p$, cf. Vrai/Faux 4), on a $R\wedge R'=R\wedge 0$
+associé à $R$, de degré $m\ge 1$, et la conclusion subsiste.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Raisonner avec une \og racine commune de $R$ et $R'$ \fg{} : un
+facteur irréductible n'a pas nécessairement de racine dans $\K$
+(penser à $X^2+1$ sur $\R$). Il faut raisonner en termes de
+\emph{divisibilité par $P$}.
+\item Écrire $R'=2PP'T+\dots$ puis simplifier par $2$ : inutile ici,
+mais surtout illicite en caractéristique $2$ ; la factorisation par
+$P$ suffit.
+\item Oublier de vérifier que départ et arrivée de $\psi_R$ ont même
+dimension $2m-1$ : parler de $\det(\psi_R)$ n'a de sens que pour une
+matrice \emph{carrée}.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q18
+\begin{enonce}{Question 18}
+On suppose $\dim\Ker(\psi_R)=1$.
+\begin{enumerate}
+\item Démontrer qu'il existe $\lambda\in\K$ et $T\in\K[X]$ tels que
+$T(\lambda)\neq 0$ et $R=(X-\lambda)^{2}T$.
+\item Démontrer qu'alors
+$\Ker(\psi_R)=\vect\big((2T+(X-\lambda)T',\,-(X-\lambda)T)\big)$.
+\end{enumerate}
+\end{enonce}
+
+\begin{corrige}
+\textbf{(a)} D'après la question 15 appliquée à $(R,R')$,
+\[
+\dg{R\wedge R'}=\dim\Ker(\psi_R)=1 .
+\]
+Le polynôme $R\wedge R'$ est unitaire de degré $1$ : il existe
+$\lambda\in\K$ tel que
+\[
+R\wedge R'=X-\lambda .
+\]
+En particulier $(X-\lambda)\mid R$ : notons $k\ge 1$ la multiplicité
+de $\lambda$ dans $R$, c'est-à-dire $R=(X-\lambda)^{k}T$ avec
+$T\in\K[X]$ et $T(\lambda)\neq 0$. Dérivons :
+\[
+R'=(X-\lambda)^{k-1}\big(\,\underbrace{k}_{\in\K}\,T
++(X-\lambda)T'\big).
+\]
+\begin{itemize}[leftmargin=1.6em, itemsep=1pt]
+\item \emph{Si $k=1$} : $R'=T+(X-\lambda)T'$, d'où
+$R'(\lambda)=T(\lambda)\neq 0$, ce qui contredit
+$(X-\lambda)\mid R'$ (conséquence de $R\wedge R'=X-\lambda$).
+\item \emph{Si $k\ge 3$} : $(X-\lambda)^{k-1}$ divise $R'$ avec
+$k-1\ge 2$, et $(X-\lambda)^{k}$ divise $R$ ; donc
+$(X-\lambda)^{2}$ divise $R\wedge R'$, ce qui contredit
+$\dg{R\wedge R'}=1$.
+\end{itemize}
+Il reste $k=2$ :
+$R=(X-\lambda)^{2}T$ avec $T(\lambda)\neq 0$.
+
+\textbf{(b)} Appliquons la description de la question 15 au couple
+$(R,S)=(R,R')$, dont le pgcd est $D=X-\lambda$, soit $d=1$. On
+factorise :
+\[
+R=(X-\lambda)\cdot\underbrace{(X-\lambda)T}_{=:R_1},
+\qquad
+R'=2(X-\lambda)T+(X-\lambda)^{2}T'
+=(X-\lambda)\cdot\underbrace{\big(2T+(X-\lambda)T'\big)}_{=:S_1}.
+\]
+La question 15 donne alors
+\[
+\Ker(\psi_R)
+=\big\{(S_1W,\,-R_1W),\ W\in\K_{0}[X]\big\}
+=\big\{\big(\alpha S_1,\,-\alpha R_1\big),\ \alpha\in\K\big\}
+=\vect\big((S_1,-R_1)\big),
+\]
+c'est-à-dire
+\[
+\boxed{\ \Ker(\psi_R)
+=\vect\Big(\big(2T+(X-\lambda)T',\ -(X-\lambda)T\big)\Big).\ }
+\]
+Le vecteur directeur est non nul (sa seconde composante
+$-(X-\lambda)T$ est non nulle), en cohérence avec
+$\dim\Ker(\psi_R)=1$.
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item \textbf{Le piège de la caractéristique :} écrire
+\og $R'=k(X-\lambda)^{k-1}T+\cdots$ et $k\neq 0$ donc\dots \fg{} est
+illicite : $k$ désigne ici l'image de l'entier $k$ dans $\K$, qui
+peut être nulle (par exemple $k=p$ en caractéristique $p$). La
+discussion $k=1$ / $k\ge 3$ ci-dessus contourne complètement cet
+écueil.
+\item Utiliser la caractérisation \og $\lambda$ racine de multiplicité
+$\ge 2$ $\iff$ $R(\lambda)=R'(\lambda)=0$ \fg{} sans précaution :
+son sens réciproque usuel repose sur la formule de Taylor, invalide
+en caractéristique positive.
+\item En (b), oublier que $d=1$ force $W$ \emph{constant}
+($\K_0[X]=\K$) : c'est ce qui fait apparaître une droite
+vectorielle.
+\item Erreurs de signe dans $(S_1W,-R_1W)$ : le couple est
+$(\,\cdot\,,-\,\cdot\,)$, à reporter fidèlement.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q19
+\begin{enonce}{Question 19}
+Démontrer que s'il existe $T,W\in\K[X]$ avec $\dg{T}\ge 2$ tels que
+$R=T^{2}W$, alors $\dim\Ker(\psi_R)\ge 2$.
+\end{enonce}
+
+\begin{corrige}
+Dérivons $R=T^{2}W$ :
+\[
+R'=2TT'W+T^{2}W'=T\,\big(2T'W+TW'\big),
+\]
+de sorte que $T$ divise $R$ et $R'$, donc $T$ divise $R\wedge R'$.
+Par croissance du degré le long de la divisibilité (les polynômes en
+jeu sont non nuls : $R\neq 0$ donc $T\neq 0$),
+\[
+\dg{R\wedge R'}\ \ge\ \dg{T}\ \ge\ 2 .
+\]
+La question 15, appliquée comme précédemment au couple $(R,R')$,
+donne alors
+\[
+\dim\Ker(\psi_R)=\dg{R\wedge R'}\ \ge\ 2 .
+\]
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Chercher à exhiber \og à la main \fg{} deux éléments
+linéairement indépendants du noyau : c'est possible (par exemple
+$(T'W\,U,\;-\ldots)$ pour divers $U$) mais acrobatique ; la formule
+$\dim\Ker(\psi_R)=\dg{R\wedge R'}$ de la question 15 rend la
+question immédiate. Le sujet est conçu pour être \emph{réinvesti}.
+\item Justifier $T\mid R\wedge R'$ en passant par les racines de $T$ :
+même écueil qu'en question 17, $T$ peut n'avoir aucune racine dans
+$\K$ ; la divisibilité se lit sur les factorisations.
+\item Ne pas remarquer que $T\neq 0$ (sinon $R=0$, exclu car
+$\dg{R}=m$) avant de comparer les degrés.
+\end{itemize}
+\end{pieges}
+
+% ------------------------------------------------ Q20
+\begin{enonce}{Question 20}
+En déduire que si $\dim\Ker(\psi_R)=1$, alors il existe
+$\lambda\in\K$, $\mu\in\K\setminus\{0\}$ et des polynômes
+$T_1,\dots,T_r\in\K[X]$ deux à deux distincts et irréductibles tels
+que
+\[
+R=\mu\,(X-\lambda)^{2}\prod_{i=1}^{r}T_i,
+\qquad\text{avec }\forall i\in\ii{1}{r},\ T_i(\lambda)\neq 0 .
+\]
+\end{enonce}
+
+\begin{corrige}
+Supposons $\dim\Ker(\psi_R)=1$. D'après la question 18(a), il existe
+$\lambda\in\K$ et $T\in\K[X]$ tels que
+\[
+R=(X-\lambda)^{2}\,T,\qquad T(\lambda)\neq 0 .
+\]
+L'anneau $\K[X]$ est factoriel : écrivons la décomposition de $T$ en
+facteurs irréductibles,
+\[
+T=\mu\prod_{i=1}^{r}T_i^{\,\alpha_i},
+\]
+avec $\mu\in\K\setminus\{0\}$ (le coefficient dominant de $T$), les
+$T_i$ irréductibles unitaires deux à deux distincts et
+$\alpha_i\ge 1$ (le cas $r=0$, $T$ constant, étant autorisé avec un
+produit vide).
+
+\emph{Chaque $\alpha_i$ vaut $1$.} Supposons par l'absurde
+$\alpha_{i_0}\ge 2$ pour un indice $i_0$. Alors
+$T_{i_0}^{2}\mid T$, et l'on peut écrire
+\[
+R=(X-\lambda)^{2}\,T_{i_0}^{2}\,V
+=\big(\,\underbrace{(X-\lambda)\,T_{i_0}}_{=:\widetilde T}\,\big)^{2}
+\,V,\qquad V\in\K[X],
+\]
+avec $\dg{\widetilde T}=1+\dg{T_{i_0}}\ge 2$. La question 19
+s'applique et donne $\dim\Ker(\psi_R)\ge 2$ : contradiction. Donc
+$\alpha_i=1$ pour tout $i$.
+
+\emph{Les $T_i$ ne s'annulent pas en $\lambda$.} Pour tout $i$,
+$T_i$ divise $T$ ; si l'on avait $T_i(\lambda)=0$, alors
+$T(\lambda)=0$, contredisant $T(\lambda)\neq 0$. Donc
+$T_i(\lambda)\neq 0$ pour tout $i$ ; en particulier aucun $T_i$
+n'est associé à $X-\lambda$.
+
+En rassemblant :
+\[
+R=\mu\,(X-\lambda)^{2}\prod_{i=1}^{r}T_i,
+\]
+avec $\mu\neq 0$, les $T_i$ irréductibles deux à deux distincts et
+$T_i(\lambda)\neq 0$ pour tout $i$ : c'est la décomposition
+annoncée. (C'est exactement la forme exploitée aux questions 35 et
+51--52 du sujet, avec $\K=\Fp$.)
+\end{corrige}
+
+\begin{pieges}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item Le cas subtil : un facteur carré $P^{2}\mid T$ avec $\dg{P}=1$
+ne permet pas d'appliquer la question 19 avec $\widetilde T=P$
+(il faut $\dg{\widetilde T}\ge 2$) ; l'astuce consiste à
+\emph{absorber} $(X-\lambda)$ en posant
+$\widetilde T=(X-\lambda)P$, de degré $2$. Beaucoup de copies
+oublient cette vérification d'hypothèse.
+\item Oublier le scalaire $\mu$ (les $T_i$ sont choisis unitaires, le
+coefficient dominant doit bien aller quelque part) ou oublier de
+justifier $T_i(\lambda)\neq 0$.
+\item Deux facteurs \og distincts \fg{} signifie ici non associés :
+prendre les $T_i$ \emph{unitaires} rend la condition nette ;
+l'éventuelle répétition $T_i=T_j$ ($i\neq j$) est déjà exclue par
+l'argument $\alpha_i=1$.
+\item Ne pas traiter (même en une phrase) le cas $T$ constant
+($r=0$) : la formule reste vraie avec un produit vide.
+\end{itemize}
+\end{pieges}
+
+% =====================================================================
+\section*{Bilan : ce qu'il faut retenir de ces deux parties}
+\addcontentsline{toc}{section}{Bilan}
+% =====================================================================
+
+\begin{conseil}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+\item \textbf{Le fil conducteur.} La partie I fournit le dictionnaire
+\og opérations élémentaires $=$ multiplications par des matrices de
+$\GLn(\Z)$ \fg{} (questions 9--10), la structure de $\GLn(\Z)$
+(question 6) et la description de $\On(\Z)$ (questions 7--8) : tout
+cela ressert dans la forme normale de Smith (partie V) et dans la
+conclusion (partie VII).
+\item \textbf{La formule maîtresse de la partie II} est
+$\dim\Ker(\varphi_{R,S})=\dg{R\wedge S}$ (question 15) : les
+questions 16 à 20 en sont des corollaires directs. En particulier,
+$\Delta(R)\neq 0\iff R\wedge R'=1$, et
+$\dim\Ker(\psi_R)=1\iff R\wedge R'$ de degré $1$, ce qui caractérise
+la forme $\mu(X-\lambda)^2\prod T_i$.
+\item \textbf{Réflexe transversal :} en caractéristique quelconque,
+bannir les arguments \og racines \fg{} et \og $\dg{R'}=\dg{R}-1$ \fg{}
+au profit d'arguments de \emph{divisibilité} ; c'est le fil rouge des
+pièges du sujet (VF4, 17, 18, puis partie IV).
+\item \textbf{Gestion du temps.} Les quatre premières parties sont
+indépendantes : le Vrai/Faux et la partie I sont des points
+\og de cours \fg{} à sécuriser rapidement et proprement ; la partie
+II demande davantage de soin (degrés, cas $S_1=0$, caractéristique)
+et récompense les copies qui citent précisément la question 15.
+\end{itemize}
+\end{conseil}
+
+\end{document}

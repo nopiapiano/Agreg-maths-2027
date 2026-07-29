@@ -1,0 +1,1443 @@
+\documentclass[11pt,a4paper]{article}
+
+% =====================================================================
+%   SUITES ET SÉRIES DE FONCTIONS
+%   Cours de début de deuxième année (CPGE / L2)
+%   Document autonome : compiler avec pdflatex (deux passes).
+% =====================================================================
+
+% ---------- Encodage, langue, fontes ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\frenchsetup{StandardLists=true}
+
+% ---------- Mathématiques ----------
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,
+            pdftitle={Suites et séries de fonctions}]{hyperref}
+
+% ---------- Environnements de théorèmes ----------
+\theoremstyle{plain}
+\newtheorem{theoreme}{Théorème}[section]
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\newtheorem{lemme}[theoreme]{Lemme}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{exemple}[theoreme]{Exemple}
+\newtheorem{contrex}[theoreme]{Contre-exemple}
+\newtheorem{methode}[theoreme]{Méthode}
+\newtheorem{application}[theoreme]{Application}
+
+\theoremstyle{remark}
+\newtheorem{remarque}[theoreme]{Remarque}
+\newtheorem{exercice}{Exercice}
+
+% ---------- Macros ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ninf}[1]{\left\lVert #1 \right\rVert_{\infty}}
+\newcommand{\Ninf}[2]{\left\lVert #1 \right\rVert_{\infty,#2}}
+\newcommand{\dd}{\,\mathrm{d}}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+% =====================================================================
+%   TITRE
+% =====================================================================
+\begin{center}
+    {\LARGE\bfseries Suites et séries de fonctions}\\[2.5mm]
+    {\large Modes de convergence et théorèmes d'interversion}\\[1.5mm]
+    {\normalsize Cours de mathématiques --- deuxième année}
+\end{center}
+\vspace{2mm}
+\hrule
+\vspace{5mm}
+
+\tableofcontents
+\vspace{5mm}
+
+% =====================================================================
+%   INTRODUCTION
+% =====================================================================
+\section*{Introduction et objectifs}
+
+En première année, on a étudié les suites et les séries \emph{numériques} :
+les objets qui convergent sont des nombres. On considère désormais des suites
+$(f_n)_{n\in\N}$ dont les termes sont des \emph{fonctions}. Deux motivations
+principales :
+\begin{itemize}
+    \item \textbf{approcher} une fonction compliquée par des fonctions simples
+    (polynômes, exponentielles, sinusoïdes\ldots) ;
+    \item \textbf{définir} de nouvelles fonctions comme limites ou comme sommes
+    de séries : c'est ainsi que l'on construit $\exp$, la fonction $\zeta$ de
+    Riemann, et plus tard les séries entières et les séries de Fourier.
+\end{itemize}
+
+La question centrale du chapitre est la suivante : \emph{si chaque $f_n$
+possède une propriété (continuité, limite en un point, intégrale, dérivée),
+la fonction limite la possède-t-elle encore ?} La réponse dépend du
+\emph{mode de convergence} utilisé. Nous introduisons donc
+toutes les notions de convergence utiles --- simple, uniforme, absolue,
+normale, sans oublier la convergence \emph{en vrac} des familles
+sommables --- avant de les organiser, de les comparer, et d'énoncer les
+théorèmes d'interversion qui en font la valeur.
+
+\medskip
+\noindent\fbox{\begin{minipage}{0.955\linewidth}
+\textbf{Objectifs du chapitre.}
+\begin{itemize}
+    \item Connaître les définitions des convergences simple, uniforme,
+    absolue, normale et en vrac, et savoir les tester en pratique.
+    \item Savoir quelles propriétés passent à la limite, et sous quelles
+    hypothèses : continuité, limite en un point, intégrale sur un segment,
+    dérivée.
+    \item Maîtriser le schéma d'implications entre les modes de convergence
+    ainsi que les contre-exemples montrant qu'aucune réciproque n'est vraie.
+    \item Connaître les exemples de référence : $x^n$, la bosse glissante,
+    la série géométrique, $\exp$, la fonction $\zeta$.
+\end{itemize}
+\end{minipage}}
+
+\medskip
+\noindent\fbox{\begin{minipage}{0.955\linewidth}
+\textbf{Notations.} Dans tout le chapitre :
+\begin{itemize}
+    \item $\K$ désigne $\R$ ou $\C$ ; $A$ est une partie non vide de $\R$ et
+    $I$ un intervalle de $\R$ non réduit à un point ;
+    \item les fonctions considérées sont définies sur $A$ (ou $I$) et à
+    valeurs dans $\K$ ;
+    \item $\mathcal{B}(A,\K)$ désigne l'ensemble des fonctions bornées de $A$
+    dans $\K$ ; pour $f\in\mathcal{B}(A,\K)$ on pose
+    \[
+        \Ninf{f}{A} \;=\; \sup_{x\in A}\,\lvert f(x)\rvert ,
+    \]
+    appelée \emph{norme de la convergence uniforme} (on écrira $\ninf{f}$
+    lorsque le domaine est clair) ;
+    \item \og sur tout segment de $I$ \fg{} signifie : sur tout segment
+    $[\alpha,\beta]\subset I$.
+\end{itemize}
+On vérifie sans difficulté que $\Ninf{\,\cdot\,}{A}$ est une norme sur
+l'espace vectoriel $\mathcal{B}(A,\K)$.
+\end{minipage}}
+
+% =====================================================================
+%   SECTION 1
+% =====================================================================
+\section{Modes de convergence d'une suite de fonctions}
+
+\subsection{Convergence simple}
+
+\begin{definition}[Convergence simple]
+Soit $(f_n)_{n\in\N}$ une suite de fonctions de $A$ dans $\K$ et
+$f : A \to \K$. On dit que $(f_n)$ \textbf{converge simplement} vers $f$
+sur $A$ si, pour tout $x\in A$, la suite numérique $\bigl(f_n(x)\bigr)_{n\in\N}$
+converge vers $f(x)$. Avec des quantificateurs :
+\[
+    \forall x\in A,\ \forall \eps>0,\ \exists N\in\N,\ \forall n\geq N,
+    \qquad \lvert f_n(x)-f(x)\rvert \leq \eps .
+\]
+On note $f_n \xrightarrow{\ \mathrm{CVS}\ } f$ sur $A$. La fonction $f$,
+unique, est la \emph{limite simple} de la suite.
+\end{definition}
+
+\begin{remarque}
+Le rang $N$ dépend de $\eps$ \emph{et du point $x$} considéré : la
+convergence peut être très rapide en certains points et arbitrairement
+lente en d'autres. C'est toute la différence avec la convergence uniforme
+introduite au paragraphe suivant.
+\end{remarque}
+
+\begin{exemple}[L'exemple fondamental $x^n$]\label{ex:xn}
+Sur $[0,1]$, posons $f_n(x)=x^n$. Pour $x\in[0,1[$ on a $f_n(x)\to 0$, et
+$f_n(1)=1\to 1$. Ainsi $(f_n)$ converge simplement sur $[0,1]$ vers
+\[
+    f(x)=\begin{cases} 0 & \text{si } 0\leq x<1,\\ 1 & \text{si } x=1.\end{cases}
+\]
+Chaque $f_n$ est continue, mais la limite simple $f$ ne l'est pas : \emph{la
+convergence simple ne conserve pas la continuité.}
+\end{exemple}
+
+\begin{exemple}[La bosse glissante]\label{ex:bosse}
+Sur $[0,1]$, posons $g_n(x)=n^2 x^n(1-x)$. À $x\in[0,1[$ fixé,
+$n^2x^n\to 0$ par croissances comparées, et $g_n(1)=0$ : la suite $(g_n)$
+converge simplement vers la fonction nulle. Pourtant
+\[
+    \int_0^1 g_n(t)\dd t
+    = n^2\left(\frac{1}{n+1}-\frac{1}{n+2}\right)
+    = \frac{n^2}{(n+1)(n+2)} \xrightarrow[n\to\infty]{} 1 \neq 0
+    = \int_0^1 \lim_{n\to\infty} g_n(t)\dd t .
+\]
+\emph{La convergence simple ne permet pas d'intervertir limite et
+intégrale} : l'aire sous la courbe se concentre dans une \og bosse \fg{} de
+plus en plus haute et étroite qui glisse vers $1$, invisible point par point.
+\end{exemple}
+
+Ces deux exemples montrent que la convergence simple est une notion trop
+faible pour l'analyse : il faut une convergence \emph{globale} sur $A$.
+
+\subsection{Convergence uniforme}
+
+\begin{definition}[Convergence uniforme]
+Soit $(f_n)$ une suite de fonctions de $A$ dans $\K$ et $f:A\to\K$. On dit
+que $(f_n)$ \textbf{converge uniformément} vers $f$ sur $A$ si $f_n-f$ est
+bornée à partir d'un certain rang et si
+\[
+    \Ninf{f_n-f}{A} \;=\; \sup_{x\in A}\,\lvert f_n(x)-f(x)\rvert
+    \xrightarrow[n\to\infty]{} 0 .
+\]
+Avec des quantificateurs :
+\[
+    \forall \eps>0,\ \exists N\in\N,\ \forall n\geq N,\ \forall x\in A,
+    \qquad \lvert f_n(x)-f(x)\rvert \leq \eps .
+\]
+On note $f_n \xrightarrow{\ \mathrm{CVU}\ } f$ sur $A$.
+\end{definition}
+
+\begin{remarque}[L'ordre des quantificateurs]
+Comparons les deux définitions : en convergence simple, on lit
+$\forall x,\ \forall\eps,\ \exists N$ ; en convergence uniforme,
+$\forall\eps,\ \exists N,\ \forall x$. Le rang $N$ est désormais
+\emph{indépendant du point} : c'est un seul et même rang qui convient
+partout, d'où l'adjectif \emph{uniforme}.
+\end{remarque}
+
+\begin{remarque}[Interprétation géométrique]
+Dire que $\Ninf{f_n-f}{A}\leq\eps$, c'est dire que le graphe de $f_n$ est
+entièrement contenu dans le \og tube \fg{} de demi-largeur $\eps$ autour du
+graphe de $f$, c'est-à-dire dans la bande
+$\{(x,y) : x\in A,\ \lvert y-f(x)\rvert\leq\eps\}$. La convergence uniforme
+signifie que, pour tout $\eps>0$, tous les graphes finissent par entrer dans
+ce tube et n'en sortent plus.
+\end{remarque}
+
+\begin{proposition}\label{prop:cvu-cvs}
+La convergence uniforme entraîne la convergence simple, vers la même limite.
+La réciproque est fausse.
+\end{proposition}
+
+\begin{proof}
+Pour tout $x\in A$, $\lvert f_n(x)-f(x)\rvert \leq \Ninf{f_n-f}{A} \to 0$.
+Pour la réciproque, voir l'exemple~\ref{ex:xn-uniforme} ci-dessous.
+\end{proof}
+
+\begin{methode}[Étudier une convergence uniforme]\label{meth:cvu}
+La limite simple $f$ étant identifiée (c'est toujours la première étape :
+la limite uniforme, si elle existe, est nécessairement la limite simple),
+on étudie $\sup_{x\in A}\lvert f_n(x)-f(x)\rvert$ :
+\begin{itemize}
+    \item soit on le \emph{calcule} (étude des variations de $f_n-f$) ou on
+    le \emph{majore} par une suite numérique $\alpha_n\to 0$, ce qui prouve
+    la convergence uniforme ;
+    \item soit on le \emph{minore} : s'il existe une suite $(x_n)$ de points
+    de $A$ telle que $f_n(x_n)-f(x_n)\not\to 0$, alors il n'y a pas
+    convergence uniforme sur $A$.
+\end{itemize}
+\end{methode}
+
+\begin{exemple}\label{ex:xn-uniforme}
+Reprenons $f_n(x)=x^n$.
+\begin{itemize}
+    \item Sur $[0,a]$ avec $0\leq a<1$ : la limite simple est la fonction
+    nulle et $\Ninf{f_n}{[0,a]}=a^n\to 0$. La convergence est uniforme.
+    \item Sur $[0,1[$ : la limite simple est encore la fonction nulle, mais
+    $\sup_{x\in[0,1[}x^n = 1$ pour tout $n$ ; ou encore, avec
+    $x_n = 1-\frac1n$, on a $f_n(x_n)=\bigl(1-\frac1n\bigr)^n\to
+    \mathrm{e}^{-1}\neq 0$. La convergence n'est pas uniforme sur $[0,1[$,
+    bien qu'elle le soit sur tout segment $[0,a]\subset[0,1[$.
+    \item Sur $[0,1]$ : pas de convergence uniforme non plus (cela
+    découlera aussi du théorème~\ref{thm:continuite}, puisque la limite
+    simple n'est pas continue).
+\end{itemize}
+\end{exemple}
+
+\begin{remarque}[Convergence uniforme sur tout segment]\label{rem:segment}
+L'exemple précédent est typique : il arrive fréquemment qu'une suite ne
+converge pas uniformément sur un intervalle $I$ tout entier, mais converge
+uniformément sur \emph{tout segment} inclus dans $I$. Cette notion, parfois
+appelée convergence \emph{localement uniforme}, suffira pour tous les
+théorèmes de régularité de nature locale (continuité, dérivabilité).
+\end{remarque}
+
+\subsection{Complément : le critère de Cauchy uniforme}
+
+\begin{theoreme}[Critère de Cauchy uniforme]\label{thm:cauchy}
+Une suite $(f_n)$ de fonctions de $A$ dans $\K$ converge uniformément sur
+$A$ (vers une certaine fonction) si et seulement si
+\[
+    \forall\eps>0,\ \exists N\in\N,\ \forall p,q\geq N,
+    \qquad \Ninf{f_p-f_q}{A}\leq \eps .
+\]
+\end{theoreme}
+
+\begin{proof}
+Si $f_n\to f$ uniformément, l'inégalité triangulaire
+$\Ninf{f_p-f_q}{A}\leq\Ninf{f_p-f}{A}+\Ninf{f-f_q}{A}$ donne le sens direct.
+Réciproquement, supposons le critère vérifié. Pour chaque $x\in A$, la suite
+$\bigl(f_n(x)\bigr)$ est de Cauchy dans $\K$ complet, donc converge : notons
+$f(x)$ sa limite, ce qui définit la limite simple $f$. Soit $\eps>0$ et $N$
+donné par le critère. Pour $p\geq N$ et $x\in A$, on a
+$\lvert f_p(x)-f_q(x)\rvert\leq\eps$ pour tout $q\geq N$ ; en faisant
+$q\to\infty$ à $x$ fixé, il vient $\lvert f_p(x)-f(x)\rvert\leq\eps$. Ceci
+valant pour tout $x\in A$, on obtient $\Ninf{f_p-f}{A}\leq\eps$ pour tout
+$p\geq N$ : la convergence est uniforme.
+\end{proof}
+
+\begin{remarque}
+L'intérêt du critère est de prouver une convergence uniforme \emph{sans
+connaître la limite}. En termes savants : $(\mathcal{B}(A,\K),
+\Ninf{\,\cdot\,}{A})$ est un espace complet.
+\end{remarque}
+
+% =====================================================================
+%   SECTION 2
+% =====================================================================
+\section{Régularité de la limite : les théorèmes d'interversion}
+
+Dans toute cette section, la convergence uniforme est l'hypothèse clé qui
+autorise les interversions de limites interdites en convergence simple.
+
+\subsection{Continuité de la limite}
+
+\begin{theoreme}[Continuité de la limite uniforme]\label{thm:continuite}
+Soit $(f_n)$ une suite de fonctions de $A$ dans $\K$ convergeant
+uniformément vers $f$ sur $A$, et soit $a\in A$. Si chaque $f_n$ est
+continue en $a$, alors $f$ est continue en $a$. En particulier, si les
+$f_n$ sont continues sur $A$, alors $f$ est continue sur $A$.
+\end{theoreme}
+
+\begin{proof}[Démonstration (argument en $\eps/3$)]
+Soit $\eps>0$. Par convergence uniforme, il existe $n\in\N$ tel que
+$\Ninf{f_n-f}{A}\leq\eps/3$. Ce $n$ étant fixé, la continuité de $f_n$ en
+$a$ fournit $\delta>0$ tel que, pour tout $x\in A$ vérifiant
+$\lvert x-a\rvert\leq\delta$, on ait
+$\lvert f_n(x)-f_n(a)\rvert\leq\eps/3$. Alors, pour un tel $x$ :
+\[
+    \lvert f(x)-f(a)\rvert
+    \leq \lvert f(x)-f_n(x)\rvert + \lvert f_n(x)-f_n(a)\rvert
+       + \lvert f_n(a)-f(a)\rvert
+    \leq \frac{\eps}{3}+\frac{\eps}{3}+\frac{\eps}{3} = \eps .
+\]
+Donc $f$ est continue en $a$.
+\end{proof}
+
+\begin{corollaire}\label{cor:continuite-segment}
+Si les $f_n$ sont continues sur l'intervalle $I$ et si $(f_n)$ converge
+uniformément vers $f$ \emph{sur tout segment de $I$}, alors $f$ est
+continue sur $I$.
+\end{corollaire}
+
+\begin{proof}
+La continuité est une notion locale : tout point $x\in I$ possède un
+voisinage dans $I$ de la forme $[x-h,x+h]\cap I$ qui est un segment inclus
+dans $I$ ; le théorème~\ref{thm:continuite} appliqué sur ce segment donne
+la continuité de $f$ en $x$.
+\end{proof}
+
+\begin{remarque}[Usage en contraposée]
+Le théorème~\ref{thm:continuite} sert très souvent \emph{négativement} :
+si les $f_n$ sont continues et si la limite simple $f$ ne l'est pas, alors
+la convergence n'est uniforme sur aucune partie contenant un point de
+discontinuité de $f$ au voisinage duquel les hypothèses s'appliquent.
+C'est l'argument le plus rapide pour l'exemple~\ref{ex:xn} sur $[0,1]$.
+\end{remarque}
+
+\subsection{Le théorème de la double limite}
+
+\begin{theoreme}[Double limite]\label{thm:double-limite}
+Soit $(f_n)$ une suite de fonctions de $A$ dans $\K$ convergeant
+uniformément vers $f$ sur $A$, et soit $a$ un point adhérent à $A$
+(éventuellement $a=\pm\infty$ si $A$ n'est pas majorée, resp. minorée).
+On suppose que, pour chaque $n$, $f_n$ admet une limite finie en $a$ :
+\[
+    b_n \;=\; \lim_{x\to a} f_n(x) .
+\]
+Alors la suite $(b_n)$ converge, $f$ admet une limite en $a$, et
+\[
+    \lim_{x\to a} f(x) \;=\; \lim_{n\to\infty} b_n,
+    \qquad\text{c'est-à-dire}\qquad
+    \lim_{x\to a}\,\lim_{n\to\infty} f_n(x)
+    \;=\; \lim_{n\to\infty}\,\lim_{x\to a} f_n(x) .
+\]
+\end{theoreme}
+
+\begin{proof}
+\emph{Étape 1 : $(b_n)$ converge.} Soit $\eps>0$. La convergence uniforme
+fournit $N$ tel que $\Ninf{f_n-f}{A}\leq\eps/2$ pour $n\geq N$, d'où, par
+inégalité triangulaire, $\Ninf{f_p-f_q}{A}\leq\eps$ pour tous $p,q\geq N$.
+Fixons $p,q\geq N$ : pour tout $x\in A$,
+$\lvert f_p(x)-f_q(x)\rvert\leq\eps$ ; en faisant tendre $x$ vers $a$, on
+obtient $\lvert b_p-b_q\rvert\leq\eps$. La suite $(b_n)$ est de Cauchy dans
+$\K$ complet, donc converge vers un certain $b\in\K$.
+
+\emph{Étape 2 : $f(x)\to b$ quand $x\to a$.} Soit $\eps>0$. Choisissons $n$
+tel que $\Ninf{f_n-f}{A}\leq\eps/3$ et $\lvert b_n-b\rvert\leq\eps/3$.
+Puisque $f_n(x)\to b_n$ quand $x\to a$, il existe un voisinage $V$ de $a$
+tel que $\lvert f_n(x)-b_n\rvert\leq\eps/3$ pour tout $x\in V\cap A$.
+Alors, pour tout $x\in V\cap A$ :
+\[
+    \lvert f(x)-b\rvert
+    \leq \lvert f(x)-f_n(x)\rvert + \lvert f_n(x)-b_n\rvert
+       + \lvert b_n-b\rvert \leq \eps .
+\]
+D'où $\lim_{x\to a}f(x)=b$.
+\end{proof}
+
+\begin{remarque}
+Le théorème~\ref{thm:continuite} en est un cas particulier lorsque
+$a\in A$ (prendre $b_n=f_n(a)$). Le cas $a=\pm\infty$ est très utile pour
+calculer la limite en l'infini de la somme d'une série de fonctions, voir
+le théorème~\ref{thm:double-limite-series}.
+\end{remarque}
+
+\subsection{Intégration sur un segment}
+
+\begin{theoreme}[Interversion limite--intégrale]\label{thm:integration}
+Soit $(f_n)$ une suite de fonctions \emph{continues} sur un segment
+$[a,b]$, convergeant uniformément vers $f$ sur $[a,b]$. Alors $f$ est
+continue sur $[a,b]$ et
+\[
+    \int_a^b f_n(t)\dd t \xrightarrow[n\to\infty]{} \int_a^b f(t)\dd t,
+    \qquad\text{c'est-à-dire}\qquad
+    \lim_{n\to\infty}\int_a^b f_n = \int_a^b \lim_{n\to\infty} f_n .
+\]
+\end{theoreme}
+
+\begin{proof}
+La continuité de $f$ vient du théorème~\ref{thm:continuite}. Puis
+\[
+    \left\lvert \int_a^b f_n - \int_a^b f \right\rvert
+    = \left\lvert \int_a^b (f_n-f) \right\rvert
+    \leq \int_a^b \lvert f_n-f\rvert
+    \leq (b-a)\,\Ninf{f_n-f}{[a,b]} \xrightarrow[n\to\infty]{} 0 . \qedhere
+\]
+\end{proof}
+
+\begin{remarque}[Les deux hypothèses sont essentielles]\label{rem:hyp-integration}
+\begin{itemize}
+    \item \emph{Sans convergence uniforme}, le résultat tombe : la bosse
+    glissante de l'exemple~\ref{ex:bosse} converge simplement vers $0$ sur
+    $[0,1]$ mais ses intégrales tendent vers $1$. (On en déduit d'ailleurs,
+    par contraposée, que cette convergence n'est pas uniforme.)
+    \item \emph{Sans segment}, le résultat tombe aussi, même avec
+    convergence uniforme : sur $[0,+\infty[$, la suite
+    $h_n(x)=\frac1n\,\mathrm{e}^{-x/n}$ vérifie $\Ninf{h_n}{[0,+\infty[}
+    = \frac1n \to 0$ (convergence uniforme vers $0$), et pourtant
+    l'intégrale généralisée $\int_0^{+\infty} h_n = 1$ ne tend pas vers
+    $0$ : la masse \og s'étale \fg{} à l'infini. L'interversion sur un
+    intervalle quelconque relève de théorèmes plus puissants (convergence
+    dominée), vus dans un chapitre ultérieur.
+\end{itemize}
+\end{remarque}
+
+\subsection{Dérivation de la limite}
+
+L'exemple suivant montre que la convergence uniforme de $(f_n)$ ne suffit
+pas à dériver la limite : c'est la convergence des \emph{dérivées} qui
+importe.
+
+\begin{contrex}\label{cex:derivation}
+Sur $\R$, posons $f_n(x)=\dfrac{\sin(nx)}{\sqrt{n}}$. On a
+$\Ninf{f_n}{\R}=\frac{1}{\sqrt n}\to 0$ : convergence uniforme vers la
+fonction nulle, qui est $\mathcal{C}^\infty$. Mais
+$f_n'(x)=\sqrt{n}\,\cos(nx)$ et $f_n'(0)=\sqrt n \to +\infty$ : la suite
+des dérivées diverge. Les oscillations, bien qu'écrasées en amplitude,
+deviennent de plus en plus rapides.
+\end{contrex}
+
+\begin{theoreme}[Dérivation de la limite]\label{thm:derivation}
+Soit $(f_n)$ une suite de fonctions de classe $\mathcal{C}^1$ sur un
+intervalle $I$. On suppose :
+\begin{enumerate}[label=(\roman*)]
+    \item $(f_n)$ converge simplement sur $I$ vers une fonction $f$ ;
+    \item $(f_n')$ converge uniformément sur tout segment de $I$ vers une
+    fonction $g$.
+\end{enumerate}
+Alors $f$ est de classe $\mathcal{C}^1$ sur $I$, $f'=g$, et la convergence
+de $(f_n)$ vers $f$ est uniforme sur tout segment de $I$. En résumé :
+\[
+    \Bigl(\lim_{n\to\infty} f_n\Bigr)' \;=\; \lim_{n\to\infty} f_n' .
+\]
+\end{theoreme}
+
+\begin{proof}
+Fixons $a\in I$. Pour tout $x\in I$, le théorème fondamental de l'analyse
+donne
+\begin{equation}\label{eq:tfa}
+    f_n(x) \;=\; f_n(a) + \int_a^x f_n'(t)\dd t .
+\end{equation}
+Le segment d'extrémités $a$ et $x$ est inclus dans $I$ ; la convergence
+uniforme de $(f_n')$ vers $g$ sur ce segment et le
+théorème~\ref{thm:integration} donnent
+$\int_a^x f_n' \to \int_a^x g$. Comme $f_n(a)\to f(a)$, le passage à la
+limite dans~\eqref{eq:tfa} fournit
+\[
+    f(x) \;=\; f(a) + \int_a^x g(t)\dd t .
+\]
+Or $g$ est continue sur $I$ (corollaire~\ref{cor:continuite-segment},
+limite uniforme sur tout segment de fonctions continues) : $f$ est donc de
+classe $\mathcal{C}^1$ sur $I$ avec $f'=g$.
+
+Montrons enfin la convergence uniforme sur tout segment. Soit
+$K\subset I$ un segment ; quitte à l'agrandir (l'enveloppe convexe de
+$K\cup\{a\}$ est encore un segment inclus dans l'intervalle $I$), on peut
+supposer $a\in K$ et noter $\ell$ la longueur de $K$. Pour $x\in K$, en
+soustrayant les deux égalités intégrales ci-dessus :
+\[
+    \lvert f_n(x)-f(x)\rvert
+    \leq \lvert f_n(a)-f(a)\rvert + \Bigl\lvert \int_a^x (f_n'-g)\Bigr\rvert
+    \leq \lvert f_n(a)-f(a)\rvert + \ell\,\Ninf{f_n'-g}{K} ,
+\]
+et le majorant, indépendant de $x\in K$, tend vers $0$.
+\end{proof}
+
+\begin{remarque}
+\begin{itemize}
+    \item L'hypothèse (i) peut être affaiblie : il suffit que $(f_n(x_0))$
+    converge \emph{en un seul point} $x_0\in I$ ; la démonstration
+    ci-dessus (avec $a=x_0$) construit alors la limite simple sur tout $I$.
+    \item Moralité du contre-exemple~\ref{cex:derivation} : pour dériver
+    une limite, on demande peu à $(f_n)$ (une convergence simple) mais
+    beaucoup à $(f_n')$ (une convergence uniforme locale).
+\end{itemize}
+\end{remarque}
+
+\begin{theoreme}[Extension aux classes $\mathcal{C}^k$]\label{thm:Ck}
+Soit $k\geq 1$ et $(f_n)$ une suite de fonctions de classe $\mathcal{C}^k$
+sur $I$ telle que, pour tout $j\in\{0,\dots,k-1\}$, la suite
+$(f_n^{(j)})_n$ converge simplement sur $I$, et telle que
+$(f_n^{(k)})_n$ converge uniformément sur tout segment de $I$. Alors
+$f=\lim f_n$ est de classe $\mathcal{C}^k$ sur $I$ et, pour tout
+$j\in\{0,\dots,k\}$,
+$f^{(j)} = \lim_{n\to\infty} f_n^{(j)}$, avec convergence uniforme sur tout
+segment pour chaque $j$.
+\end{theoreme}
+
+\begin{proof}
+Récurrence immédiate sur $k$ à partir du théorème~\ref{thm:derivation},
+laissée en exercice.
+\end{proof}
+
+% =====================================================================
+%   SECTION 3
+% =====================================================================
+\section{Séries de fonctions : les modes de convergence}
+
+Une \emph{série de fonctions} $\sum u_n$ est la donnée d'une suite
+$(u_n)_{n\in\N}$ de fonctions de $A$ dans $\K$ ; on lui associe la suite
+de ses \emph{sommes partielles}
+\[
+    S_N \;=\; \sum_{n=0}^{N} u_n , \qquad N\in\N .
+\]
+Étudier la série $\sum u_n$, c'est étudier la suite de fonctions $(S_N)$ :
+toutes les notions de la section 1 s'appliquent donc, et une notion
+nouvelle --- la convergence normale --- vient s'y ajouter. Présentons-les
+toutes, avant de dresser le panorama complet au
+paragraphe~\ref{subsec:panorama}.
+
+\subsection{Convergences simple et absolue}
+
+\begin{definition}[Convergence simple, somme, restes]
+La série $\sum u_n$ \textbf{converge simplement} sur $A$ si la suite
+$(S_N)$ converge simplement sur $A$, c'est-à-dire si, pour tout $x\in A$,
+la série numérique $\sum u_n(x)$ converge. Sa \emph{somme} est alors la
+fonction
+\[
+    S : x \longmapsto \sum_{n=0}^{+\infty} u_n(x),
+\]
+et pour $N\in\N$ son \emph{reste d'ordre $N$} est la fonction
+\[
+    R_N \;=\; S - S_N : x \longmapsto \sum_{n=N+1}^{+\infty} u_n(x) .
+\]
+La suite $(R_N)$ converge simplement vers $0$ sur $A$.
+\end{definition}
+
+\begin{definition}[Convergence absolue en un point]
+La série $\sum u_n$ \textbf{converge absolument} au point $x\in A$ si la
+série numérique $\sum \lvert u_n(x)\rvert$ converge. On dit qu'elle
+converge absolument sur $A$ si elle converge absolument en tout point de
+$A$.
+\end{definition}
+
+\begin{remarque}
+La convergence absolue en un point entraîne la convergence de la série
+numérique $\sum u_n(x)$ ($\K$ est complet) : la convergence absolue sur
+$A$ entraîne donc la convergence simple sur $A$. En pratique, le domaine
+de définition naturel de la somme $S$ est l'ensemble
+$D=\{x : \sum u_n(x) \text{ converge}\}$, que l'on commence toujours par
+déterminer avec les outils des séries numériques (comparaison, règle de
+d'Alembert, séries de Riemann, critère spécial des séries alternées\ldots).
+\end{remarque}
+
+\subsection{Convergence uniforme}
+
+\begin{definition}[Convergence uniforme d'une série]
+La série $\sum u_n$ \textbf{converge uniformément} sur $A$ si la suite
+$(S_N)$ de ses sommes partielles converge uniformément sur $A$.
+\end{definition}
+
+\begin{proposition}[Caractérisation par les restes]\label{prop:restes}
+La série $\sum u_n$ converge uniformément sur $A$ si et seulement si elle
+converge simplement sur $A$ et si
+\[
+    \Ninf{R_N}{A} = \sup_{x\in A}\,\Bigl\lvert \sum_{n=N+1}^{+\infty}
+    u_n(x)\Bigr\rvert \xrightarrow[N\to\infty]{} 0 ,
+\]
+autrement dit si la suite des restes converge uniformément vers $0$.
+\end{proposition}
+
+\begin{proof}
+Si la convergence est uniforme, elle est en particulier simple
+(proposition~\ref{prop:cvu-cvs}), la somme $S$ et les restes sont définis,
+et $\Ninf{R_N}{A} = \Ninf{S-S_N}{A} \to 0$. Réciproquement, si la série
+converge simplement et $\Ninf{R_N}{A}\to 0$, alors
+$\Ninf{S-S_N}{A} = \Ninf{R_N}{A}\to 0$ : $(S_N)$ converge uniformément
+vers $S$.
+\end{proof}
+
+\begin{proposition}[Condition nécessaire]\label{prop:cn}
+Si $\sum u_n$ converge uniformément sur $A$, alors la suite $(u_n)$
+converge uniformément vers $0$ sur $A$ : $\Ninf{u_N}{A}\to 0$.
+\end{proposition}
+
+\begin{proof}
+Pour $N\geq 1$, $u_N = S_N - S_{N-1}$, donc
+$\Ninf{u_N}{A}\leq\Ninf{S_N-S}{A}+\Ninf{S-S_{N-1}}{A}\to 0$.
+\end{proof}
+
+\begin{remarque}
+Cette condition nécessaire s'utilise surtout en \emph{contraposée} : si
+$\Ninf{u_n}{A}\not\to 0$, il n'y a pas convergence uniforme sur $A$. C'est
+souvent le moyen le plus rapide d'infirmer une convergence uniforme, comme
+pour la série géométrique $\sum x^n$ sur $\left]-1,1\right[$ :
+$\sup_{\left]-1,1\right[}\lvert x\rvert^n = 1$ pour tout $n$.
+\end{remarque}
+
+\subsection{Convergence normale}
+
+La convergence uniforme d'une série est souvent délicate à établir
+directement (il faut contrôler les restes). La notion suivante, propre aux
+séries, est un critère beaucoup plus maniable.
+
+\begin{definition}[Convergence normale]
+La série $\sum u_n$ \textbf{converge normalement} sur $A$ si les $u_n$
+sont bornées sur $A$ et si la série numérique
+\[
+    \sum_{n\geq 0} \Ninf{u_n}{A}
+\]
+converge. De façon équivalente (et c'est ainsi qu'on procède en pratique) :
+s'il existe une suite réelle $(a_n)$ telle que
+\[
+    \forall n\in\N,\ \forall x\in A,\quad \lvert u_n(x)\rvert \leq a_n
+    \qquad\text{et}\qquad \sum a_n \text{ converge.}
+\]
+\end{definition}
+
+\begin{remarque}
+L'équivalence des deux formulations tient à ce que $\Ninf{u_n}{A}$ est le
+\emph{meilleur} majorant uniforme possible : si $(a_n)$ convient, alors
+$\Ninf{u_n}{A}\leq a_n$ et $\sum\Ninf{u_n}{A}$ converge par comparaison de
+séries à termes positifs ; réciproquement, $a_n = \Ninf{u_n}{A}$ convient.
+\end{remarque}
+
+\begin{theoreme}[La convergence normale entraîne tout le reste]\label{thm:cvn}
+Si $\sum u_n$ converge normalement sur $A$, alors elle converge
+absolument en tout point de $A$ et uniformément sur $A$ (donc simplement).
+\end{theoreme}
+
+\begin{proof}
+Pour $x\in A$, on a $\lvert u_n(x)\rvert \leq \Ninf{u_n}{A}$, terme
+général d'une série convergente : la série $\sum u_n(x)$ converge
+absolument, donc converge. La somme $S$ et les restes $R_N$ sont ainsi
+définis sur $A$ et, pour tout $x\in A$ et tout $N$ :
+\[
+    \lvert R_N(x)\rvert
+    = \Bigl\lvert \sum_{n=N+1}^{+\infty} u_n(x) \Bigr\rvert
+    \leq \sum_{n=N+1}^{+\infty} \lvert u_n(x)\rvert
+    \leq \sum_{n=N+1}^{+\infty} \Ninf{u_n}{A} \;=:\; \rho_N .
+\]
+Le majorant $\rho_N$, indépendant de $x$, est le reste d'une série
+convergente : $\rho_N\to 0$. D'où $\Ninf{R_N}{A}\leq\rho_N\to 0$ et la
+convergence uniforme par la proposition~\ref{prop:restes}.
+\end{proof}
+
+\begin{exemple}
+La série $\sum_{n\geq 1} \dfrac{x^n}{n^2}$ converge normalement sur
+$[-1,1]$ : en effet $\Ninf{u_n}{[-1,1]} = \frac{1}{n^2}$, terme général
+d'une série de Riemann convergente. Sa somme est donc définie et (on le
+verra au théorème~\ref{thm:continuite-series}) continue sur $[-1,1]$.
+\end{exemple}
+
+\begin{contrex}[Uniforme sans normale]\label{cex:alternee}
+Sur $A=[0,+\infty[$, considérons $\displaystyle\sum_{n\geq 1} u_n$ avec
+$u_n(x) = \frac{(-1)^n}{n+x}$.
+\begin{itemize}
+    \item \emph{Convergence simple.} À $x\geq 0$ fixé, la suite
+    $\bigl(\frac{1}{n+x}\bigr)_{n\geq 1}$ est positive, décroissante, de
+    limite nulle : le critère spécial des séries alternées s'applique et
+    la série converge (mais pas absolument :
+    $\lvert u_n(x)\rvert \sim \frac1n$).
+    \item \emph{Convergence uniforme.} Le critère spécial majore le reste
+    par son premier terme :
+    \[
+        \forall x\geq 0,\quad
+        \lvert R_N(x)\rvert \leq \frac{1}{N+1+x} \leq \frac{1}{N+1},
+        \qquad\text{donc}\quad \Ninf{R_N}{A}\leq\frac{1}{N+1}\to 0 .
+    \]
+    La convergence est uniforme sur $[0,+\infty[$.
+    \item \emph{Pas de convergence normale.} $\Ninf{u_n}{A} = \frac1n$
+    (atteint en $x=0$) et $\sum\frac1n$ diverge.
+\end{itemize}
+Cet exemple montre au passage que la convergence uniforme n'entraîne même
+pas la convergence absolue.
+\end{contrex}
+
+\subsection{Panorama : les modes de convergence en un schéma}
+\label{subsec:panorama}
+
+Rassemblons les quatre notions rencontrées. Les flèches représentent les
+implications valables sur une partie $A$ quelconque (théorème~\ref{thm:cvn}
+et proposition~\ref{prop:cvu-cvs} ; la convergence absolue s'entend en
+tout point de $A$).
+
+\begin{center}
+$\begin{array}{ccc}
+ & \textbf{convergence normale} & \\[1.5mm]
+\swarrow & & \searrow \\[1.5mm]
+\textbf{convergence uniforme} & &
+\begin{array}{c}\textbf{convergence absolue}\\ \text{(en tout point)}\end{array} \\[1.5mm]
+\searrow & & \swarrow \\[1.5mm]
+ & \textbf{convergence simple} &
+\end{array}$
+\end{center}
+
+\emph{Aucune} autre implication n'est vraie en général ; en particulier
+les convergences uniforme et absolue sont indépendantes l'une de l'autre,
+et aucune des quatre flèches ne se remonte. Contre-exemples de référence :
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Implication fausse} & \textbf{Contre-exemple} \\
+\hline
+simple $\not\Rightarrow$ uniforme &
+$f_n(x)=x^n$ sur $[0,1]$ (ex.~\ref{ex:xn}) \\
+\hline
+absolue $\not\Rightarrow$ uniforme &
+$\sum x^n$ sur $\left]-1,1\right[$ \\
+\hline
+uniforme $\not\Rightarrow$ absolue &
+$\sum \frac{(-1)^n}{n+x}$ sur $[0,+\infty[$ (c.-ex.~\ref{cex:alternee}) \\
+\hline
+uniforme $\not\Rightarrow$ normale &
+$\sum \frac{(-1)^n}{n+x}$ sur $[0,+\infty[$ (c.-ex.~\ref{cex:alternee}) \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{methode}[Plan d'étude d'une série de fonctions]\label{meth:series}
+Pour étudier $\sum u_n$ sur une partie $A$ :
+\begin{enumerate}
+    \item \emph{Convergence simple} : à $x$ fixé, déterminer la nature de
+    la série numérique $\sum u_n(x)$ ; en déduire le domaine de définition
+    de la somme.
+    \item \emph{Tenter d'abord la convergence normale} : calculer ou
+    majorer $\Ninf{u_n}{A}$. Si $\sum\Ninf{u_n}{A}$ converge, tout est
+    acquis (théorème~\ref{thm:cvn}).
+    \item \emph{Sinon}, vérifier la condition nécessaire
+    $\Ninf{u_n}{A}\to 0$ (proposition~\ref{prop:cn}) ; si elle échoue,
+    conclure à la non-convergence uniforme. Si elle est vérifiée, étudier
+    directement les restes : pour les séries alternées, la majoration
+    $\lvert R_N\rvert\leq\lvert u_{N+1}\rvert$ du critère spécial est
+    l'outil privilégié.
+    \item \emph{Penser aux sous-parties} : à défaut de convergence normale
+    ou uniforme sur $A$ tout entier, la rechercher sur tout segment de
+    $A$, ce qui suffit pour la régularité de la somme (section suivante).
+\end{enumerate}
+\end{methode}
+
+% =====================================================================
+%   SECTION 4
+% =====================================================================
+\section{Régularité de la somme d'une série de fonctions}
+
+Chaque théorème de la section 2, appliqué à la suite des sommes partielles
+$(S_N)$, se traduit immédiatement en un théorème sur les séries. Grâce au
+théorème~\ref{thm:cvn}, l'hypothèse de convergence uniforme pourra, dans
+chaque énoncé, être remplacée par la convergence normale, plus facile à
+vérifier.
+
+\subsection{Continuité et double limite}
+
+\begin{theoreme}[Continuité de la somme]\label{thm:continuite-series}
+Si les $u_n$ sont continues sur l'intervalle $I$ et si $\sum u_n$ converge
+uniformément sur tout segment de $I$ (en particulier si elle converge
+normalement sur tout segment de $I$), alors la somme
+$S=\sum_{n=0}^{+\infty}u_n$ est continue sur $I$.
+\end{theoreme}
+
+\begin{proof}
+Les sommes partielles $S_N$ sont continues (sommes finies de fonctions
+continues) et convergent uniformément vers $S$ sur tout segment de $I$ :
+le corollaire~\ref{cor:continuite-segment} conclut.
+\end{proof}
+
+\begin{theoreme}[Double limite pour les séries]\label{thm:double-limite-series}
+Soit $\sum u_n$ une série de fonctions convergeant uniformément sur $A$,
+et $a$ un point adhérent à $A$ (éventuellement $\pm\infty$). Si chaque
+$u_n$ admet en $a$ une limite finie $\ell_n$, alors la série numérique
+$\sum \ell_n$ converge et
+\[
+    \lim_{x\to a}\; \sum_{n=0}^{+\infty} u_n(x)
+    \;=\; \sum_{n=0}^{+\infty} \ell_n
+    \;=\; \sum_{n=0}^{+\infty} \lim_{x\to a} u_n(x) .
+\]
+\end{theoreme}
+
+\begin{proof}
+On applique le théorème~\ref{thm:double-limite} à la suite $(S_N)$ : elle
+converge uniformément vers $S$ sur $A$, et pour chaque $N$,
+$\lim_{x\to a} S_N(x) = \sum_{n=0}^{N}\ell_n$ (somme finie de limites). La
+conclusion du théorème~\ref{thm:double-limite} dit exactement que la suite
+des sommes partielles de $\sum\ell_n$ converge --- c'est-à-dire que
+$\sum\ell_n$ converge --- et que $S(x)\to\sum_{n=0}^{+\infty}\ell_n$
+quand $x\to a$.
+\end{proof}
+
+\subsection{Intégration terme à terme sur un segment}
+
+\begin{theoreme}[Intégration terme à terme]\label{thm:integration-series}
+Soit $(u_n)$ une suite de fonctions continues sur un segment $[a,b]$ telle
+que $\sum u_n$ converge uniformément sur $[a,b]$. Alors $S$ est continue
+sur $[a,b]$, la série numérique $\sum \int_a^b u_n$ converge, et
+\[
+    \int_a^b \left(\sum_{n=0}^{+\infty} u_n(t)\right)\dd t
+    \;=\; \sum_{n=0}^{+\infty} \int_a^b u_n(t)\dd t .
+\]
+\end{theoreme}
+
+\begin{proof}
+Le théorème~\ref{thm:integration} appliqué à $(S_N)$ donne
+$\int_a^b S_N \to \int_a^b S$ ; or, par linéarité de l'intégrale,
+$\int_a^b S_N = \sum_{n=0}^{N}\int_a^b u_n$ : la suite des sommes
+partielles de $\sum\int_a^b u_n$ converge vers $\int_a^b S$.
+\end{proof}
+
+\begin{remarque}
+Comme pour les suites (remarque~\ref{rem:hyp-integration}), ce théorème
+est un énoncé \emph{sur un segment}. L'intégration terme à terme sur un
+intervalle quelconque requiert des hypothèses différentes (par exemple la
+convergence de $\sum\int\lvert u_n\rvert$) et sera vue dans le chapitre
+d'intégration.
+\end{remarque}
+
+\subsection{Dérivation terme à terme}
+
+\begin{theoreme}[Dérivation terme à terme]\label{thm:derivation-series}
+Soit $(u_n)$ une suite de fonctions de classe $\mathcal{C}^1$ sur un
+intervalle $I$. On suppose :
+\begin{enumerate}[label=(\roman*)]
+    \item $\sum u_n$ converge simplement sur $I$ ;
+    \item $\sum u_n'$ converge uniformément sur tout segment de $I$ (en
+    particulier : normalement sur tout segment de $I$).
+\end{enumerate}
+Alors $S=\sum u_n$ est de classe $\mathcal{C}^1$ sur $I$, la convergence
+de $\sum u_n$ est uniforme sur tout segment de $I$, et
+\[
+    S'(x) \;=\; \sum_{n=0}^{+\infty} u_n'(x),
+    \qquad\text{c'est-à-dire}\qquad
+    \left(\sum_{n=0}^{+\infty} u_n\right)'
+    = \sum_{n=0}^{+\infty} u_n' .
+\]
+\end{theoreme}
+
+\begin{proof}
+Appliquer le théorème~\ref{thm:derivation} à la suite $(S_N)$, qui est de
+classe $\mathcal{C}^1$ avec $S_N' = \sum_{n=0}^N u_n'$.
+\end{proof}
+
+\begin{remarque}
+Le théorème~\ref{thm:Ck} se transpose de même : si les $u_n$ sont de
+classe $\mathcal{C}^k$, si $\sum u_n^{(j)}$ converge simplement sur $I$
+pour $0\leq j\leq k-1$ et si $\sum u_n^{(k)}$ converge uniformément (par
+exemple normalement) sur tout segment de $I$, alors $S$ est de classe
+$\mathcal{C}^k$ et se dérive terme à terme $k$ fois.
+\end{remarque}
+
+% =====================================================================
+%   SECTION 5
+% =====================================================================
+\section{Trois exemples fondamentaux}
+
+\subsection{La série géométrique}
+
+Pour $u_n(x)=x^n$, la série $\sum u_n$ converge simplement (et
+absolument) sur $\left]-1,1\right[$, de somme
+\[
+    \sum_{n=0}^{+\infty} x^n \;=\; \frac{1}{1-x},
+    \qquad x\in\left]-1,1\right[ .
+\]
+Elle converge normalement sur tout segment $[-a,a]$ avec $0\leq a<1$
+(majoration $\Ninf{u_n}{[-a,a]}=a^n$), mais pas uniformément sur
+$\left]-1,1\right[$ tout entier (condition nécessaire :
+$\Ninf{u_n}{\left]-1,1\right[}=1\not\to 0$). La convergence normale sur
+tout segment suffit néanmoins à retrouver la continuité de la somme sur
+$\left]-1,1\right[$ : c'est le prototype de la situation décrite à la
+remarque~\ref{rem:segment}.
+
+\subsection{L'exponentielle}
+
+\begin{application}[Régularité de $\exp$ par sa série]\label{app:exp}
+Posons $u_n(x)=\dfrac{x^n}{n!}$ pour $x\in\R$.
+\begin{itemize}
+    \item Sur tout segment $[-A,A]$, $\Ninf{u_n}{[-A,A]} = \frac{A^n}{n!}$
+    et $\sum\frac{A^n}{n!}$ converge (règle de d'Alembert) : la série
+    converge \emph{normalement sur tout segment de $\R$}. Sa somme
+    $S(x)=\sum_{n\geq 0}\frac{x^n}{n!}$ est donc définie et continue sur
+    $\R$ (théorème~\ref{thm:continuite-series}).
+    \item La série dérivée est $\sum_{n\geq 1}\frac{x^{n-1}}{(n-1)!}$,
+    c'est-à-dire la même série : elle converge normalement sur tout
+    segment. Le théorème~\ref{thm:derivation-series} s'applique et donne
+    $S\in\mathcal{C}^1(\R)$ avec
+    \[
+        S'(x) = \sum_{n=1}^{+\infty}\frac{x^{n-1}}{(n-1)!} = S(x) .
+    \]
+    \item Ainsi $S$ est solution de l'équation différentielle $y'=y$ avec
+    $S(0)=1$ : par unicité, $S=\exp$. En itérant, $\exp$ est de classe
+    $\mathcal{C}^\infty$ sur $\R$ --- toute la régularité de
+    l'exponentielle se lit sur sa série.
+\end{itemize}
+\end{application}
+
+\subsection{La fonction $\zeta$ de Riemann}
+
+\begin{application}[Étude de $\zeta$]\label{app:zeta}
+Pour $x>1$, posons
+\[
+    \zeta(x) \;=\; \sum_{n=1}^{+\infty} \frac{1}{n^x},
+    \qquad u_n(x) = n^{-x} = \mathrm{e}^{-x\ln n} .
+\]
+\begin{itemize}
+    \item \emph{Domaine.} À $x$ fixé, $\sum n^{-x}$ est une série de
+    Riemann : convergence si et seulement si $x>1$. La somme $\zeta$ est
+    définie sur $\left]1,+\infty\right[$.
+    \item \emph{Convergence normale sur $[a,+\infty[$ pour tout $a>1$.}
+    Pour
+    $x\geq a$ on a $n^{-x}\leq n^{-a}$, donc
+    $\Ninf{u_n}{[a,+\infty[} = n^{-a}$, terme général d'une série
+    convergente. Tout segment de $\left]1,+\infty\right[$ étant inclus
+    dans un tel $[a,+\infty[$, le théorème~\ref{thm:continuite-series}
+    montre que \emph{$\zeta$ est continue sur $\left]1,+\infty\right[$}.
+    \item \emph{Pas de convergence uniforme sur $\left]1,+\infty\right[$.}
+    Si la convergence était uniforme sur $\left]1,2\right]$, le théorème
+    de la double limite~\ref{thm:double-limite-series} en $a=1^+$
+    (adhérent au domaine) donnerait la convergence de
+    $\sum_n \lim_{x\to 1^+} n^{-x} = \sum_n \frac1n$, ce qui est absurde.
+    La convergence uniforme \og sur tout segment \fg{} est donc ici la
+    bonne notion, et on ne peut pas faire mieux.
+    \item \emph{Classe $\mathcal{C}^1$ (puis $\mathcal{C}^\infty$).} On a
+    $u_n'(x) = -\ln(n)\,n^{-x}$ et, pour $a>1$,
+    $\Ninf{u_n'}{[a,+\infty[} = \frac{\ln n}{n^a}
+    = o\!\left(\frac{1}{n^{(1+a)/2}}\right)$ avec $\frac{1+a}{2}>1$ : la
+    série dérivée converge normalement sur tout $[a,+\infty[$. Le
+    théorème~\ref{thm:derivation-series} donne
+    $\zeta\in\mathcal{C}^1\bigl(\left]1,+\infty\right[\bigr)$ et
+    \[
+        \zeta'(x) = -\sum_{n=1}^{+\infty}\frac{\ln n}{n^x} .
+    \]
+    Une récurrence sur le même modèle montre que $\zeta$ est de classe
+    $\mathcal{C}^\infty$ sur $\left]1,+\infty\right[$ avec
+    $\zeta^{(k)}(x) = (-1)^k\sum_{n\geq 1}\frac{(\ln n)^k}{n^x}$.
+    \item \emph{Limite en $+\infty$.} La convergence étant normale, donc
+    uniforme, sur $[2,+\infty[$, et chaque $u_n$ ayant pour limite en
+    $+\infty$ le réel $\ell_n = 0$ si $n\geq 2$ et $\ell_1=1$, le
+    théorème~\ref{thm:double-limite-series} donne
+    $\lim_{x\to+\infty}\zeta(x) = \sum_n \ell_n = 1$.
+\end{itemize}
+\end{application}
+
+\begin{remarque}[Culture : la fonction de Weierstrass]
+Pour $0<a<1$ et $b$ entier impair tel que $ab>1+\frac{3\pi}{2}$, la série
+\[
+    W(x) \;=\; \sum_{n=0}^{+\infty} a^n\cos\!\left(b^n\pi x\right)
+\]
+converge normalement sur $\R$ (car $\Ninf{a^n\cos(b^n\pi\,\cdot)}{\R}
+= a^n$) : sa somme $W$ est donc continue sur $\R$. Weierstrass a montré
+en 1872 que $W$ n'est dérivable \emph{en aucun point} (résultat admis).
+Cet exemple, historiquement décisif, montre qu'aucun théorème du type
+\og convergence normale $\Rightarrow$ dérivabilité de la somme \fg{} ne
+peut exister : ce sont bien les hypothèses sur la série \emph{dérivée}
+qui gouvernent la régularité.
+\end{remarque}
+
+% =====================================================================
+%   SECTION 6 : LA CONVERGENCE EN VRAC
+% =====================================================================
+\section{La convergence en vrac (familles sommables)}\label{sec:vrac}
+
+Sommer une série, c'est jusqu'ici sommer \emph{dans un ordre} : on forme
+$S_N=u_0+\dots+u_N$, puis on fait tendre $N$ vers l'infini. Cet ordre est
+une commodité d'écriture plus qu'une nécessité mathématique : lorsque les
+termes sont indexés par $\N^2$, par $\mathbb{Z}$ ou par un ensemble
+dénombrable quelconque, aucun ordre ne s'impose naturellement. La
+\emph{convergence en vrac} --- la terminologie est celle de R.~Godement ;
+on dit aussi \emph{famille sommable} --- formalise l'idée d'une somme
+\og sans ordre \fg{} : la somme doit pouvoir être approchée par les sommes
+finies, pourvu seulement qu'elles contiennent un paquet fini bien choisi.
+
+\subsection{Définition et lien avec la convergence absolue}
+
+\begin{definition}[Convergence en vrac]\label{def:vrac}
+Soit $I$ un ensemble d'indices au plus dénombrable et $(u_i)_{i\in I}$ une
+famille d'éléments d'un espace vectoriel normé
+$(E,\lVert\cdot\rVert)$ --- pour nous, le plus souvent $E=\K$. On dit que
+la famille $(u_i)_{i\in I}$ \emph{converge en vrac}, ou est
+\emph{sommable}, de somme $S\in E$, si :
+\[
+\forall \eps>0,\ \exists J_0\subset I \text{ fini},\
+\forall J\subset I \text{ fini},\quad
+J_0\subset J \;\Longrightarrow\;
+\Bigl\lVert S-\sum_{i\in J}u_i\Bigr\rVert\leq\eps .
+\]
+On note alors $S=\displaystyle\sum_{i\in I}u_i$.
+\end{definition}
+
+\begin{remarque}
+La définition ne fait intervenir \emph{aucun ordre} sur $I$ : c'est tout le
+sens de l'expression. La somme est unique : si $S$ et $S'$ conviennent,
+avec les paquets respectifs $J_0$ et $J_0'$, la somme finie sur
+$J=J_0\cup J_0'$ est à distance au plus $\eps$ de chacun d'eux, donc
+$\lVert S-S'\rVert\leq 2\eps$ pour tout $\eps>0$.
+\end{remarque}
+
+\begin{proposition}[Convergence commutative]\label{prop:commutative}
+Si $I=\N$ et si la famille $(u_n)_{n\in\N}$ converge en vrac de somme $S$,
+alors pour \emph{toute} bijection $\sigma:\N\to\N$, la série
+$\sum u_{\sigma(n)}$ converge au sens usuel et
+$\sum_{n=0}^{+\infty}u_{\sigma(n)}=S$. En particulier
+($\sigma=\mathrm{id}$), la série $\sum u_n$ converge vers $S$.
+\end{proposition}
+
+\begin{proof}
+Soit $\eps>0$ et $J_0$ le paquet fini fourni par la définition. Comme
+$\sigma$ est bijective, il existe $N_0$ tel que
+$J_0\subset\sigma(\{0,\dots,N_0\})$. Pour $N\geq N_0$, l'ensemble
+$J=\sigma(\{0,\dots,N\})$ est fini et contient $J_0$, donc
+$\bigl\lVert S-\sum_{n=0}^{N}u_{\sigma(n)}\bigr\rVert
+=\bigl\lVert S-\sum_{i\in J}u_i\bigr\rVert\leq\eps$.
+\end{proof}
+
+\begin{theoreme}[Familles de réels positifs]\label{thm:vrac-positif}
+Une famille $(u_i)_{i\in I}$ de réels \emph{positifs} converge en vrac si
+et seulement si l'ensemble de ses sommes finies est majoré, c'est-à-dire
+\[
+M:=\sup\Bigl\{\,\sum_{i\in J}u_i \;:\; J\subset I \text{ fini}\Bigr\}
+<+\infty ,
+\]
+et dans ce cas $\sum_{i\in I}u_i=M$. Lorsque les sommes finies ne sont pas
+majorées, on convient d'écrire $\sum_{i\in I}u_i=+\infty$.
+\end{theoreme}
+
+\begin{proof}
+Supposons $M<+\infty$ et soit $\eps>0$. Par définition de la borne
+supérieure, il existe $J_0$ fini tel que $\sum_{i\in J_0}u_i\geq M-\eps$.
+Pour tout $J$ fini contenant $J_0$, la positivité des termes donne
+\[
+M-\eps\;\leq\;\sum_{i\in J_0}u_i\;\leq\;\sum_{i\in J}u_i\;\leq\;M :
+\]
+la famille converge en vrac vers $M$. Réciproquement, si la famille
+converge en vrac de somme $S$, appliquons la définition avec $\eps=1$, de
+paquet associé $J_0$ : pour tout $J$ fini,
+$\sum_{i\in J}u_i\leq\sum_{i\in J\cup J_0}u_i\leq S+1$ par positivité,
+donc $M\leq S+1<+\infty$.
+\end{proof}
+
+\begin{theoreme}[Pour les scalaires, en vrac $=$ absolue]\label{thm:vrac-abs}
+Soit $(u_n)_{n\in\N}$ une suite d'éléments de $\K$. La famille $(u_n)$
+converge en vrac si et seulement si la série $\sum u_n$ converge
+\emph{absolument}. La somme en vrac est alors la somme usuelle de la
+série.
+\end{theoreme}
+
+\begin{proof}
+$(\Leftarrow)$ Supposons $\sum\lvert u_n\rvert<+\infty$ et notons $S$ la
+somme usuelle de la série. Soit $\eps>0$ et $N$ tel que
+$\sum_{n>N}\lvert u_n\rvert\leq\eps$ ; posons $J_0=\{0,\dots,N\}$. Pour
+$J$ fini contenant $J_0$ et $M$ assez grand pour que
+$J\subset\{0,\dots,M\}$, tout indice $n\leq M$ hors de $J$ vérifie $n>N$,
+d'où
+\[
+\Bigl\lvert \sum_{n=0}^{M}u_n-\sum_{i\in J}u_i\Bigr\rvert
+=\Bigl\lvert \sum_{\substack{n\leq M\\ n\notin J}}u_n\Bigr\rvert
+\leq \sum_{n>N}\lvert u_n\rvert\leq\eps .
+\]
+En faisant tendre $M$ vers l'infini :
+$\bigl\lvert S-\sum_{i\in J}u_i\bigr\rvert\leq\eps$.
+
+$(\Rightarrow)$ Supposons la convergence en vrac, de somme $S$, et
+traitons d'abord le cas réel. Appliquons la définition avec $\eps=1$, de
+paquet associé $J_0$. Soit $K\subset\N$ fini quelconque, et
+$K^{+}=\{i\in K\setminus J_0 : u_i\geq 0\}$. L'ensemble $J=J_0\cup K^{+}$
+est fini et contient $J_0$, donc $\sum_{i\in J}u_i\leq S+1$, d'où
+\[
+\sum_{i\in K^{+}}u_i=\sum_{i\in J}u_i-\sum_{i\in J_0}u_i
+\;\leq\; S+1-\sum_{i\in J_0}u_i\;=:\;C .
+\]
+De même, avec $K^{-}=\{i\in K\setminus J_0 : u_i<0\}$ et
+$J'=J_0\cup K^{-}$, la minoration $\sum_{i\in J'}u_i\geq S-1$ fournit
+$\sum_{i\in K^{-}}(-u_i)\leq \sum_{i\in J_0}u_i-(S-1)=:C'$. Ainsi
+\[
+\sum_{i\in K}\lvert u_i\rvert
+\;\leq\; \sum_{i\in J_0}\lvert u_i\rvert
++\sum_{i\in K^{+}}u_i+\sum_{i\in K^{-}}(-u_i)
+\;\leq\; \sum_{i\in J_0}\lvert u_i\rvert+C+C' :
+\]
+les sommes partielles de $\sum\lvert u_n\rvert$ sont majorées, donc la
+série $\sum\lvert u_n\rvert$ converge. Pour le cas complexe, on remarque
+que la famille $(\operatorname{Re}u_n)$ converge en vrac vers
+$\operatorname{Re}S$, puisque
+$\lvert\operatorname{Re}z\rvert\leq\lvert z\rvert$ pour tout $z\in\C$, et
+de même pour la partie imaginaire ; le cas réel et l'inégalité
+$\lvert u_n\rvert\leq\lvert\operatorname{Re}u_n\rvert
++\lvert\operatorname{Im}u_n\rvert$ concluent. Enfin, la somme en vrac
+coïncide avec la somme usuelle d'après la
+proposition~\ref{prop:commutative} appliquée à $\sigma=\mathrm{id}$.
+\end{proof}
+
+\begin{remarque}[Séries semi-convergentes et théorème de Riemann]\label{rem:riemann}
+Converger en vrac est \emph{strictement} plus fort que converger : la
+série harmonique alternée $\sum(-1)^{n}/(n+1)$ converge d'après le
+critère spécial des séries alternées, mais pas absolument, donc pas en
+vrac. Le théorème de réarrangement de Riemann (hors programme, admis)
+précise ce que l'on perd : si une série réelle converge sans converger
+absolument, alors pour \emph{tout} $\ell\in\R\cup\{\pm\infty\}$ il existe
+une bijection $\sigma$ de $\N$ telle que $\sum u_{\sigma(n)}=\ell$. La
+somme d'une série semi-convergente est donc un artefact de l'ordre de
+sommation ; celle d'une famille sommable n'en dépend jamais
+(proposition~\ref{prop:commutative}). L'exercice~\ref{exo:rearrangement}
+propose un réarrangement explicite.
+\end{remarque}
+
+\subsection{Sommation par paquets}
+
+Le vrai confort de la convergence en vrac est de rendre licites les
+regroupements arbitraires de termes.
+
+\begin{theoreme}[Sommation par paquets, cas positif]\label{thm:paquets}
+Soit $(u_i)_{i\in I}$ une famille de réels positifs et
+$I=\bigsqcup_{k\in\N}I_k$ une partition de $I$. Alors, avec la convention
+du théorème~\ref{thm:vrac-positif}, on a l'égalité dans $[0,+\infty]$ :
+\[
+\sum_{i\in I}u_i \;=\; \sum_{k=0}^{+\infty}\Bigl(\sum_{i\in I_k}u_i\Bigr).
+\]
+\end{theoreme}
+
+\begin{proof}
+Notons $M$ la borne supérieure des sommes finies sur $I$, $M_k$ celle des
+sommes finies sur $I_k$, et $T=\sum_k M_k\in[0,+\infty]$.
+
+\emph{Montrons $M\leq T$.} Toute somme finie $\sum_{i\in J}u_i$ se découpe
+suivant la partition : $J\cap I_k$ est non vide pour un nombre fini
+d'indices $k$, disons $k\leq K$, et
+\[
+\sum_{i\in J}u_i=\sum_{k\leq K}\;\sum_{i\in J\cap I_k}u_i
+\;\leq\;\sum_{k\leq K}M_k\;\leq\; T .
+\]
+
+\emph{Montrons $M\geq T$.} Si l'un des $M_k$ vaut $+\infty$, alors
+$M=+\infty$ (toute somme finie dans $I_k$ est une somme finie dans $I$) et
+l'égalité est acquise. Supposons donc tous les $M_k$ finis, et fixons
+$K\in\N$ et $\eps>0$. Pour chaque $k\leq K$, choisissons $J_k\subset I_k$
+fini tel que $\sum_{i\in J_k}u_i\geq M_k-\eps\,2^{-k}$. L'ensemble
+$J=J_0\cup\dots\cup J_K$ est fini et, la réunion étant disjointe,
+\[
+M\;\geq\;\sum_{i\in J}u_i\;\geq\;\sum_{k\leq K}M_k-2\eps .
+\]
+En faisant $\eps\to 0$ puis $K\to+\infty$, on obtient $M\geq T$.
+\end{proof}
+
+\begin{corollaire}[Fubini pour les séries doubles à termes positifs]\label{cor:fubini}
+Pour toute famille $(a_{m,n})_{(m,n)\in\N^2}$ de réels positifs, on a dans
+$[0,+\infty]$ :
+\[
+\sum_{(m,n)\in\N^2}a_{m,n}
+=\sum_{m=0}^{+\infty}\Bigl(\sum_{n=0}^{+\infty}a_{m,n}\Bigr)
+=\sum_{n=0}^{+\infty}\Bigl(\sum_{m=0}^{+\infty}a_{m,n}\Bigr).
+\]
+\end{corollaire}
+
+\begin{proof}
+Appliquer le théorème~\ref{thm:paquets} aux deux partitions de $\N^2$ en
+lignes $I_m=\{m\}\times\N$, puis en colonnes $I_n=\N\times\{n\}$.
+\end{proof}
+
+\begin{remarque}
+La sommation par paquets vaut aussi pour toute famille \emph{complexe}
+sommable, avec des paquets en nombre au plus dénombrable (nous
+l'admettons). Elle tombe en défaut sans sommabilité : les paquets
+$(1-1)+(1-1)+\cdots$ convergent vers $0$ alors que la série $\sum(-1)^n$
+diverge --- la convergence des paquets n'entraîne pas celle de la
+série --- et, pour une série semi-convergente, regrouper des termes non
+consécutifs peut changer la somme (remarque~\ref{rem:riemann}).
+L'associativité \og infinie \fg{} de l'addition se paie par la convergence
+en vrac.
+\end{remarque}
+
+\begin{application}[Une somme de valeurs de $\zeta$]\label{app:zeta-vrac}
+Montrons que
+\[
+\sum_{n=2}^{+\infty}\bigl(\zeta(n)-1\bigr)=1 .
+\]
+Pour $n\geq 2$, $\zeta(n)-1=\sum_{k\geq 2}k^{-n}$. La famille
+$(k^{-n})$, indexée par les couples d'entiers $n\geq 2$, $k\geq 2$, est à
+termes positifs ; le corollaire~\ref{cor:fubini} autorise donc à
+intervertir les deux sommations :
+\[
+\sum_{n\geq 2}\bigl(\zeta(n)-1\bigr)
+=\sum_{n\geq 2}\sum_{k\geq 2}\frac{1}{k^{n}}
+=\sum_{k\geq 2}\sum_{n\geq 2}\frac{1}{k^{n}}
+=\sum_{k\geq 2}\frac{1/k^{2}}{1-1/k}
+=\sum_{k\geq 2}\frac{1}{k(k-1)} ,
+\]
+en sommant la série géométrique de raison $1/k\in\left]0,1\right[$. Le
+télescopage $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$ donne la valeur
+$1$ --- et la finitude du résultat valide, a posteriori, la sommabilité de
+la famille double.
+\end{application}
+
+\subsection{Retour aux séries de fonctions}
+
+\begin{proposition}\label{prop:cva-vrac}
+Soit $\sum u_n$ une série de fonctions définies sur $A$, et $x\in A$. La
+série converge absolument au point $x$ si et seulement si la famille de
+scalaires $\bigl(u_n(x)\bigr)_{n\in\N}$ converge en vrac. La somme
+ponctuelle d'une série absolument convergente ne dépend donc pas de
+l'ordre des termes.
+\end{proposition}
+
+\begin{proof}
+C'est le théorème~\ref{thm:vrac-abs} appliqué en chaque point.
+\end{proof}
+
+\begin{proposition}[La convergence normale est une convergence en vrac uniforme]\label{prop:cvn-vrac}
+Si $\sum u_n$ converge normalement sur $A$, de somme $S$, alors pour toute
+bijection $\sigma$ de $\N$, la série réarrangée $\sum u_{\sigma(n)}$
+converge encore normalement sur $A$, et uniformément vers la même somme
+$S$.
+\end{proposition}
+
+\begin{proof}
+Les sommes finies de la famille positive
+$\bigl(\Ninf{u_{\sigma(n)}}{A}\bigr)_n$ sont des sommes finies de la
+famille $\bigl(\Ninf{u_n}{A}\bigr)_n$ : elles sont majorées par
+$\sum_{n}\Ninf{u_n}{A}<+\infty$, donc la série
+$\sum\Ninf{u_{\sigma(n)}}{A}$ converge, et $\sum u_{\sigma(n)}$ converge
+normalement, donc uniformément (théorème~\ref{thm:cvn}), vers une
+fonction $T$. En un point $x\in A$ fixé, $\sum\lvert u_n(x)\rvert$
+converge, donc la famille $\bigl(u_n(x)\bigr)$ est sommable
+(théorème~\ref{thm:vrac-abs}), et la proposition~\ref{prop:commutative}
+donne
+$T(x)=\sum_{n}u_{\sigma(n)}(x)=\sum_{n}u_n(x)=S(x)$.
+\end{proof}
+
+\begin{remarque}[Pour aller plus loin]\label{rem:banach}
+La définition~\ref{def:vrac} a un sens dans tout espace vectoriel normé,
+et la convergence normale de $\sum u_n$ n'est autre que sa convergence
+\emph{absolue} dans l'espace
+$\bigl(\mathcal{B}(A,\K),\Ninf{\cdot}{A}\bigr)$. Elle entraîne la
+sommabilité de la famille $(u_n)$ dans cet espace, mais la réciproque est
+fausse. Prenons $A=\N^{*}$ et $u_n:\N^{*}\to\R$ définie par $u_n(n)=1/n$
+et $u_n(k)=0$ si $k\neq n$. La famille $(u_n)$ est sommable dans
+$\mathcal{B}(\N^{*},\R)$, de somme $f:k\mapsto 1/k$ : dès que
+$J\supset\{1,\dots,N\}$, la fonction $f-\sum_{n\in J}u_n$ est nulle sur
+$\{1,\dots,N\}$, donc $\Ninf{f-\sum_{n\in J}u_n}{\N^{*}}\leq 1/(N+1)$.
+Mais $\sum_n\Ninf{u_n}{\N^{*}}=\sum_n 1/n$ diverge : pas de convergence
+normale. En dimension finie, sommable équivaut à absolument convergente ;
+en dimension infinie, le théorème de Dvoretzky--Rogers (très au-delà de ce
+cours) affirme que les deux notions diffèrent dans \emph{tout} espace de
+Banach.
+\end{remarque}
+
+% =====================================================================
+%   SECTION 7
+% =====================================================================
+\section{Méthodes et pièges classiques}
+
+\begin{methode}[Plan d'étude d'une suite de fonctions]
+\begin{enumerate}
+    \item \emph{Limite simple.} Fixer $x$ et calculer
+    $\lim_{n\to\infty}f_n(x)$ ; préciser le domaine de convergence et la
+    fonction limite $f$ --- seule candidate possible pour toute
+    convergence plus forte.
+    \item \emph{Convergence uniforme.} Étudier
+    $\Ninf{f_n-f}{A}$ suivant la méthode~\ref{meth:cvu} : calcul du sup
+    par étude de variations, majoration par une suite tendant vers $0$,
+    ou minoration le long d'une suite $(x_n)$ bien choisie (souvent le
+    point où $f_n-f$ atteint son maximum).
+    \item \emph{À défaut}, chercher la convergence uniforme sur tout
+    segment, ou sur des sous-parties du type $[a,+\infty[$.
+    \item \emph{Conclure} sur la régularité de $f$ à l'aide des théorèmes
+    de la section 2, en vérifiant scrupuleusement leurs hypothèses.
+\end{enumerate}
+\end{methode}
+
+Le plan d'étude d'une série de fonctions a été donné à la
+méthode~\ref{meth:series} : convergence simple, puis tentative de
+convergence normale, puis étude des restes, puis repli sur tout segment.
+
+\begin{remarque}[Les pièges à éviter]
+\begin{itemize}
+    \item \textbf{Inverser les quantificateurs.} En convergence simple, le
+    rang $N$ dépend de $x$ ; écrire un $N$ universel, c'est déjà supposer
+    la convergence uniforme.
+    \item \textbf{Confondre \og sur tout segment de $I$ \fg{} et
+    \og sur $I$ \fg.} La série géométrique et la fonction $\zeta$ montrent
+    que la convergence peut être normale sur tout segment sans être
+    uniforme sur l'intervalle entier. Pour la continuité ou la
+    dérivabilité (notions locales), tout segment suffit ; pour appliquer
+    la double limite en une borne de $I$, il faut la convergence uniforme
+    au voisinage de cette borne.
+    \item \textbf{Intervertir limite et intégrale sans justification.} La
+    bosse glissante (exemple~\ref{ex:bosse}) est le contre-exemple à
+    connaître ; et même la convergence uniforme ne suffit pas hors d'un
+    segment (remarque~\ref{rem:hyp-integration}).
+    \item \textbf{Croire que la convergence de $(f_n)$ contrôle
+    $(f_n')$.} C'est faux (contre-exemple~\ref{cex:derivation}) : pour
+    dériver, les hypothèses portent sur la suite ou la série des
+    \emph{dérivées}.
+    \item \textbf{Croire que uniforme $\Rightarrow$ normale, ou que
+    absolue $\Rightarrow$ uniforme.} Revoir le panorama du
+    paragraphe~\ref{subsec:panorama} et ses contre-exemples.
+\end{itemize}
+\end{remarque}
+
+% =====================================================================
+%   SECTION 7
+% =====================================================================
+\section{Exercices}
+
+\begin{exercice}[Convergence uniforme sans convergence des dérivées]
+Pour $n\geq 1$ et $x\in\R$, on pose $f_n(x)=\dfrac{x}{1+n^2x^2}$.
+\begin{enumerate}
+    \item Montrer que $(f_n)$ converge uniformément sur $\R$ vers la
+    fonction nulle. \emph{(Indication : étudier les variations de $f_n$
+    ou utiliser $1+n^2x^2\geq 2n\lvert x\rvert$.)}
+    \item Calculer $f_n'(0)$ et déterminer la limite simple de la suite
+    $(f_n')$. Commenter au regard du théorème~\ref{thm:derivation}.
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[Une famille à paramètre]
+Pour $\alpha\in\R$, $n\geq 1$ et $x\in[0,+\infty[$, on pose
+$f_n(x) = n^{\alpha}\,x\,\mathrm{e}^{-nx}$.
+\begin{enumerate}
+    \item Montrer que $(f_n)$ converge simplement vers $0$ sur
+    $[0,+\infty[$, pour tout $\alpha$.
+    \item Calculer $\Ninf{f_n}{[0,+\infty[}$ et déterminer pour quelles
+    valeurs de $\alpha$ la convergence est uniforme sur $[0,+\infty[$ ;
+    montrer qu'elle est uniforme sur tout $[a,+\infty[$ avec $a>0$, pour
+    tout $\alpha$.
+    \item Calculer $\lim_{n\to\infty}\int_0^1 f_n(t)\dd t$ suivant les
+    valeurs de $\alpha$, et commenter le cas $\alpha=2$.
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[Une somme discontinue]
+On considère la série $\sum_{n\geq 0} u_n$ avec $u_n(x)=x^n(1-x)$ pour
+$x\in[0,1]$.
+\begin{enumerate}
+    \item Montrer que la série converge simplement sur $[0,1]$ et calculer
+    sa somme $S$.
+    \item La convergence est-elle uniforme sur $[0,1]$ ? normale sur
+    $[0,1]$ ? normale sur $[0,a]$ pour $0\leq a<1$ ?
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[La série alternée de référence]
+On reprend $\displaystyle S(x)=\sum_{n\geq 1}\frac{(-1)^n}{n+x}$ sur
+$[0,+\infty[$ (contre-exemple~\ref{cex:alternee}).
+\begin{enumerate}
+    \item Justifier que $S$ est continue sur $[0,+\infty[$.
+    \item Déterminer $\lim_{x\to+\infty}S(x)$.
+    \item Montrer que $S$ est de classe $\mathcal{C}^1$ sur
+    $[0,+\infty[$ et exprimer $S'$ comme somme d'une série.
+    \emph{(Indication : la série des dérivées est-elle normalement
+    convergente ?)}
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[Régularité d'une somme]
+Pour $x\in\R$, on pose $\displaystyle S(x)=\sum_{n\geq 1}
+\frac{1}{n^2+x^2}$.
+\begin{enumerate}
+    \item Montrer que $S$ est définie et continue sur $\R$.
+    \item Montrer que $S$ est de classe $\mathcal{C}^1$ sur $\R$.
+    \emph{(Indication : montrer que
+    $\bigl\lvert \frac{2x}{(n^2+x^2)^2} \bigr\rvert \leq \frac{1}{n^3}$
+    en remarquant que $n^2+x^2\geq 2n\lvert x\rvert$.)}
+    \item Déterminer $\lim_{x\to+\infty}S(x)$.
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[Autour d'une série géométrique déguisée]
+Pour $x>0$, on pose $\displaystyle S(x)=\sum_{n\geq 1}\mathrm{e}^{-nx}$.
+\begin{enumerate}
+    \item Déterminer le domaine de convergence simple de la série sur
+    $\R$ et calculer $S(x)$ pour $x>0$.
+    \item Montrer que la série converge normalement sur tout
+    $[a,+\infty[$ avec $a>0$, mais pas uniformément sur
+    $\left]0,+\infty\right[$. \emph{(Indication : que vaudrait
+    $\lim_{x\to 0^+}S(x)$ si la convergence était uniforme au voisinage
+    de $0$ ?)}
+    \item Retrouver par dérivation terme à terme la valeur de
+    $\sum_{n\geq 1} n\,\mathrm{e}^{-nx}$ pour $x>0$.
+\end{enumerate}
+\end{exercice}
+
+\begin{exercice}[Un réarrangement explicite]\label{exo:rearrangement}
+On admet le développement
+$H_n:=\sum_{k=1}^{n}\frac{1}{k}=\ln n+\gamma+o(1)$, où $\gamma$ est la
+constante d'Euler, ainsi que la valeur
+$\sum_{n\geq 1}\frac{(-1)^{n+1}}{n}=\ln 2$. On réarrange cette série en
+prenant alternativement \emph{deux} termes positifs puis \emph{un} terme
+négatif :
+\[
+1+\frac{1}{3}-\frac{1}{2}+\frac{1}{5}+\frac{1}{7}-\frac{1}{4}
++\frac{1}{9}+\frac{1}{11}-\frac{1}{6}+\cdots
+\]
+\begin{enumerate}
+    \item Exprimer la somme partielle $S_{3N}$ du réarrangement à l'aide
+    de $H_{4N}$, $H_{2N}$ et $H_N$. \emph{(Indication : la somme des
+    inverses des entiers impairs de $1$ à $4N-1$ vaut
+    $H_{4N}-\frac{1}{2}H_{2N}$.)}
+    \item En déduire que la série réarrangée converge et que sa somme vaut
+    $\frac{3}{2}\ln 2$.
+    \item Pourquoi ce phénomène ne contredit-il ni la
+    proposition~\ref{prop:commutative}, ni la
+    proposition~\ref{prop:cvn-vrac} ?
+\end{enumerate}
+\end{exercice}
+
+\vspace{4mm}
+\hrule
+\vspace{2mm}
+\begin{center}
+\emph{Fin du chapitre. Les séries entières et les séries de Fourier, à
+venir, sont deux familles remarquables de séries de fonctions auxquelles
+tout ce chapitre s'appliquera.}
+\end{center}
+
+\end{document}
