@@ -1,0 +1,308 @@
+% =====================================================================
+%  Leçon 201 — Espaces de fonctions. Exemples et applications.
+%  Fichier autonome (préambule identique à template-lecon.tex).
+%  Compilation : pdflatex (2 passes pour le nombre de pages).
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Encodage, langue, fontes ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,landscape,margin=1.2cm,top=1.6cm,bottom=1.2cm,headsep=0.3cm]{geometry}
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+
+% ---------- Mathématiques ----------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+
+% ---------- Informations sur la leçon (à remplir) ----------
+\newcommand{\numlecon}{201}
+\newcommand{\titrelecon}{Espaces de fonctions. Exemples et applications.}
+
+% ---------- En-tête / pied de page ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{Leçon \numlecon}\ --- \titrelecon}
+\fancyhead[R]{\small\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Titres de sections (I), II)... et 1), 2)...) ----------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\titleformat{\section}{\large\bfseries}{\thesection)}{0.4em}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection)}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+
+% ---------- Environnements d'énoncés (compteur unique) ----------
+\newtheoremstyle{plan}{2pt}{2pt}{}{}{\bfseries}{ :}{ }{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\newtheoremstyle{planex}{2pt}{2pt}{}{}{\bfseries\itshape}{ :}{ }{\thmname{#1}\thmnote{ (#3)}}
+\theoremstyle{plan}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\newtheorem{application}[theoreme]{Application}
+\newtheorem{remarque}[theoreme]{Remarque}
+\newtheorem{notation}[theoreme]{Notation}
+\theoremstyle{planex}
+\newtheorem*{exemple}{Ex}
+\newtheorem*{contreexemple}{Contre-ex}
+\newtheorem*{remarq}{Rq}
+
+% ---------- Développements ----------
+% \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
+\newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \listedev{...} : récapitulatif en fin de plan
+\newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Raccourcis mathématiques ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Oo}{\mathcal{O}}
+\newcommand{\tribu}{\mathcal{A}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Lp}[1][p]{L^{#1}}
+\newcommand{\tq}{\ \text{tq}\ }
+\newcommand{\ssi}{\text{ ssi }}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Vect}{Vect}
+
+% =====================================================================
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Leçon \numlecon}\\[2pt]
+{\large\bfseries \titrelecon}
+\end{center}
+\vspace{2pt}\hrule\vspace{4pt}
+
+\begin{multicols}{2}
+
+\section{Fonctions continues sur un compact}
+$(K,d)$ espace métrique compact.
+
+\subsection{Définitions et premières propriétés}
+
+\begin{definition}
+$f : K \to (Y,d')$ métrique est continue en $x \in K$ si $\forall \varepsilon > 0,\ \exists \eta > 0 \mid \forall y \in K,\ d(x,y) \le \eta \Rightarrow d'(f(x),f(y)) \le \varepsilon$. $f$ est continue sur $K$ si elle est continue en tout $x \in K$. On note $\Cc(K,Y) = \{ f : K \to Y \mid f \text{ continue sur } K \}$.
+\end{definition}
+
+\begin{exemple}
+$K = [a,b]$, $Y = \R$ : continuité usuelle sur $\R$.
+\end{exemple}
+
+\begin{proposition}
+Si $f, g \in \Cc(K,Y)$, $E = \{ d'(f(x),g(x)),\ x \in K \}$ est borné et $\sup E$ est atteint en $x_0 \in K$. $\Cc(K,Y)$ est alors métrique pour $d_{\Cc(K,Y)}(f,g) = \sup_{x \in K} d'(f(x),g(x))$.
+\end{proposition}
+
+\begin{proposition}
+Si $Y$ est complet, $(\Cc(K,Y), d_{\Cc(K,Y)})$ aussi. Si $Y$ est un Banach, $\Cc(K,Y)$ aussi pour $\norm{f}_\infty = \sup_{x \in K} \norm{f(x)}_Y$. Si $Y$ est une algèbre, $\Cc(K,Y)$ aussi.
+
+En particulier, une limite uniforme de fonctions continues sur $K$ est continue.
+\end{proposition}
+
+\begin{exemple}
+Sur $\R$, $x \mapsto \sum_{n \ge 0} e^{-n x^2}$ est continue sur $]0,+\infty[$.
+\end{exemple}
+
+\begin{application}[Cauchy-Lipschitz]
+$E$ un espace de Banach et $F : E \to E$ tq $\norm{F(u) - F(v)} \le L \norm{u - v}$ $\forall u, v \in E$ ($L > 0$). Alors pour tout $u_0 \in E$, il existe $u \in \Cc^1([0,+\infty[, E)$ unique telle que :
+\[ \begin{cases} \dfrac{du}{dt} = F(u) & \text{sur } [0,+\infty[ \\ u(0) = u_0. \end{cases} \]
+\end{application}
+
+\subsection{Théorèmes fondamentaux}
+
+\begin{theoreme}[Heine]
+$f \in \Cc(K,Y)$. $f$ est uniformément continue : $\forall \varepsilon > 0,\ \exists \eta > 0 \mid \forall x, y \in K,\ d(x,y) \le \eta \Rightarrow d'(f(x),f(y)) \le \varepsilon$.
+\end{theoreme}
+
+\begin{exemple}
+$f : [0,1[ \to \R$ uniformément continue. Alors $f$ se prolonge par continuité sur $[0,1]$.
+\end{exemple}
+
+\begin{theoreme}[Dini]
+$Y = \R$. $(f_n) \in \Cc(K,Y)^\N$ croissante. Si $(f_n)$ converge vers $f \in \Cc(K,Y)$ sur $K$ alors $f_n \to f$ dans $\Cc(K,Y)$.
+\end{theoreme}
+
+\begin{theoreme}[Arzelà]
+$Y$ complet. $A \subset \Cc(K,Y)$. $\overline{A}$ est compacte ssi :
+\begin{itemize}
+\item $\forall x \in K$, $\{ f(x),\ f \in A \} \subset Y$ est compact.
+\item Équicontinuité : $\forall \varepsilon > 0,\ \exists \eta > 0 \mid \forall f \in A,\ \forall x, y \in K,\ d(x,y) \le \eta \Rightarrow d'(f(x),f(y)) \le \varepsilon$.
+\end{itemize}
+\end{theoreme}
+
+\begin{exemple}
+$M > 0$ : $\{ f : [0,1] \to \R \mid f\ M\text{-lipschitz},\ f(0) = 0 \}$ est compacte dans $\Cc([0,1],\R)$. % [correction] ajout de f(0)=0 (sinon l'ensemble n'est pas borné)
+\end{exemple}
+
+\begin{application}
+$T : \Cc([0,1],\R) \to \Cc([0,1],\R)$, $f \mapsto \left( x \mapsto \int_0^x f(s)\,ds \right)$ est un opérateur compact.
+\end{application}
+
+\begin{theoreme}[Stone-Weierstrass] % [correction] hypothèse « x ≠ y » (le manuscrit hésite avec « a ≠ b »)
+$A \subset \Cc(K,\R)$ une sous-algèbre tq pour tous $x, y \in K$, $a, b \in \R$ avec $x \ne y$, il existe $f \in A$ tq $f(x) = a$, $f(y) = b$. Alors $\overline{A} = \Cc(K,\R)$.
+
+Si $A \subset \Cc(K,\C)$ vérifie les mêmes hypothèses et si $\forall f \in A$, $\overline{f} \in A$, alors $\overline{A} = \Cc(K,\C)$.
+\end{theoreme}
+
+\begin{corollaire}[Weierstrass]
+$f : [a,b] \to \R$ continue. $f$ est limite uniforme de polynômes à coefficients réels.
+\end{corollaire}
+
+\begin{exemple}
+L'ensemble des polynômes trigonométriques $\C[e^{ix}, e^{-ix}]$ est dense dans $\Cc(\U,\C)$ (Fejér).
+\end{exemple}
+
+\begin{exemple}
+$f : [0,1] \to \R$ continue. $B_n(f) \to f$ uniformément, où
+\[ B_n(f)(x) = \sum_{k=0}^{n} f\!\left(\tfrac{k}{n}\right) \binom{n}{k} x^k (1-x)^{n-k}. \]
+\end{exemple}
+
+\section{Espaces $\Lp$}
+
+\subsection{Généralités}
+
+\begin{definition}
+$(X, \tribu, \mu)$ mesuré. Pour $p \in [1,+\infty[$, on définit
+\[ \Lp(X) = \left\{ f : X \to \C \,\Big|\, \int \abs{f}^p\,d\mu < \infty \right\} \Big/ \sim \]
+où $f \sim g \Leftrightarrow f = g$ $\mu$-pp,
+et $\Lp[\infty](X) = \{ f : X \to \C \mid \exists M > 0 \mid \abs{f} \le M\ \mu\text{-pp} \}$. On pose :
+\begin{itemize}
+\item $\norm{f}_\infty = \inf \{ M > 0 \mid \abs{f} \le M\ \mu\text{-pp} \}$ sur $\Lp[\infty](X)$,
+\item $\norm{f}_p = \left( \int \abs{f}^p\,d\mu \right)^{1/p}$ sur $\Lp(X)$,
+\end{itemize}
+bien définis.
+\end{definition}
+
+\begin{theoreme}
+$\norm{\cdot}_p$ définit une norme sur $\Lp(X)$ qui en fait un espace de Banach (Riesz-Fischer).
+\end{theoreme}
+
+\begin{corollaire}
+$L^2(X)$ est un espace de Hilbert.
+\end{corollaire}
+
+\begin{application}[Radon-Nikodym]
+Soit $\lambda, \mu$ deux mesures $\sigma$-finies sur $(X,\tribu)$ tq $\lambda \ll \mu$ (absolue continuité). Alors il existe une unique $h$ $\mu$-mesurable positive tq $\forall E \in \tribu$, $\lambda(E) = \int_E h\,d\mu$.
+\end{application}
+
+\begin{remarq}
+C'est encore vrai si $\lambda$ est une mesure complexe.
+\end{remarq}
+
+\begin{application}[Espérance conditionnelle]
+$(\Omega, \tribu, \PP)$ espace probabilisé. $\mathcal{G}$ une sous-tribu de $\tribu$. $X \ge 0$ ou intégrable : il existe une unique v.a. $\E(X \mid \mathcal{G})$ $\mathcal{G}$-mesurable tq $\forall A \in \mathcal{G}$, $\E(X \mathbf{1}_A) = \E\big( \E(X \mid \mathcal{G}) \mathbf{1}_A \big)$.
+\end{application}
+
+\subsection{Cas $\Omega$ ouvert de $\R^N$}
+$\Omega$ ouvert de $\R^N$, les espaces se réfèrent aux fonctions sur $\Omega$. $\lambda$ est la mesure de Lebesgue. $1 \le p < \infty$.
+
+\begin{theoreme}[densité]
+$\Cc_c(\Omega) = \{ f : \Omega \to \C \mid f \text{ continue à support compact} \}$ est dense dans $\Lp(\Omega)$.
+\end{theoreme}
+
+\begin{application}
+$f \in \Lp$, $y \in \R^N$. $\tau_y f = f(\cdot - y) \in \Lp$. Alors $\tau_y f \xrightarrow[y \to 0]{} f$ dans $\Lp$.
+\end{application}
+
+\begin{definition}
+On appelle suite régularisante toute suite $(\rho_n)_{n \ge 0}$ tq $\rho_n \in \Cc_c^\infty(\R^N)$, $\Supp \rho_n \subset B(0, \frac{1}{n})$, $\int \rho_n = 1$, $\rho_n \ge 0$.
+\end{definition}
+
+\begin{remarq}
+On pose $\rho(x) = \begin{cases} e^{-\frac{1}{1 - \norm{x}^2}} & \text{si } \norm{x} < 1 \\ 0 & \text{si } \norm{x} \ge 1 \end{cases}$ et $\rho_n(x) = C n^N \rho(nx)$, $C = \left( \int \rho \right)^{-1}$ est une suite régularisante.
+\end{remarq}
+
+\begin{theoreme}
+Si $f \in \Lp(\R^N)$, $\rho_n * f \xrightarrow[n \to \infty]{} f$ dans $\Lp(\R^N)$ où $\rho_n * f : x \mapsto \int f(y) \rho_n(x-y)\,dy$.
+\end{theoreme}
+
+\begin{corollaire}
+$\Omega \subset \R^N$ ouvert. $\Cc_c^\infty(\Omega)$ dense dans $\Lp(\Omega)$.
+\end{corollaire}
+
+\begin{exemple}
+$f \in L^1(\R)$, $\hat{f}(n) = \int f(x) e^{inx}\,dx \xrightarrow[n \to \infty]{} 0$ (lemme de Riemann-Lebesgue).
+\end{exemple}
+
+\subsection{Applications en analyse fonctionnelle}
+
+\begin{theoreme}[Riesz]
+$1 < p < \infty$. $\Omega$ ouvert de $\R^N$. $\varphi$ forme linéaire sur $\Lp_\R(\Omega)$, continue : $\varphi \in (\Lp)'$. Alors $\exists!\ u \in L^q$ tq $\forall f \in \Lp$, $\varphi(f) = \int u f\,d\lambda$ ($\frac{1}{p} + \frac{1}{q} = 1$). $(\Lp)'$ est isométrique à $L^q$.
+\end{theoreme}
+
+\begin{theoreme}[Plancherel\dev{1}]
+La transformation de Fourier réalise une isométrie de $L^2(\R) \cap L^1(\R)$ dans $L^2$ pour $\norm{\cdot}_2$, donc se prolonge en une isométrie de $L^2(\R)$. Cette isométrie est bijective.
+\end{theoreme}
+
+\begin{definition}
+\[ L^2(\T) = \Big\{ f : \R \to \C,\ 2\pi\text{-pér. } \lambda\text{-pp tq } \textstyle\int_0^{2\pi} \abs{f}^2\,d\lambda < \infty \Big\} \]
+et $\norm{f}_2 = \left( \frac{1}{2\pi} \int_0^{2\pi} \abs{f}^2\,d\lambda \right)^{1/2}$.
+C'est un Hilbert.
+\end{definition}
+
+\begin{theoreme}
+Pour $n \in \Z$, $e_n : x \mapsto e^{inx} \in L^2(\T)$. $(e_n)_{n \in \Z}$ forme une base hilbertienne de $L^2(\T)$.
+\end{theoreme}
+
+\begin{corollaire}
+Si $u \in L^2(\T)$, la série de Fourier $(S_u)$ définie par $S_u = \sum_{n \in \Z} \ps{e_n}{u} e_n$ converge vers $u$ dans $L^2(\T)$. $u = \sum_{n \in \Z} \ps{e_n}{u} e_n$ et $\norm{u}_2^2 = \sum_{n \in \Z} \abs{\ps{e_n}{u}}^2$.
+\end{corollaire}
+
+\begin{exemple}
+$\displaystyle \int_\R \left( \frac{\sin x}{x} \right)^2 dx = \pi$, $\displaystyle \sum_{n=1}^{\infty} \frac{1}{n^4} = \frac{\pi^4}{90}$.
+\end{exemple}
+
+\section{Espaces de fonctions holomorphes}
+$\Omega \subset \C$ ouvert. On note $\Oo(\Omega)$ l'ensemble des fonctions holomorphes sur $\Omega$. Soit $(K_n)_{n \ge 0}$ une suite exhaustive de compacts de $\Omega$ ($\bigcup K_n = \Omega$, $K_n \subset \mathring{K}_{n+1}$).
+
+\begin{definition} % [correction] f, g ∈ O(Ω) (le manuscrit écrit f, g ∈ Ω)
+Si $f, g \in \Oo(\Omega)$, on pose $p_n(f) = \sup_{y \in K_n} \abs{f(y)}$ et $d(f,g) = \sum_{i \ge 1} 2^{-i} \min(1, p_i(f-g))$. C'est une distance sur $\Oo(\Omega)$ et $f_n \xrightarrow{d} f$ ssi $f_n \to f$ uniformément sur tout compact de $\Omega$.
+\end{definition}
+
+\begin{theoreme}[Weierstrass]
+Si $(f_n) \in \Oo(\Omega)^\N$, $f : \Omega \to \C$ et $f_n \to f$ uniformément sur tout compact de $\Omega$, alors $f \in \Oo(\Omega)$ et $\forall k \ge 0$, $f_n^{(k)} \to f^{(k)}$ dans $\Oo(\Omega)$.
+\end{theoreme}
+
+\begin{remarque}
+$(\Oo(\Omega), d)$ est complet. C'est un espace stable par dérivation. Il n'est pas normable.
+\end{remarque}
+
+\begin{theoreme}[Montel\dev{2}]
+$H \subset \Oo(\Omega)$. Alors $H$ est relativement compact ssi pour tout compact $K \subset \Omega$, la famille $(f|_K)_{f \in H}$ est bornée pour la distance uniforme. Une telle famille est dite normale.
+\end{theoreme}
+
+\end{multicols}
+
+\listedev{1. Théorème de Plancherel (Thm~22). --- 2. Théorème de Montel (Thm~29).}
+
+\end{document}

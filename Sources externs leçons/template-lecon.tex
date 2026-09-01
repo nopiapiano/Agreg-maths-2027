@@ -1,0 +1,157 @@
+% =====================================================================
+%  TEMPLATE — Plan de leçon (agrégation)
+%  Format : A4 paysage, deux colonnes, numérotation continue des énoncés,
+%  étiquettes de développements en rouge.
+%  Compilation : pdflatex (2 passes pour le nombre de pages).
+%  Pour une nouvelle leçon : remplir \numlecon, \titrelecon,
+%  les sections et la liste des développements en fin de fichier.
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Encodage, langue, fontes ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,landscape,margin=1.2cm,top=1.6cm,bottom=1.2cm,headsep=0.3cm]{geometry}
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+
+% ---------- Mathématiques ----------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+
+% ---------- Informations sur la leçon (à remplir) ----------
+\newcommand{\numlecon}{000}
+\newcommand{\titrelecon}{Titre de la leçon.}
+
+% ---------- En-tête / pied de page ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{Leçon \numlecon}\ --- \titrelecon}
+\fancyhead[R]{\small\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Titres de sections (I), II)... et 1), 2)...) ----------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\titleformat{\section}{\large\bfseries}{\thesection)}{0.4em}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection)}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+
+% ---------- Environnements d'énoncés (compteur unique) ----------
+\newtheoremstyle{plan}{2pt}{2pt}{}{}{\bfseries}{ :}{ }{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\newtheoremstyle{planex}{2pt}{2pt}{}{}{\bfseries\itshape}{ :}{ }{\thmname{#1}\thmnote{ (#3)}}
+\theoremstyle{plan}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\newtheorem{application}[theoreme]{Application}
+\newtheorem{remarque}[theoreme]{Remarque}
+\newtheorem{notation}[theoreme]{Notation}
+\theoremstyle{planex}
+\newtheorem*{exemple}{Ex}
+\newtheorem*{contreexemple}{Contre-ex}
+\newtheorem*{remarq}{Rq}
+
+% ---------- Développements ----------
+% \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
+\newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \listedev{...} : récapitulatif en fin de plan
+\newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Raccourcis mathématiques ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Oo}{\mathcal{O}}
+\newcommand{\tribu}{\mathcal{A}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Lp}[1][p]{L^{#1}}
+\newcommand{\tq}{\ \text{tq}\ }
+\newcommand{\ssi}{\text{ ssi }}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Vect}{Vect}
+
+% =====================================================================
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Leçon \numlecon}\\[2pt]
+{\large\bfseries \titrelecon}
+\end{center}
+\vspace{2pt}\hrule\vspace{4pt}
+
+\begin{multicols}{2}
+
+\section{Première partie}
+Cadre et notations de la partie.
+
+\subsection{Première sous-partie}
+
+\begin{definition}
+Énoncé.
+\end{definition}
+
+\begin{exemple}
+Un exemple.
+\end{exemple}
+
+\begin{proposition}
+Énoncé.
+\end{proposition}
+
+\begin{theoreme}[Nom du théorème\dev{1}]
+Énoncé faisant l'objet du premier développement.
+\end{theoreme}
+
+\begin{application}
+Énoncé.
+\end{application}
+
+\subsection{Deuxième sous-partie}
+
+\begin{corollaire}
+Énoncé.
+\end{corollaire}
+
+\begin{remarq}
+Une remarque non numérotée.
+\end{remarq}
+
+\section{Deuxième partie}
+
+\begin{theoreme}[Autre théorème\dev{2}]
+Énoncé faisant l'objet du second développement.
+\end{theoreme}
+
+\end{multicols}
+
+\listedev{1. Nom du premier développement (Thm~X). --- 2. Nom du second développement (Thm~Y).}
+
+\end{document}
