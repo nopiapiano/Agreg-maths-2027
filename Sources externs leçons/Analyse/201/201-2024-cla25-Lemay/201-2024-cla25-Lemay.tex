@@ -1,0 +1,439 @@
+% =====================================================================
+%  Leçon 201 — Espaces de fonctions. Exemples et applications.
+%  Plan manuscrit (auteur, session et classement à compléter dans l'encart).
+%  Fichier autonome (préambule identique à template-lecon.tex).
+%  Compilation : pdflatex (2 passes pour le nombre de pages).
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Encodage, langue, fontes ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,landscape,margin=1.2cm,top=1.6cm,bottom=1.2cm,headsep=0.3cm]{geometry}
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.4pt}
+\raggedcolumns   % pas d'étirement vertical des colonnes pleines
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+
+% ---------- Mathématiques ----------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+
+% ---------- Informations sur la leçon (à remplir) ----------
+\newcommand{\numlecon}{201}
+\newcommand{\titrelecon}{Espaces de fonctions. Exemples et applications.}
+\newcommand{\auteur}{Lemay}   % à remplir (laisser vide pour masquer l'encart)
+\newcommand{\session}{2024}   % à remplir
+\newcommand{\classement}{25}   % à remplir
+
+% ---------- En-tête / pied de page ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{Leçon \numlecon}\ --- \titrelecon}
+\fancyhead[R]{\small\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Titres de sections (I), II)... et 1), 2)...) ----------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\titleformat{\section}{\large\bfseries}{\thesection)}{0.4em}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection)}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+
+% ---------- Environnements d'énoncés (compteur unique) ----------
+\newtheoremstyle{plan}{2pt}{2pt}{}{}{\bfseries}{ :}{ }{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\newtheoremstyle{planex}{2pt}{2pt}{}{}{\bfseries\itshape}{ :}{ }{\thmname{#1}\thmnote{ (#3)}}
+\theoremstyle{plan}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\newtheorem{application}[theoreme]{Application}
+\newtheorem{remarque}[theoreme]{Remarque}
+\newtheorem{notation}[theoreme]{Notation}
+\newtheorem{exemple}[theoreme]{Exemple}
+\newtheorem{contreexemple}[theoreme]{Contre-exemple}
+\theoremstyle{planex}   % variantes non numérotées : Ex / Rq / Contre-ex
+\newtheorem*{exemple*}{Ex}
+\newtheorem*{remarque*}{Rq}
+\newtheorem*{contreexemple*}{Contre-ex}
+
+% ---------- Références (équivalent de la marge du manuscrit) ----------
+% \src{GOU}{31} à la fin d'un énoncé : la référence est poussée à droite
+% de la dernière ligne (ou sur la ligne suivante s'il n'y a pas la place).
+\newcommand{\src}[2]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\mbox{\normalfont\scriptsize\textcolor{gray}{[#1~#2]}}\par}
+% \srcs{ELA, GOU} dans un titre de section
+\newcommand{\srcs}[1]{\ {\normalfont\small\textcolor{gray}{[#1]}}}
+
+% ---------- Développements ----------
+% \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
+\newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \begin{devbloc}{1} ... \end{devbloc} : encadre en rouge plusieurs énoncés
+\newsavebox{\devsavebox}
+\newenvironment{devbloc}[1]{\par\smallskip\noindent\begin{lrbox}{\devsavebox}\begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule}\vspace{-2pt}\hfill\textcolor{red}{\textbf{Dév.\,#1}}\par\vspace{-6pt}}{\end{minipage}\end{lrbox}{\color{red}\fbox{\color{black}\usebox{\devsavebox}}}\par\smallskip}
+% \listedev{...} : récapitulatif en fin de plan
+\newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Encart auteur ----------
+\newcommand{\encartauteur}{\ifx\auteur\empty\else\begin{center}\fbox{\small\textbf{Auteur} : \auteur\quad$\bullet$\quad\textbf{Session} \session\quad$\bullet$\quad\textbf{Classement} : \classement}\end{center}\fi}
+
+% ---------- Blocs de fin de plan ----------
+\newcommand{\blocfin}[1]{\par\vspace{4pt}{\small\textbf{#1 :}}\par\vspace{1pt}}
+
+% ---------- Raccourcis mathématiques ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Bb}{\mathcal{B}}
+\newcommand{\Oo}{\mathcal{O}}
+\newcommand{\Ll}{\mathcal{L}}
+\newcommand{\Ff}{\mathcal{F}}
+\newcommand{\tribu}{\mathcal{A}}
+\newcommand{\ind}{\mathds{1}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Lp}[1][p]{L^{#1}}
+\newcommand{\tq}{\ \text{tq}\ }
+\newcommand{\ssi}{\text{ ssi }}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Vect}{Vect}
+
+% =====================================================================
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Leçon \numlecon}\\[2pt]
+{\large\bfseries \titrelecon}
+\end{center}
+\encartauteur
+\vspace{2pt}\hrule\vspace{4pt}
+
+\begin{multicols}{2}
+
+Dans cette leçon, $\K$ désigne le corps $\R$ ou $\C$.
+
+\section{Espaces de fonctions continues sur un compact}
+
+\subsection{Généralités\srcs{GOU, HIR}}
+Soient $(E,d)$, $(E',d')$ deux espaces métriques.
+
+\begin{definition}
+$f : E \to E'$ est dite continue en $a \in E$ lorsque : $\forall \varepsilon > 0,\ \exists \eta > 0,\ \forall x \in E,\ d(x,a) < \eta \Rightarrow d'(f(x),f(a)) < \varepsilon$.
+\end{definition}
+
+\begin{definition}
+$f$ est dite uniformément continue sur $E$ lorsque $\forall \varepsilon > 0,\ \exists \eta > 0,\ \forall x, y \in E,\ d(x,y) < \eta \Rightarrow d'(f(x),f(y)) < \varepsilon$.
+\end{definition}
+
+\begin{proposition}
+L'espace $\Cc^0(E,\K)$ des fonctions continues sur $E$ à valeurs dans $\K$ est un espace vectoriel.
+\end{proposition}
+
+\begin{exemple} % [correction] intervalle ]0;1] (le manuscrit écrit « ]0;1) »)
+Toute fonction lipschitzienne est uniformément continue. La fonction $f : ]0;1] \to \R$, $x \mapsto \frac{1}{x}$ est continue mais pas uniformément continue.
+\end{exemple}
+
+\begin{proposition}
+Si $(E,d)$ est compact et $f : E \to E'$ est continue, alors $f(E)$ est compact.
+\end{proposition}
+
+\begin{theoreme}[Heine]
+Si $(E,d)$ est compact et $f : E \to E'$ est continue, alors $f$ est uniformément continue.
+\end{theoreme}
+
+\begin{definition}
+On suppose $(E,d)$ compact. On munit $\Cc(E,\K)$ de la norme : $f \mapsto \norm{f}_\infty = \sup_{x \in E} \abs{f(x)}$ appelée norme de la convergence uniforme.
+\end{definition}
+
+\begin{proposition}
+L'espace $(\Cc(E,\K), \norm{\cdot}_\infty)$ est un espace de Banach séparable pour $(E,d)$ compact.
+\end{proposition}
+
+\subsection{Densité\srcs{HIR}}
+On suppose $(E,d)$ compact.
+
+\begin{definition}
+Soit $H \subset \Cc(E,\R)$. On dit que $H$ est réticulée lorsque $\forall u, v \in H$, $\sup(u,v) \in H$ et $\inf(u,v) \in H$. On dit que $H$ est séparante lorsque : $\forall x \ne y \in E,\ \exists u \in H,\ u(x) \ne u(y)$.
+\end{definition}
+
+\begin{devbloc}{1}
+\begin{lemme}
+On suppose que $E$ contient au moins 2 éléments. Soit $H \subset \Cc(E,\R)$ telle que :
+\begin{enumerate}
+\item $H$ est réticulée ;
+\item si $x_1$ et $x_2$ sont deux points distincts quelconques de $E$, et si $\alpha_1$ et $\alpha_2$ sont deux réels, il existe $u \in H$, $u(x_1) = \alpha_1$, $u(x_2) = \alpha_2$.
+\end{enumerate}
+Alors $H$ est dense dans $\Cc(E,\R)$.
+\end{lemme}
+\begin{theoreme}
+Si $H$ est un sous-espace vectoriel de $\Cc(E,\R)$ réticulé, séparant et contenant les fonctions constantes alors $H$ est dense dans $\Cc(E,\R)$.
+\end{theoreme}
+\begin{theoreme}[Stone-Weierstrass réel]
+Toute sous-algèbre de $\Cc(E,\R)$ séparante contenant les fonctions constantes est dense dans $\Cc(E,\R)$.
+\end{theoreme}
+\end{devbloc}
+
+\begin{exemple}
+L'espace des fonctions lipschitziennes de $E$ dans $\R$ est dense dans $\Cc(E,\R)$.
+\end{exemple}
+
+\begin{exemple}\label{ex:polydense}
+Si $X$ est un compact de $\R^d$ et $H = \{ x \mapsto P(x) \mid P \in \R[X_1, \dots, X_d] \}$, $H$ est dense dans $\Cc(X,\R)$.
+\end{exemple}
+
+\begin{corollaire}
+Dans le cas $d = 1$ de l'Exemple~\ref{ex:polydense} et $X = [a;b]$ est un compact de $\R$, on retrouve le théorème de Weierstrass : toute fonction continue sur $[a;b]$ est limite uniforme de fonctions polynomiales.
+\end{corollaire}
+
+\begin{remarque}
+$H = \{ z \mapsto P(z),\ P \in \C[X] \}$ n'est pas dense dans $\Cc(E,\C)$.
+\end{remarque}
+
+\begin{theoreme}[Stone-Weierstrass complexe]
+Toute sous-algèbre $H$ de $\Cc(E,\C)$ séparante, auto-conjuguée, contenant les fonctions constantes est dense dans $\Cc(E,\C)$.
+\end{theoreme}
+
+\begin{remarque}
+Stone-Weierstrass peut se généraliser à $\Cc(E,\R)$ où $E$ est localement compact.
+\end{remarque}
+
+\begin{exemple}
+Soit $f \in \Cc([a;b],\R)$ telle que pour tout $n \in \N$, $\int_a^b t^n f(t)\,dt = 0$. Alors $f = 0$.
+\end{exemple}
+
+\begin{exemple} % [correction] « le sous-espace engendré par la famille » (le manuscrit écrit « la famille … est dense »)
+Le sous-espace engendré par la famille $(e_n)_{n \in \Z} = (x \mapsto e^{-inx})_{n \in \Z}$ est dense dans $\Cc(\T,\C)$ où $\T$ est le cercle unité. On a également la densité des polynômes trigonométriques dans $\Cc(\T,\C)$.
+\end{exemple}
+
+\subsection{Équicontinuité et théorème d'Ascoli\srcs{HIR}}
+$(E,d)$ compact.
+
+\begin{definition}
+Une partie $H$ de $\Cc(E,\K)$ est dite équicontinue (e.c.) en $x_0 \in E$ lorsque : $\forall \varepsilon > 0,\ \exists \eta > 0,\ \forall x \in E,\ d(x,x_0) < \eta \Rightarrow \forall f \in H,\ \abs{f(x) - f(x_0)} < \varepsilon$. On dit que $H$ est équicontinue lorsqu'elle l'est en tout point.
+\end{definition}
+
+\begin{definition}
+$H \subset \Cc(E,\K)$ est dite uniformément équicontinue (u.e.c.) lorsque : $\forall \varepsilon > 0,\ \exists \eta > 0,\ \forall x, y \in E,\ d(x,y) < \eta \Rightarrow \forall f \in H,\ \abs{f(x) - f(y)} < \varepsilon$.
+\end{definition}
+
+\begin{exemple}
+L'espace des fonctions lipschitziennes de même rapport sur $E$ est e.c.
+\end{exemple}
+
+\begin{proposition}[Heine]
+Une partie de $\Cc(E,\K)$ est équicontinue si et seulement si elle est uniformément équicontinue.
+\end{proposition}
+
+\begin{proposition}
+Soient $(f_n)_{n \ge 1}$ une suite équicontinue de $\Cc(E,\K)$ et $D$ une partie dense de $E$. Si $(f_n(x))_{n \in \N}$ converge pour tout $x \in D$ alors $(f_n)$ converge uniformément vers $f \in \Cc(E)$.
+\end{proposition}
+
+\begin{theoreme}[Ascoli]
+Une partie de $\Cc(E,\K)$ est relativement compacte dans $\Cc(E,\K)$ si et seulement si elle est bornée et équicontinue.
+\end{theoreme}
+
+\begin{application}
+Soient $X, Y$ deux espaces métriques compacts, $K \in \Cc(X \times Y, \K)$ et $\mu$ une mesure telle que $\mu(Y) < \infty$. On définit $T : \Cc(Y) \to \Cc(X)$, $f \mapsto \big( x \mapsto Tf(x) = \int_Y K(x,y) f(y)\,d\mu(y) \big)$. L'image par $T$ de $\overline{B}_{\Cc(Y)}(0,1)$ est relativement compacte dans $\Cc(X)$. On dit que $T$ est un opérateur compact.
+\end{application}
+
+\section{Espaces $L^p$ de Lebesgue}
+Soit $(\Omega, \mathcal{F}, \mu)$ un espace mesuré, $1 \le p \le \infty$.
+
+\subsection{L'espace vectoriel normé $L^p(\Omega,\mathcal{F},\mu)$ et son dual\srcs{BRI}}
+
+\begin{definition} % [correction] fonctions de L^∞ à valeurs dans K (le manuscrit semble écrire « Ω → ℝ̄₊ »)
+$\Ll^p(\Omega,\mathcal{F},\mu) = \{ f : (\Omega,\mathcal{F}) \to (\K, \Bb(\K)) \text{ mesurable} \mid \int_\Omega \abs{f}^p\,d\mu < \infty \}$. On définit $\norm{f}_p = \left( \int_\Omega \abs{f}^p\,d\mu \right)^{1/p}$ ; $\norm{f}_\infty = \operatorname{supess}(f) = \inf \{ M \mid \mu(\abs{f} > M) = 0 \}$ ; $\Ll^\infty(\Omega,\mathcal{F},\mu) = \{ f : \Omega \to \K,\ \norm{f}_\infty < \infty \}$.
+\end{definition}
+
+\begin{proposition}[Hölder]
+Soient $p, q \ge 1$ tels que $\frac{1}{p} + \frac{1}{q} = 1$. Si $f \in \Ll^p$ et $g \in \Ll^q$, alors $fg \in \Ll^1$ et $\norm{fg}_1 \le \norm{f}_p \norm{g}_q$.
+\end{proposition}
+
+\begin{definition}
+On définit pour $p \in [1;\infty]$, $L^p(\Omega,\mathcal{F},\mu) = \Ll^p(\Omega,\mathcal{F},\mu) / \!\sim$ où $\sim$ est l'égalité presque partout.
+\end{definition}
+
+\begin{proposition}
+$\forall f, g \in L^p$, $\norm{f+g}_p \le \norm{f}_p + \norm{g}_p$ (Minkowski). $(L^p(\Omega,\mathcal{F},\mu), \norm{\cdot}_p)$ est un espace vectoriel normé.
+\end{proposition}
+
+\begin{devbloc}{2}
+\begin{theoreme}[Riesz-Fischer]
+L'espace $(L^p(\Omega,\mathcal{F},\mu), \norm{\cdot}_p)$ est complet. C'est un espace de Banach.
+\end{theoreme}
+\end{devbloc}
+
+\begin{proposition}
+Si $\mu(\Omega) < \infty$, $1 \le p < q < \infty$, $L^\infty(\mu) \subset L^q(\mu) \subset L^p(\mu) \subset L^1(\mu)$.
+\end{proposition}
+
+\begin{proposition}
+$(L^2(\mu), \norm{\cdot}_2)$ est un espace de Hilbert pour le produit scalaire $\langle f | g \rangle = \int_\Omega f(t) \overline{g(t)}\,d\mu(t)$.
+\end{proposition}
+
+\begin{theoreme}
+On suppose $\mu$ $\sigma$-finie. Soit $1 \le p < \infty$ et $q$ son exposant conjugué. L'application $T : L^q \to (L^p)^*$, $g \mapsto T_g : L^p \to \K$, $f \mapsto \int_\Omega fg\,d\mu$ est une isométrie linéaire surjective. Le dual topologique de $L^p$ « est » $L^q$.
+\end{theoreme}
+
+\subsection{Résultats de densité et convolution\srcs{BRI, ELAM}}
+
+\begin{proposition}
+Pour tout $p \in [1;+\infty[$, l'ensemble des fonctions étagées intégrables est dense dans $L^p(\Omega,\mathcal{F},\mu)$. L'ensemble des fonctions étagées est dense dans $L^\infty(\Omega,\mathcal{F},\mu)$.
+\end{proposition}
+
+\begin{theoreme}
+Pour $(\Omega,\mathcal{F},\mu) = (\R, \Bb(\R), \lambda)$, on a :
+\begin{itemize}
+\item l'espace des fonctions en escalier à support compact est dense dans $L^p(\lambda)$, $1 \le p < \infty$ ;
+\item l'ensemble $\Cc^0_c(\R,\K)$ des fonctions continues à support compact est dense dans $L^p(\lambda)$, $1 \le p < \infty$.
+\end{itemize}
+\end{theoreme}
+
+\begin{corollaire}
+Soient $a \in \R^d$, $f \in L^p(\R^d)$. On définit $\tau_a f : x \mapsto f(x-a)$. On a pour tout $p \in [1;+\infty[$, $\norm{\tau_a f - f}_p \xrightarrow[a \to 0]{} 0$.
+\end{corollaire}
+
+\begin{definition}
+On dit que deux fonctions sont convolables lorsque pour presque tout $x \in \R^d$, $t \mapsto f(x-t) g(t)$ est intégrable. On définit alors le produit de convolution $f * g : x \in \R^d \mapsto \int_{\R^d} f(x-t) g(t)\,dt$.
+\end{definition}
+
+\begin{proposition}
+\begin{itemize}
+\item Si $f, g \in L^1(\R^d)$, $f * g \in L^1(\R^d)$ et $\norm{f * g}_1 \le \norm{f}_1 \norm{g}_1$.
+\item Si $f \in L^1(\R^d)$, $g \in L^p(\R^d)$ ($1 \le p < \infty$), $f * g \in L^p(\R^d)$ et $\norm{f * g}_p \le \norm{f}_1 \norm{g}_p$.
+\end{itemize}
+\end{proposition}
+
+\begin{corollaire}
+$(L^1(\R^d), +, \cdot, *)$ est une algèbre de Banach commutative.
+\end{corollaire}
+
+\begin{definition}
+On appelle approximation de l'unité dans $L^1(\R^d)$ toute suite $(\varphi_j)_{j \ge 1}$ de fonctions mesurables sur $\R^d$ telles que : $\forall j \in \N^*$, $\varphi_j \ge 0$, $\int_{\R^d} \varphi_j(x)\,dx = 1$ et pour tout $\varepsilon > 0$, $\lim_{j \to +\infty} \int_{\abs{x} \ge \varepsilon} \varphi_j(x)\,dx = 0$.
+\end{definition}
+
+\begin{theoreme}
+Soit $(\varphi_j)_{j \ge 1}$ une approximation de l'unité dans $L^1(\R^d)$. Si $f \in L^p(\R^d)$, $p \in [1;+\infty[$, $\norm{f * \varphi_j - f}_p \xrightarrow[j \to +\infty]{} 0$.
+\end{theoreme}
+
+\begin{proposition}
+$\forall \varepsilon > 0$, $\exists \rho_\varepsilon \in \Cc_c^\infty(\R^d)$ telle que : $\rho_\varepsilon \ge 0$, $\operatorname{supp}(\rho_\varepsilon) \subset \overline{B}(0,\varepsilon)$ et $\int_{\R^d} \rho_\varepsilon = 1$.
+\end{proposition}
+
+\begin{theoreme}
+$\Cc_c^\infty(\R^d)$ est dense dans $L^p(\R^d)$.
+\end{theoreme}
+
+\section{Le cas de l'espace de Hilbert $L^2_{2\pi}$}
+
+\subsection{Théorie $L^2$ des séries de Fourier\srcs{ELAM}}
+On note $L^2_{2\pi}$ l'espace des fonctions $2\pi$-périodiques dans $L^2(\R, \Bb(\R), \frac{\lambda}{2\pi})$. On note $c_n(f) = \langle f | e_n \rangle$ les coefficients de Fourier de $f \in L^2_{2\pi}$.
+
+\begin{theoreme}
+La famille $(e_n)_{n \in \Z}$ est une base hilbertienne de $L^2_{2\pi}$.
+\end{theoreme}
+
+\begin{theoreme}[Parseval]
+On a $f = \sum_{n \in \Z} c_n(f) e_n$ dans $L^2_{2\pi}$. On a de plus $\norm{f}_2^2 = \sum_{n \in \Z} \abs{c_n(f)}^2$ pour $f \in L^2_{2\pi}$.
+\end{theoreme}
+
+\begin{theoreme}
+L'application $\mathcal{F} : L^2_{2\pi} \to \ell^2(\Z)$, $f \mapsto (c_n(f))_{n \in \Z}$ est un isomorphisme isométrique entre espaces de Hilbert.
+\end{theoreme}
+
+\begin{contreexemple}
+Il existe $f \in \Cc_{2\pi}$ telle que sa série de Fourier diverge en $0$.
+\end{contreexemple}
+
+\begin{exemple}
+En étudiant $x \in ]-\pi;\pi] \mapsto 1 - \frac{x^2}{\pi^2}$ $2\pi$-périodique on trouve $\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$ et $\sum_{n=1}^{\infty} \frac{1}{n^4} = \frac{\pi^4}{90}$.
+\end{exemple}
+
+\subsection{$L^2(\R)$ et transformation de Fourier\srcs{ELAM}}
+
+\begin{theoreme}
+L'opérateur $\Ff : L^1(\R) \to \Cc^0_0(\R)$, $f \mapsto \Ff(f) : \R \to \C$, $\xi \mapsto \int_\R f(x) e^{-ix\xi}\,dx$ est bien défini, linéaire, continu et $\Ff(f)(\xi) \xrightarrow[\abs{\xi} \to +\infty]{} 0$.
+\end{theoreme}
+
+\begin{theoreme}[Fourier-Plancherel]
+$\Ff|_{L^1 \cap L^2}$ se prolonge en un unique isomorphisme isométrique qui définit la transformation de Fourier sur $L^2(\R)$.
+\end{theoreme}
+
+\begin{application}
+$\displaystyle \int_{-\infty}^{+\infty} \frac{\sin^2(t)}{t^2}\,dt = \pi$.
+\end{application}
+
+\subsection{Totalité des polynômes orthogonaux dans $L^2(I,\omega)$\srcs{ELAM}}
+
+\begin{definition} % [correction] fonctions définies sur I (le manuscrit écrit « f : ℝ → ℂ »)
+Soit $I$ un intervalle ouvert de $\R$. On appelle poids sur $I$ une fonction $\omega : I \to \R_+^*$ mesurable telle que : $\forall n \in \N$, $\int_I \abs{x^n} \omega(x)\,dx < \infty$. $L^2(I,\omega) = \{ f : I \to \C \text{ mesurable} \mid \int_I \abs{f(x)}^2 \omega(x)\,dx < \infty \}$. $L^2(I,\omega)$ est un espace de Hilbert pour $\langle f | g \rangle = \int_I f(x) \overline{g(x)} \omega(x)\,dx$.
+\end{definition}
+
+\begin{theoreme}
+Il existe une unique famille de polynômes unitaires orthogonaux deux à deux tels que $\deg(P_n) = n$. Cette famille s'appelle la famille des polynômes orthogonaux associée au poids $\omega$.
+\end{theoreme}
+
+\begin{theoreme}
+Soit $\omega$ un poids sur $I$ intervalle ouvert de $\R$. S'il existe $\alpha > 0$ tel que $\int_I e^{\alpha \abs{x}} \omega(x)\,dx < \infty$, alors les polynômes orthogonaux associés à $\omega$ forment une base hilbertienne de $L^2(I,\omega)$.
+\end{theoreme}
+
+\section{Espaces de fonctions holomorphes\srcs{Z-Q}}
+Soit $U$ un ouvert connexe de $\C$. On note $\mathcal{H}(U)$ l'espace des fonctions holomorphes sur $U$.
+
+\begin{theoreme}[Weierstrass]
+Soit $(f_n)_{n \in \N} \in \mathcal{H}(U)^\N$ telle que $f_n \to f$ uniformément sur tout compact. Alors $f \in \mathcal{H}(U)$ et $\forall k \in \N$, $f_n^{(k)} \to f^{(k)}$.
+\end{theoreme}
+
+\begin{proposition} % [correction] U à la place de Ω (le manuscrit mélange les deux notations)
+$\forall n \in \N$, on pose $K_n = \{ z \in \C \mid \abs{z} \le n,\ \operatorname{dist}(z, U^c) \ge \frac{1}{n} \}$. $\forall n \in \N$, $K_n$ est compact, $K_n \subset \mathring{K}_{n+1}$, $U = \bigcup_{n \ge 0} K_n$ et pour tout $K \subset U$ compact, il existe $n \ge 1$, $K \subset K_n$.
+\end{proposition}
+
+\begin{definition}
+$\forall f, g \in \mathcal{H}(U)$, on pose $\delta(f,g) = \sum_{n=1}^{+\infty} \frac{1}{2^n} \frac{p_n(f-g)}{1 + p_n(f-g)}$ où $p_n(f) = \sup_{z \in K_n} \abs{f(z)}$.
+\end{definition}
+
+\begin{proposition}
+$\delta$ est une distance, $(\mathcal{H}(U), \delta)$ est complet et $f_n \to f$ uniformément sur tout compact ssi $\delta(f_n, f) \xrightarrow[n \to \infty]{} 0$.
+\end{proposition}
+
+\begin{theoreme}[Montel]
+Soit $A \subset \mathcal{H}(U)$. Alors $A$ est relativement compacte si et seulement si $A$ est localement bornée.
+\end{theoreme}
+
+\begin{theoreme}
+La topologie de la convergence uniforme sur les compacts est métrisable mais pas normable pour $\mathcal{H}(U)$.
+\end{theoreme}
+
+\end{multicols}
+
+\listedev{1. Théorème de Stone-Weierstrass (Lemme~10, Thm~11, Thm~12). --- 2. Théorème de Riesz-Fischer (Thm~32).}
+
+\blocfin{Références}
+[HIR] Hirsch --- [GOU] Gourdon --- [BRI] Briane-Pagès --- [ELAM] El Amrani --- [Z-Q] Zuily-Queffélec (un peu au début).
+
+\end{document}

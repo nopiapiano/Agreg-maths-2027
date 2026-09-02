@@ -16,6 +16,7 @@
 \usepackage{multicol}
 \setlength{\columnsep}{1cm}
 \setlength{\columnseprule}{0.4pt}
+\raggedcolumns   % pas d'étirement vertical des colonnes pleines
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2pt}
 \usepackage{lastpage}
@@ -29,10 +30,14 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
+\usepackage{dsfont}
 
 % ---------- Informations sur la leçon (à remplir) ----------
 \newcommand{\numlecon}{201}
 \newcommand{\titrelecon}{Espaces de fonctions. Exemples et applications.}
+\newcommand{\auteur}{Grenier}   % à remplir (laisser vide pour masquer l'encart)
+\newcommand{\session}{2026}   % à remplir
+\newcommand{\classement}{2}   % à remplir
 
 % ---------- En-tête / pied de page ----------
 \pagestyle{fancy}
@@ -61,16 +66,34 @@
 \newtheorem{application}[theoreme]{Application}
 \newtheorem{remarque}[theoreme]{Remarque}
 \newtheorem{notation}[theoreme]{Notation}
-\theoremstyle{planex}
-\newtheorem*{exemple}{Ex}
-\newtheorem*{contreexemple}{Contre-ex}
-\newtheorem*{remarq}{Rq}
+\newtheorem{exemple}[theoreme]{Exemple}
+\newtheorem{contreexemple}[theoreme]{Contre-exemple}
+\theoremstyle{planex}   % variantes non numérotées : Ex / Rq / Contre-ex
+\newtheorem*{exemple*}{Ex}
+\newtheorem*{remarque*}{Rq}
+\newtheorem*{contreexemple*}{Contre-ex}
+
+% ---------- Références (équivalent de la marge du manuscrit) ----------
+% \src{GOU}{31} à la fin d'un énoncé : la référence est poussée à droite
+% de la dernière ligne (ou sur la ligne suivante s'il n'y a pas la place).
+\newcommand{\src}[2]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\mbox{\normalfont\scriptsize\textcolor{gray}{[#1~#2]}}\par}
+% \srcs{ELA, GOU} dans un titre de section
+\newcommand{\srcs}[1]{\ {\normalfont\small\textcolor{gray}{[#1]}}}
 
 % ---------- Développements ----------
 % \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
 \newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \begin{devbloc}{1} ... \end{devbloc} : encadre en rouge plusieurs énoncés
+\newsavebox{\devsavebox}
+\newenvironment{devbloc}[1]{\par\smallskip\noindent\begin{lrbox}{\devsavebox}\begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule}\vspace{-2pt}\hfill\textcolor{red}{\textbf{Dév.\,#1}}\par\vspace{-6pt}}{\end{minipage}\end{lrbox}{\color{red}\fbox{\color{black}\usebox{\devsavebox}}}\par\smallskip}
 % \listedev{...} : récapitulatif en fin de plan
 \newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Encart auteur ----------
+\newcommand{\encartauteur}{\ifx\auteur\empty\else\begin{center}\fbox{\small\textbf{Auteur} : \auteur\quad$\bullet$\quad\textbf{Session} \session\quad$\bullet$\quad\textbf{Classement} : \classement}\end{center}\fi}
+
+% ---------- Blocs de fin de plan ----------
+\newcommand{\blocfin}[1]{\par\vspace{4pt}{\small\textbf{#1 :}}\par\vspace{1pt}}
 
 % ---------- Raccourcis mathématiques ----------
 \newcommand{\R}{\mathbb{R}}
@@ -84,8 +107,12 @@
 \newcommand{\T}{\mathbb{T}}
 \newcommand{\U}{\mathbb{U}}
 \newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Bb}{\mathcal{B}}
 \newcommand{\Oo}{\mathcal{O}}
+\newcommand{\Ll}{\mathcal{L}}
+\newcommand{\Ff}{\mathcal{F}}
 \newcommand{\tribu}{\mathcal{A}}
+\newcommand{\ind}{\mathds{1}}
 \newcommand{\norm}[1]{\left\lVert #1\right\rVert}
 \newcommand{\abs}[1]{\left\lvert #1\right\rvert}
 \newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
@@ -102,6 +129,7 @@
 {\LARGE\bfseries Leçon \numlecon}\\[2pt]
 {\large\bfseries \titrelecon}
 \end{center}
+\encartauteur
 \vspace{2pt}\hrule\vspace{4pt}
 
 \begin{multicols}{2}
@@ -115,9 +143,9 @@ $(K,d)$ espace métrique compact.
 $f : K \to (Y,d')$ métrique est continue en $x \in K$ si $\forall \varepsilon > 0,\ \exists \eta > 0 \mid \forall y \in K,\ d(x,y) \le \eta \Rightarrow d'(f(x),f(y)) \le \varepsilon$. $f$ est continue sur $K$ si elle est continue en tout $x \in K$. On note $\Cc(K,Y) = \{ f : K \to Y \mid f \text{ continue sur } K \}$.
 \end{definition}
 
-\begin{exemple}
+\begin{exemple*}
 $K = [a,b]$, $Y = \R$ : continuité usuelle sur $\R$.
-\end{exemple}
+\end{exemple*}
 
 \begin{proposition}
 Si $f, g \in \Cc(K,Y)$, $E = \{ d'(f(x),g(x)),\ x \in K \}$ est borné et $\sup E$ est atteint en $x_0 \in K$. $\Cc(K,Y)$ est alors métrique pour $d_{\Cc(K,Y)}(f,g) = \sup_{x \in K} d'(f(x),g(x))$.
@@ -129,9 +157,9 @@ Si $Y$ est complet, $(\Cc(K,Y), d_{\Cc(K,Y)})$ aussi. Si $Y$ est un Banach, $\Cc
 En particulier, une limite uniforme de fonctions continues sur $K$ est continue.
 \end{proposition}
 
-\begin{exemple}
+\begin{exemple*}
 Sur $\R$, $x \mapsto \sum_{n \ge 0} e^{-n x^2}$ est continue sur $]0,+\infty[$.
-\end{exemple}
+\end{exemple*}
 
 \begin{application}[Cauchy-Lipschitz]
 $E$ un espace de Banach et $F : E \to E$ tq $\norm{F(u) - F(v)} \le L \norm{u - v}$ $\forall u, v \in E$ ($L > 0$). Alors pour tout $u_0 \in E$, il existe $u \in \Cc^1([0,+\infty[, E)$ unique telle que :
@@ -144,9 +172,9 @@ $E$ un espace de Banach et $F : E \to E$ tq $\norm{F(u) - F(v)} \le L \norm{u - 
 $f \in \Cc(K,Y)$. $f$ est uniformément continue : $\forall \varepsilon > 0,\ \exists \eta > 0 \mid \forall x, y \in K,\ d(x,y) \le \eta \Rightarrow d'(f(x),f(y)) \le \varepsilon$.
 \end{theoreme}
 
-\begin{exemple}
+\begin{exemple*}
 $f : [0,1[ \to \R$ uniformément continue. Alors $f$ se prolonge par continuité sur $[0,1]$.
-\end{exemple}
+\end{exemple*}
 
 \begin{theoreme}[Dini]
 $Y = \R$. $(f_n) \in \Cc(K,Y)^\N$ croissante. Si $(f_n)$ converge vers $f \in \Cc(K,Y)$ sur $K$ alors $f_n \to f$ dans $\Cc(K,Y)$.
@@ -160,9 +188,9 @@ $Y$ complet. $A \subset \Cc(K,Y)$. $\overline{A}$ est compacte ssi :
 \end{itemize}
 \end{theoreme}
 
-\begin{exemple}
+\begin{exemple*}
 $M > 0$ : $\{ f : [0,1] \to \R \mid f\ M\text{-lipschitz},\ f(0) = 0 \}$ est compacte dans $\Cc([0,1],\R)$. % [correction] ajout de f(0)=0 (sinon l'ensemble n'est pas borné)
-\end{exemple}
+\end{exemple*}
 
 \begin{application}
 $T : \Cc([0,1],\R) \to \Cc([0,1],\R)$, $f \mapsto \left( x \mapsto \int_0^x f(s)\,ds \right)$ est un opérateur compact.
@@ -178,14 +206,14 @@ Si $A \subset \Cc(K,\C)$ vérifie les mêmes hypothèses et si $\forall f \in A$
 $f : [a,b] \to \R$ continue. $f$ est limite uniforme de polynômes à coefficients réels.
 \end{corollaire}
 
-\begin{exemple}
+\begin{exemple*}
 L'ensemble des polynômes trigonométriques $\C[e^{ix}, e^{-ix}]$ est dense dans $\Cc(\U,\C)$ (Fejér).
-\end{exemple}
+\end{exemple*}
 
-\begin{exemple}
+\begin{exemple*}
 $f : [0,1] \to \R$ continue. $B_n(f) \to f$ uniformément, où
 \[ B_n(f)(x) = \sum_{k=0}^{n} f\!\left(\tfrac{k}{n}\right) \binom{n}{k} x^k (1-x)^{n-k}. \]
-\end{exemple}
+\end{exemple*}
 
 \section{Espaces $\Lp$}
 
@@ -215,9 +243,9 @@ $L^2(X)$ est un espace de Hilbert.
 Soit $\lambda, \mu$ deux mesures $\sigma$-finies sur $(X,\tribu)$ tq $\lambda \ll \mu$ (absolue continuité). Alors il existe une unique $h$ $\mu$-mesurable positive tq $\forall E \in \tribu$, $\lambda(E) = \int_E h\,d\mu$.
 \end{application}
 
-\begin{remarq}
+\begin{remarque*}
 C'est encore vrai si $\lambda$ est une mesure complexe.
-\end{remarq}
+\end{remarque*}
 
 \begin{application}[Espérance conditionnelle]
 $(\Omega, \tribu, \PP)$ espace probabilisé. $\mathcal{G}$ une sous-tribu de $\tribu$. $X \ge 0$ ou intégrable : il existe une unique v.a. $\E(X \mid \mathcal{G})$ $\mathcal{G}$-mesurable tq $\forall A \in \mathcal{G}$, $\E(X \mathbf{1}_A) = \E\big( \E(X \mid \mathcal{G}) \mathbf{1}_A \big)$.
@@ -238,9 +266,9 @@ $f \in \Lp$, $y \in \R^N$. $\tau_y f = f(\cdot - y) \in \Lp$. Alors $\tau_y f \x
 On appelle suite régularisante toute suite $(\rho_n)_{n \ge 0}$ tq $\rho_n \in \Cc_c^\infty(\R^N)$, $\Supp \rho_n \subset B(0, \frac{1}{n})$, $\int \rho_n = 1$, $\rho_n \ge 0$.
 \end{definition}
 
-\begin{remarq}
+\begin{remarque*}
 On pose $\rho(x) = \begin{cases} e^{-\frac{1}{1 - \norm{x}^2}} & \text{si } \norm{x} < 1 \\ 0 & \text{si } \norm{x} \ge 1 \end{cases}$ et $\rho_n(x) = C n^N \rho(nx)$, $C = \left( \int \rho \right)^{-1}$ est une suite régularisante.
-\end{remarq}
+\end{remarque*}
 
 \begin{theoreme}
 Si $f \in \Lp(\R^N)$, $\rho_n * f \xrightarrow[n \to \infty]{} f$ dans $\Lp(\R^N)$ où $\rho_n * f : x \mapsto \int f(y) \rho_n(x-y)\,dy$.
@@ -250,9 +278,9 @@ Si $f \in \Lp(\R^N)$, $\rho_n * f \xrightarrow[n \to \infty]{} f$ dans $\Lp(\R^N
 $\Omega \subset \R^N$ ouvert. $\Cc_c^\infty(\Omega)$ dense dans $\Lp(\Omega)$.
 \end{corollaire}
 
-\begin{exemple}
+\begin{exemple*}
 $f \in L^1(\R)$, $\hat{f}(n) = \int f(x) e^{inx}\,dx \xrightarrow[n \to \infty]{} 0$ (lemme de Riemann-Lebesgue).
-\end{exemple}
+\end{exemple*}
 
 \subsection{Applications en analyse fonctionnelle}
 
@@ -278,9 +306,9 @@ Pour $n \in \Z$, $e_n : x \mapsto e^{inx} \in L^2(\T)$. $(e_n)_{n \in \Z}$ forme
 Si $u \in L^2(\T)$, la série de Fourier $(S_u)$ définie par $S_u = \sum_{n \in \Z} \ps{e_n}{u} e_n$ converge vers $u$ dans $L^2(\T)$. $u = \sum_{n \in \Z} \ps{e_n}{u} e_n$ et $\norm{u}_2^2 = \sum_{n \in \Z} \abs{\ps{e_n}{u}}^2$.
 \end{corollaire}
 
-\begin{exemple}
+\begin{exemple*}
 $\displaystyle \int_\R \left( \frac{\sin x}{x} \right)^2 dx = \pi$, $\displaystyle \sum_{n=1}^{\infty} \frac{1}{n^4} = \frac{\pi^4}{90}$.
-\end{exemple}
+\end{exemple*}
 
 \section{Espaces de fonctions holomorphes}
 $\Omega \subset \C$ ouvert. On note $\Oo(\Omega)$ l'ensemble des fonctions holomorphes sur $\Omega$. Soit $(K_n)_{n \ge 0}$ une suite exhaustive de compacts de $\Omega$ ($\bigcup K_n = \Omega$, $K_n \subset \mathring{K}_{n+1}$).

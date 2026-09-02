@@ -1,10 +1,11 @@
 % =====================================================================
 %  TEMPLATE — Plan de leçon (agrégation)
 %  Format : A4 paysage, deux colonnes, numérotation continue des énoncés,
-%  étiquettes de développements en rouge.
+%  encart auteur, références en marge, blocs de développements.
 %  Compilation : pdflatex (2 passes pour le nombre de pages).
-%  Pour une nouvelle leçon : remplir \numlecon, \titrelecon,
-%  les sections et la liste des développements en fin de fichier.
+%  Pour une nouvelle leçon : remplir \numlecon, \titrelecon, \auteur,
+%  \session, \classement, les sections, puis les blocs de fin
+%  (développements, références, présentation).
 % =====================================================================
 \documentclass[10pt,a4paper]{article}
 
@@ -19,6 +20,7 @@
 \usepackage{multicol}
 \setlength{\columnsep}{1cm}
 \setlength{\columnseprule}{0.4pt}
+\raggedcolumns   % pas d'étirement vertical des colonnes pleines
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2pt}
 \usepackage{lastpage}
@@ -32,10 +34,14 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
+\usepackage{dsfont}
 
 % ---------- Informations sur la leçon (à remplir) ----------
 \newcommand{\numlecon}{000}
 \newcommand{\titrelecon}{Titre de la leçon.}
+\newcommand{\auteur}{Nom de l'auteur}   % laisser vide pour masquer l'encart
+\newcommand{\session}{2025}
+\newcommand{\classement}{00}
 
 % ---------- En-tête / pied de page ----------
 \pagestyle{fancy}
@@ -64,16 +70,34 @@
 \newtheorem{application}[theoreme]{Application}
 \newtheorem{remarque}[theoreme]{Remarque}
 \newtheorem{notation}[theoreme]{Notation}
-\theoremstyle{planex}
-\newtheorem*{exemple}{Ex}
-\newtheorem*{contreexemple}{Contre-ex}
-\newtheorem*{remarq}{Rq}
+\newtheorem{exemple}[theoreme]{Exemple}
+\newtheorem{contreexemple}[theoreme]{Contre-exemple}
+\theoremstyle{planex}   % variantes non numérotées : Ex / Rq / Contre-ex
+\newtheorem*{exemple*}{Ex}
+\newtheorem*{remarque*}{Rq}
+\newtheorem*{contreexemple*}{Contre-ex}
+
+% ---------- Références (équivalent de la marge du manuscrit) ----------
+% \src{GOU}{31} à la fin d'un énoncé : la référence est poussée à droite
+% de la dernière ligne (ou sur la ligne suivante s'il n'y a pas la place).
+\newcommand{\src}[2]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\mbox{\normalfont\scriptsize\textcolor{gray}{[#1~#2]}}\par}
+% \srcs{ELA, GOU} dans un titre de section
+\newcommand{\srcs}[1]{\ {\normalfont\small\textcolor{gray}{[#1]}}}
 
 % ---------- Développements ----------
 % \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
 \newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \begin{devbloc}{1} ... \end{devbloc} : encadre en rouge plusieurs énoncés
+\newsavebox{\devsavebox}
+\newenvironment{devbloc}[1]{\par\smallskip\noindent\begin{lrbox}{\devsavebox}\begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule}\vspace{-2pt}\hfill\textcolor{red}{\textbf{Dév.\,#1}}\par\vspace{-6pt}}{\end{minipage}\end{lrbox}{\color{red}\fbox{\color{black}\usebox{\devsavebox}}}\par\smallskip}
 % \listedev{...} : récapitulatif en fin de plan
 \newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Encart auteur ----------
+\newcommand{\encartauteur}{\ifx\auteur\empty\else\begin{center}\fbox{\small\textbf{Auteur} : \auteur\quad$\bullet$\quad\textbf{Session} \session\quad$\bullet$\quad\textbf{Classement} : \classement}\end{center}\fi}
+
+% ---------- Blocs de fin de plan ----------
+\newcommand{\blocfin}[1]{\par\vspace{4pt}{\small\textbf{#1 :}}\par\vspace{1pt}}
 
 % ---------- Raccourcis mathématiques ----------
 \newcommand{\R}{\mathbb{R}}
@@ -87,8 +111,12 @@
 \newcommand{\T}{\mathbb{T}}
 \newcommand{\U}{\mathbb{U}}
 \newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Bb}{\mathcal{B}}
 \newcommand{\Oo}{\mathcal{O}}
+\newcommand{\Ll}{\mathcal{L}}
+\newcommand{\Ff}{\mathcal{F}}
 \newcommand{\tribu}{\mathcal{A}}
+\newcommand{\ind}{\mathds{1}}
 \newcommand{\norm}[1]{\left\lVert #1\right\rVert}
 \newcommand{\abs}[1]{\left\lvert #1\right\rvert}
 \newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
@@ -105,6 +133,7 @@
 {\LARGE\bfseries Leçon \numlecon}\\[2pt]
 {\large\bfseries \titrelecon}
 \end{center}
+\encartauteur
 \vspace{2pt}\hrule\vspace{4pt}
 
 \begin{multicols}{2}
@@ -112,22 +141,22 @@
 \section{Première partie}
 Cadre et notations de la partie.
 
-\subsection{Première sous-partie}
+\subsection{Première sous-partie\srcs{ELA}}
 
 \begin{definition}
-Énoncé.
+Énoncé. \src{ELA}{143}
 \end{definition}
 
-\begin{exemple}
-Un exemple.
-\end{exemple}
+\begin{exemple*}
+Un exemple non numéroté.
+\end{exemple*}
 
 \begin{proposition}
 Énoncé.
 \end{proposition}
 
 \begin{theoreme}[Nom du théorème\dev{1}]
-Énoncé faisant l'objet du premier développement.
+Énoncé faisant l'objet du premier développement (étiquette seule). \src{GOU}{31}
 \end{theoreme}
 
 \begin{application}
@@ -140,18 +169,37 @@ Un exemple.
 Énoncé.
 \end{corollaire}
 
-\begin{remarq}
+\begin{remarque*}
 Une remarque non numérotée.
-\end{remarq}
+\end{remarque*}
 
 \section{Deuxième partie}
 
-\begin{theoreme}[Autre théorème\dev{2}]
-Énoncé faisant l'objet du second développement.
+\begin{devbloc}{2}
+\begin{lemme}
+Lemme préparatoire.
+\end{lemme}
+\begin{theoreme}[Autre théorème]
+Énoncé faisant l'objet du second développement (bloc encadré).
 \end{theoreme}
+\end{devbloc}
+
+\begin{exemple}
+Exemple numéroté.
+\end{exemple}
+
+\begin{contreexemple}
+Contre-exemple numéroté.
+\end{contreexemple}
 
 \end{multicols}
 
-\listedev{1. Nom du premier développement (Thm~X). --- 2. Nom du second développement (Thm~Y).}
+\listedev{1. Nom du premier développement (Thm~X) --- réf. --- 2. Nom du second développement (Thm~Y) --- réf.}
+
+\blocfin{Références}
+[ELA] Titre, Auteur --- [GOU] Titre, Auteur.
+
+\blocfin{Présentation}
+Quelques phrases de motivation du plan.
 
 \end{document}

@@ -1,0 +1,403 @@
+% =====================================================================
+%  Leçon 201 — Espaces de fonctions. Exemples et applications.
+%  Plan manuscrit d'un candidat de la session 2025 (classement 59).
+%  Fichier autonome (préambule identique à template-lecon.tex).
+%  Compilation : pdflatex (2 passes pour le nombre de pages).
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+% ---------- Encodage, langue, fontes ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+
+% ---------- Mise en page ----------
+\usepackage[a4paper,landscape,margin=1.2cm,top=1.6cm,bottom=1.2cm,headsep=0.3cm]{geometry}
+\usepackage{multicol}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.4pt}
+\raggedcolumns   % pas d'étirement vertical des colonnes pleines
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+
+% ---------- Mathématiques ----------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+
+% ---------- Informations sur la leçon (à remplir) ----------
+\newcommand{\numlecon}{201}
+\newcommand{\titrelecon}{Espaces de fonctions. Exemples et applications.}
+\newcommand{\auteur}{Mr-Syndrome}   % à remplir (laisser vide pour masquer l'encart)
+\newcommand{\session}{2025}   % à remplir
+\newcommand{\classement}{59}   % à remplir
+
+% ---------- En-tête / pied de page ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textbf{Leçon \numlecon}\ --- \titrelecon}
+\fancyhead[R]{\small\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- Titres de sections (I), II)... et 1), 2)...) ----------
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\titleformat{\section}{\large\bfseries}{\thesection)}{0.4em}{}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection)}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+
+% ---------- Environnements d'énoncés (compteur unique) ----------
+\newtheoremstyle{plan}{2pt}{2pt}{}{}{\bfseries}{ :}{ }{\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\newtheoremstyle{planex}{2pt}{2pt}{}{}{\bfseries\itshape}{ :}{ }{\thmname{#1}\thmnote{ (#3)}}
+\theoremstyle{plan}
+\newtheorem{theoreme}{Théorème}
+\newtheorem{definition}[theoreme]{Définition}
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\newtheorem{corollaire}[theoreme]{Corollaire}
+\newtheorem{application}[theoreme]{Application}
+\newtheorem{remarque}[theoreme]{Remarque}
+\newtheorem{notation}[theoreme]{Notation}
+\newtheorem{exemple}[theoreme]{Exemple}
+\newtheorem{contreexemple}[theoreme]{Contre-exemple}
+\theoremstyle{planex}   % variantes non numérotées : Ex / Rq / Contre-ex
+\newtheorem*{exemple*}{Ex}
+\newtheorem*{remarque*}{Rq}
+\newtheorem*{contreexemple*}{Contre-ex}
+
+% ---------- Références (équivalent de la marge du manuscrit) ----------
+% \src{GOU}{31} à la fin d'un énoncé : la référence est poussée à droite
+% de la dernière ligne (ou sur la ligne suivante s'il n'y a pas la place).
+\newcommand{\src}[2]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\mbox{\normalfont\scriptsize\textcolor{gray}{[#1~#2]}}\par}
+% \srcs{ELA, GOU} dans un titre de section
+\newcommand{\srcs}[1]{\ {\normalfont\small\textcolor{gray}{[#1]}}}
+
+% ---------- Développements ----------
+% \dev{1} dans le titre d'un énoncé : \begin{theoreme}[Plancherel\dev{1}]
+\newcommand{\dev}[1]{\ \textcolor{red}{\textbf{[Dév.\,#1]}}}
+% \begin{devbloc}{1} ... \end{devbloc} : encadre en rouge plusieurs énoncés
+\newsavebox{\devsavebox}
+\newenvironment{devbloc}[1]{\par\smallskip\noindent\begin{lrbox}{\devsavebox}\begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule}\vspace{-2pt}\hfill\textcolor{red}{\textbf{Dév.\,#1}}\par\vspace{-6pt}}{\end{minipage}\end{lrbox}{\color{red}\fbox{\color{black}\usebox{\devsavebox}}}\par\smallskip}
+% \listedev{...} : récapitulatif en fin de plan
+\newcommand{\listedev}[1]{\par\vspace{4pt}\hrule\vspace{3pt}{\small\textcolor{red}{\textbf{Développements :}} #1}}
+
+% ---------- Encart auteur ----------
+\newcommand{\encartauteur}{\ifx\auteur\empty\else\begin{center}\fbox{\small\textbf{Auteur} : \auteur\quad$\bullet$\quad\textbf{Session} \session\quad$\bullet$\quad\textbf{Classement} : \classement}\end{center}\fi}
+
+% ---------- Blocs de fin de plan ----------
+\newcommand{\blocfin}[1]{\par\vspace{4pt}{\small\textbf{#1 :}}\par\vspace{1pt}}
+
+% ---------- Raccourcis mathématiques ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Bb}{\mathcal{B}}
+\newcommand{\Oo}{\mathcal{O}}
+\newcommand{\Ll}{\mathcal{L}}
+\newcommand{\Ff}{\mathcal{F}}
+\newcommand{\tribu}{\mathcal{A}}
+\newcommand{\ind}{\mathds{1}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\ps}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\Lp}[1][p]{L^{#1}}
+\newcommand{\tq}{\ \text{tq}\ }
+\newcommand{\ssi}{\text{ ssi }}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Vect}{Vect}
+
+% =====================================================================
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Leçon \numlecon}\\[2pt]
+{\large\bfseries \titrelecon}
+\end{center}
+\encartauteur
+\vspace{2pt}\hrule\vspace{4pt}
+
+\begin{multicols}{2}
+
+Soit $\K = \R$ ou $\C$.
+
+\section{Espace de fonctions continues}
+Soit $X$ un ensemble et $E$ un $\K$-espace vectoriel normé. Soit $(f_n)_n$ une suite de fonctions de $X$ dans $E$ et $f : X \to E$. \src{ELA}{143}
+
+\subsection{Espace des fonctions bornées\srcs{ELA}}
+
+\begin{notation}
+On note $\Bb(X,E)$ l'espace vectoriel des applications bornées de $X$ dans $E$. \src{ELA}{143}
+\end{notation}
+
+\begin{definition}
+Pour $f \in \Bb(X,E)$, on définit la norme de la convergence uniforme donnée par : $\norm{f}_\infty = \sup_{x \in X} \norm{f(x)}$.
+\end{definition}
+
+\begin{proposition}
+L'application $f \mapsto \norm{f}_\infty$ est une norme sur $\Bb(X,E)$, ce qui fait de $\Bb(X,E)$ un EVN.
+\end{proposition}
+
+\begin{proposition}
+Une suite $(f_n)_n$ de $\Bb(X,E)$ converge uniformément sur $X$ vers $f$ ssi $\norm{f_n - f}_\infty \xrightarrow[n \to \infty]{} 0$.
+\end{proposition}
+
+\begin{proposition}
+Si $(f_n)$ est une suite de $\Bb(X,E)$ qui converge uniformément vers $f$, alors $f \in \Bb(X,E)$.
+\end{proposition}
+
+\begin{theoreme}[critère de Cauchy uniforme]
+Soit $E$ complet. Alors la suite $(f_n)_n$ est uniformément convergente ssi : $\forall \varepsilon > 0,\ \exists N \in \N,\ \forall n \ge N,\ \forall p \ge N,\ \forall x \in X,\ \norm{f_n(x) - f_p(x)} \le \varepsilon$. \src{ELA}{142}
+\end{theoreme}
+
+\begin{theoreme}
+Si $E$ est un espace de Banach, alors $(\Bb(X,E), \norm{\cdot}_\infty)$ est un espace de Banach. \src{ELA}{145}
+\end{theoreme}
+
+\subsection{Espace des fonctions continues sur un compact\srcs{ELA, GOU, SKA}}
+
+\begin{proposition}
+Soit $(f_n)_n$ qui converge uniformément vers $f$. Si les $f_n$ sont toutes continues en $a \in X$, alors $f$ est continue en $a$. \src{ELA}{143}
+\end{proposition}
+
+On suppose ici que $X$ est un compact.
+
+\begin{notation}
+On note $\Cc(X,E)$ l'espace des applications continues de $X$ dans $E$.
+\end{notation}
+
+\begin{proposition}
+Soit $f : X \to E$ continue. Alors $f(X)$ est compact. \src{GOU}{31}
+\end{proposition}
+
+\begin{theoreme}[des bornes atteintes]
+Soit $f : X \to \R$ continue. Alors $f$ est bornée et atteint ses bornes : il existe $c, d \in X$ tel que $f(c) = \inf_{x \in X} f(x)$ et $f(d) = \sup_{x \in X} f(x)$. \src{GOU}{31}
+\end{theoreme}
+
+\begin{theoreme}[de Heine]
+Toute application continue d'un compact dans un espace métrique quelconque est uniformément continue. \src{SKA}{121}
+\end{theoreme}
+
+\begin{application}
+Soit $f : [a;b] \to \R$ continue. Alors :
+\[ \int_a^b f(t)\,dt = \lim_{n \to \infty} \frac{b-a}{n} \sum_{k=0}^{n-1} f\!\left( a + k \frac{b-a}{n} \right) \]
+\end{application}
+
+\begin{application}
+Toute fonction $f : \R \to \R$ continue et $T$-périodique est uniformément continue sur $\R$.
+\end{application}
+
+\begin{theoreme}
+Soit $E$ complet. Alors $\Cc(X,E)$ est un fermé de $\Bb(X,E)$. Ainsi $\Cc(X,E)$ muni de $\norm{\cdot}_\infty$ est un espace de Banach.
+\end{theoreme}
+
+\begin{exemple}
+Soit $a < b$. Alors $\Cc([a;b],\R)$ et $\Cc([a;b],\C)$ sont complets munis de $\norm{\cdot}_\infty$.
+\end{exemple}
+
+\subsection{Densité\srcs{ELA, GOU}}
+
+\begin{definition}
+Soit $f : [0;1] \to \K$. Pour $n \in \N$, on appelle $n$-ième polynôme de Bernstein associé à $f$, le polynôme $B_n(f)$ défini par : $B_n(f)(x) = \sum_{k=0}^{n} \binom{n}{k} x^k (1-x)^{n-k} f\!\left(\frac{k}{n}\right)$. \src{ELA}{156}
+\end{definition}
+
+\begin{devbloc}{1}
+\begin{proposition} % [correction] ajout de « continue » (absent du manuscrit)
+Soit $f : [0;1] \to \K$ continue. Alors la suite des polynômes de Bernstein associée à $f$ converge uniformément vers $f$ sur $[0;1]$.
+\end{proposition}
+\begin{theoreme}[de Weierstrass]
+Toute fonction $f$ continue sur un intervalle compact $[a;b]$, à valeurs dans $\K$, est limite uniforme sur $[a;b]$ d'une suite de fonctions polynomiales.
+\end{theoreme}
+\end{devbloc}
+
+\begin{contreexemple*}
+Avec $1/x$ sur $]0;1]$.
+\end{contreexemple*}
+
+\begin{remarque}
+Les fonctions polynomiales sont denses dans $(\Cc([a,b],\K), \norm{\cdot}_\infty)$.
+\end{remarque}
+
+\begin{application}
+Soit $f : [0;1] \to \C$ continue, tel que pour tout $n \in \N$, $\int_0^1 f(t) t^n\,dt = 0$. Alors $f \equiv 0$. \src{GOU}{306}
+\end{application}
+
+\begin{definition}
+On appelle polynôme trigonométrique toute combinaison linéaire d'éléments de la famille $(e^{inx})_{n \in \Z}$. \src{ELA}{159}
+\end{definition}
+
+\begin{theoreme}[de Weierstrass trigonométrique]
+Toute fonction continue et $2\pi$-périodique de $\R$ dans $\C$ est limite uniforme sur $\R$ d'une suite de polynômes trigonométriques.
+\end{theoreme}
+
+\begin{remarque}
+Les polynômes trigonométriques sont denses dans $(\Cc_{2\pi}(\R,\C), \norm{\cdot}_\infty)$.
+\end{remarque}
+
+\section{Espaces de fonctions Lebesgue-intégrables}
+Soit $(X, \tribu, \mu)$ un espace mesuré.
+
+\subsection{Espaces $\Ll^p$\srcs{KUR, FAR}}
+
+\begin{definition}
+Pour $p \in [1;+\infty[$, on note $\Ll^p(X,\tribu,\mu)$ l'ensemble des applications mesurables de $(X,\tribu,\mu)$ dans $(\R, \Bb(\R))$ tel que $\int_X \abs{f(x)}^p\,d\mu(x) < +\infty$. On note alors $\norm{f}_p = \left( \int_X \abs{f(x)}^p\,d\mu(x) \right)^{1/p}$.
+
+On note $\Ll^\infty(X,\tribu,\mu)$ l'ensemble des applications mesurables de $(X,\tribu,\mu)$ dans $(\R, \Bb(\R))$ tel que $\norm{f}_\infty < +\infty$ où $\norm{f}_\infty = \inf \{ M \in \R\ ;\ \mu(\{ x \in X\ ;\ \abs{f(x)} > M \}) = 0 \}$. \src{GK}{209}
+\end{definition}
+
+\begin{devbloc}{2}
+\begin{proposition}[inégalité de Young]
+Soit $p, q > 0$ tel que $\frac{1}{p} + \frac{1}{q} = 1$. Alors $\forall u, v \in \R_+^*$, $u^{1/p} v^{1/q} \le \frac{1}{p} u + \frac{1}{q} v$. \src{ROM}{239}
+\end{proposition}
+\begin{theoreme}[inégalité de Hölder]
+Soit $p, q > 1$ tel que $\frac{1}{p} + \frac{1}{q} = 1$. Soit $f \in \Ll^p$ et $g \in \Ll^q$. Alors $fg \in \Ll^1$ et : $\norm{fg}_1 \le \norm{f}_p \cdot \norm{g}_q$. \src{GK}{208}
+\end{theoreme}
+\begin{theoreme}[inégalité de Minkowski]
+Soit $p \in [1;+\infty[$. Soit $f, g \in \Ll^p$. Alors $f + g \in \Ll^p$ et : $\norm{f+g}_p \le \norm{f}_p + \norm{g}_p$. \src{GK}{211}
+\end{theoreme}
+\end{devbloc}
+
+\begin{remarque}
+Ces inégalités sont aussi vraies pour $p = +\infty$, avec la convention $\frac{1}{+\infty} = 0$.
+\end{remarque}
+
+\begin{corollaire}
+Pour $1 \le p \le +\infty$, l'ensemble $\Ll^p(X,\tribu,\mu)$ est un espace vectoriel, et l'application $f \mapsto \norm{f}_p$ est une semi-norme sur celui-ci. \src{FAR}{43}
+\end{corollaire}
+
+\begin{contreexemple}
+On a $\norm{\ind_\Q}_p = 0$ mais $\ind_\Q \not\equiv 0$. \src{GK}{212}
+\end{contreexemple}
+
+\subsection{Espaces $L^p$\srcs{FAR, KUR}}
+
+\begin{proposition}
+Soit $f, g \in \Ll^p$. La relation $\sim$ définie par $f \sim g \Leftrightarrow f = g$ $\mu$-pp, est une relation d'équivalence sur $\Ll^p$. \src{FAR}{44}
+\end{proposition}
+
+\begin{definition}
+On définit les espaces $L^p$ par $L^p(X,\tribu,\mu) = \Ll^p(X,\tribu,\mu) / \!\sim$.
+\end{definition}
+
+\begin{proposition}
+Soit $1 \le p \le +\infty$. Alors $(L^p, \norm{\cdot}_p)$ est un espace vectoriel normé. \src{KUR}{213}
+\end{proposition}
+
+\begin{lemme}
+Soit $\mu$ une mesure finie. Si $1 \le p \le q \le +\infty$, alors on a l'inclusion $L^q \subset L^p$. \src{KUR}{212}
+\end{lemme}
+
+\begin{contreexemple}
+Si $\mu = \lambda$, alors $f \equiv 1 \in L^\infty$ mais n'appartient à aucun $L^p$ pour $p \in [1;+\infty[$.
+\end{contreexemple}
+
+\begin{theoreme}[de Riesz-Fischer]
+Pour tout $p \in [1;+\infty]$, l'espace $L^p(X,\tribu,\mu)$ est complet pour $\norm{\cdot}_p$.
+\end{theoreme}
+
+\begin{corollaire}
+$L^2(X,\tribu,\mu)$ est un espace de Hilbert muni de $\ps{f}{g} = \int_X f(x) \overline{g(x)}\,d\mu(x)$. \src{FAR}{49}
+\end{corollaire}
+
+\begin{proposition}
+Pour $p \in [1;+\infty[$, l'ensemble des fonctions étagées intégrables est dense dans $L^p(\mu)$. \src{BRI}{170}
+\end{proposition}
+
+\subsection{Convolution dans $L^1$\srcs{ELA2}}
+
+\begin{definition}
+On dit que deux fonctions $f, g : \R^d \to \R$ sont convolables si pour presque tout $x \in \R^d$, $t \mapsto f(x-t) g(t)$ est intégrable. On définit alors le produit de convolution de $f$ et $g$ par : $(f * g)(x) = \int_{\R^d} f(x-t) g(t)\,dt$. \src{ELA2}{75}
+\end{definition}
+
+\begin{exemple}
+Soit $a < b$ et $f = \ind_{[-a;a]}$ et $g = \ind_{[-b;b]}$. Alors :
+\[ f * g(x) = \begin{cases} 2a & \text{si } 0 \le \abs{x} \le b - a \\ b + a - \abs{x} & \text{si } b - a \le \abs{x} \le b + a \\ 0 & \text{si } b + a < \abs{x} \end{cases} \]
+\end{exemple}
+
+\begin{proposition}
+Dans $L^1(\R^d)$, le produit de convolution est commutatif et bilinéaire.
+\end{proposition}
+
+\begin{theoreme}
+Soit $f, g \in L^1(\R^d)$. Pour presque tout $x$, l'application $t \mapsto f(x-t) g(t)$ est intégrable sur $\R^d$. La fonction $f * g$ est intégrable sur $\R^d$ et : $\norm{f * g}_1 \le \norm{f}_1 \cdot \norm{g}_1$.
+\end{theoreme}
+
+\begin{proposition} % [correction] norme ||.||_1 (le manuscrit écrit ||.||_p)
+L'espace vectoriel normé $(L^1(\R^d), \norm{\cdot}_1)$ muni du produit de convolution est une algèbre de Banach commutative.
+\end{proposition}
+
+\subsection{Transformée de Fourier dans $L^1$\srcs{ELA2, FAR}}
+
+\begin{definition}
+Soit $f \in L^1(\R^d)$. On appelle transformée de Fourier de $f$, notée $\hat{f}$ ou $\Ff(f)$, la fonction : $\hat{f} : \R^d \to \C$, $\xi \mapsto \int_{\R^d} f(x) e^{-i \ps{x}{\xi}}\,dx$. \src{ELA2}{103}
+\end{definition}
+
+\begin{lemme}[de Riemann-Lebesgue]
+On a $\lim_{\norm{\xi} \to +\infty} \hat{f}(\xi) = 0$.
+\end{lemme}
+
+\begin{theoreme}
+Soit $f \in L^1(\R^d)$. Alors $\hat{f}$ est continue et bornée par $\norm{f}_1$, avec $\norm{\hat{f}}_\infty \le \norm{f}_1$. On appelle transformation de Fourier l'application $\Ff : L^1(\R^d) \to \Cc_0(\R^d)$, $f \mapsto \hat{f}$.
+\end{theoreme}
+
+\begin{corollaire}
+La transformation de Fourier est une application linéaire continue.
+\end{corollaire}
+
+\begin{exemple}
+Soit $f(x) = e^{-a x^2}$ avec $a > 0$. Alors $\hat{f}(\xi) = \sqrt{\frac{\pi}{a}}\, e^{-\xi^2 / 4a}$.
+\end{exemple}
+
+\begin{proposition}
+Soit $f, g \in L^1(\R^d)$. Alors $\widehat{f * g} = \hat{f} \cdot \hat{g}$. \src{ELA}{114}
+\end{proposition}
+
+\begin{remarque}
+Cela montre qu'il n'y a pas d'élément neutre pour le produit de convolution dans $L^1(\R)$.
+\end{remarque}
+
+\begin{exemple}
+Soit $f \in L^1(\R)$. Si $f * f = f$, alors $f = 0$.
+\end{exemple}
+
+\begin{proposition}[formule de dualité]
+Soit $f, g \in L^1(\R^d)$. Alors : $\int_{\R^d} f(u) \hat{g}(u)\,du = \int_{\R^d} \hat{f}(v) g(v)\,dv$.
+\end{proposition}
+
+\begin{theoreme}[formule d'inversion]
+Si $f \in L^1(\R^d)$ et $\hat{f} \in L^1(\R^d)$, alors pour presque tout $x \in \R^d$ :
+\[ f(x) = \frac{1}{(2\pi)^d} \int_{\R^d} \hat{f}(\xi) e^{i \ps{x}{\xi}}\,d\xi \]
+Ainsi : $\Ff(\Ff(f))(x) = (2\pi)^d f(-x)$. \src{ELA}{116}
+\end{theoreme}
+
+\begin{corollaire}
+La transformation de Fourier est injective : si $\hat{f} \equiv 0$, alors $f \equiv 0$ pp. \src{FAR}{133}
+\end{corollaire}
+
+\end{multicols}
+
+\listedev{1. Théorème de Weierstrass par les probabilités (Prop~18, Thm~19) --- Garet-Kurtzman p.\,195 ; Oraux X-ENS 6, FGN, p.\,259 ; El Amrani (suites et séries), p.\,158. --- 2. Inégalité de Young-Hölder-Minkowski (Prop~26, Thm~27, Thm~28) --- Garet-Kurtzman p.\,209 ; Rombaldi, Éléments d'analyse réelle, p.\,239 et 39.}
+
+\blocfin{Références}
+[ELA] Suites et séries numériques, suites et séries de fonctions, El Amrani --- [GOU] Analyse, Gourdon --- [SKA] Topologie et analyse 3e année, Skandalis --- [KUR] / [GK] De l'intégration aux probabilités, Garet-Kurtzman --- [FAR] Calcul intégral, Faraut --- [ELA2] Analyse de Fourier dans les espaces fonctionnels, El Amrani --- [ROM] Éléments d'analyse réelle, Rombaldi --- [BRI] (non précisé dans le manuscrit).
+
+\blocfin{Présentation}
+Le théorème de Weierstrass permet d'approcher de façon globale et uniforme des fonctions par des polynômes, qui sont des objets très réguliers et faciles à manipuler. Sur $\Ll^p$, $\norm{\cdot}_p$ n'est pas une norme ; c'est pour cette raison que l'on introduit $L^p$, et on confondra toujours une fonction $f \in \Ll^p$ et sa classe dans $L^p$. On observe que le produit de deux fonctions dans $L^1$ n'est pas forcément dans $L^1$ : l'idée du produit de convolution est d'avoir une opération qui fait de $L^1$ une algèbre.
+
+\end{document}

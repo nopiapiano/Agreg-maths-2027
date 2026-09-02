@@ -1,0 +1,46 @@
+% =====================================================================
+%  lecon.tex — compile UNE leçon du recueil, seule.
+%
+%  À placer à la racine du recueil (à côté de « Oraux Agreg ext maths.tex ») :
+%  il charge le même préambule (Preambule/preambule.tex) et \input le même
+%  fichier de leçon que le recueil, donc rien n'est dupliqué.
+%
+%  Usage : depuis la racine du recueil,  ./lecon.sh 101
+%  Le script fait les deux passes de pdflatex (nombre de pages) et écrit le PDF
+%  dans Lecons/AG/101.pdf (algèbre, leçons 1xx) ou Lecons/AP/201.pdf
+%  (analyse-probas, leçons 2xx). À la main, c'est l'option -output-directory :
+%    pdflatex -output-directory=Lecons/AG -jobname=101 "\def\numlecon{101}\input{lecon}"
+%  Sans rien passer en ligne de commande, « pdflatex lecon » compile la leçon
+%  par défaut indiquée ci-dessous, dans le dossier courant.
+%
+%  Le fichier de la leçon est lu au même endroit que dans le recueil, dans le
+%  dossier des centaines : 101 -> 100/101, 201 -> 200/201. Pour un autre
+%  chemin (un développement par exemple) :  ./lecon.sh DevAlg/baseburnside
+%  (le PDF est alors écrit à côté du fichier source).
+% =====================================================================
+\documentclass[a4paper,10pt,oneside,twocolumn,landscape]{book}
+
+% ---------- Leçon à compiler ----------
+\ifdefined\fichier
+	% chemin explicite fourni en ligne de commande : rien à faire
+\else
+	\providecommand{\numlecon}{101}   % leçon par défaut (ignorée si \numlecon vient de la ligne de commande)
+	\edef\fichier{\the\numexpr(\numlecon-50)/100*100\relax/\numlecon}
+\fi
+\edef\titrepdf{\ifdefined\numlecon Leçon \numlecon\else\fichier\fi}
+
+\input{Preambule/preambule}
+
+% ---------- Ajustements propres à une leçon compilée seule ----------
+% Pas de chapitre ici : la section (titre de la leçon) n'est pas numérotée (sinon « 0.1 ») et les sous-sections sont numérotées 1, 2, 3...
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+% Pas de page de titre ici : numérotation des pages sans le décalage de +1 du recueil.
+\fancyfoot[C]{Page \thepage/\pageref{LastPage}}
+\hypersetup{pdftitle={\titrepdf}}
+
+\begin{document}
+
+\input{\fichier}
+
+\end{document}
