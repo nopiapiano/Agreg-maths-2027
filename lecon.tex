@@ -5,7 +5,9 @@
 %  il charge le même préambule (Preambule/preambule.tex) et \input le même
 %  fichier de leçon que le recueil, donc rien n'est dupliqué.
 %
-%  Usage : depuis la racine du recueil,  ./lecon.sh 101
+%  Usage : depuis la racine du recueil,  lecon.bat 101  (Windows) ou
+%  ./lecon.sh 101  (Mac, Linux) ; « all » compile toutes les leçons de 100/ et
+%  200/. Un double-clic sur lecon.bat (Windows) ou lecon.command (Mac) = all.
 %  Le script fait les deux passes de pdflatex (nombre de pages) et écrit le PDF
 %  dans Lecons/AG/101.pdf (algèbre, leçons 1xx) ou Lecons/AP/201.pdf
 %  (analyse-probas, leçons 2xx). À la main, c'est l'option -output-directory :
@@ -15,7 +17,7 @@
 %
 %  Le fichier de la leçon est lu au même endroit que dans le recueil, dans le
 %  dossier des centaines : 101 -> 100/101, 201 -> 200/201. Pour un autre
-%  chemin (un développement par exemple) :  ./lecon.sh DevAlg/baseburnside
+%  chemin (un développement par exemple) :  lecon.bat DevAlg/baseburnside
 %  (le PDF est alors écrit à côté du fichier source).
 % =====================================================================
 \documentclass[a4paper,10pt,oneside,twocolumn,landscape]{book}
